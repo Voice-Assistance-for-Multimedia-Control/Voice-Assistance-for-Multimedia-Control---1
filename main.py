@@ -1,12 +1,12 @@
-﻿import speech_recognition as sr
-from media_controls import next_track
+import speech_recognition as sr
+from media_controls import next_track, previous_track
 
 
 def main():
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
 
-    print("Voice Assistant started. Say 'next track' or 'next song'.")
+    print("Voice Assistant started. Say 'next track', 'next song', 'previous track', or 'previous song'.")
 
     while True:
         try:
@@ -22,6 +22,8 @@ def main():
 
             if "next track" in command or "next song" in command:
                 next_track()
+            elif "previous track" in command or "previous song" in command:
+                previous_track()
             elif command in ("exit", "quit", "stop assistant"):
                 print("Voice Assistant stopped.")
                 break
