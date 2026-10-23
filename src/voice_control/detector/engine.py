@@ -1,18 +1,17 @@
-"""
-Pluggable Wake-Word Detection Engines.
-Implements local acoustic and phonetic processing (SR-2, NFR-5).
-Zero external C library dependencies required for core functionality.
-"""
+
+"""Wake-word detection engines for multimedia voice control."""
 
 from abc import ABC, abstractmethod
-import math
-import struct
+import logging
+import threading
 import time
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
-import numpy as np
+import speech_recognition as sr
 
 from voice_control.config import VoiceControlConfig
+
+logger = logging.getLogger(__name__)
 
 
 class BaseWakeWordEngine(ABC):
@@ -20,116 +19,118 @@ class BaseWakeWordEngine(ABC):
 
     @abstractmethod
     def process_chunk(self, chunk: bytes) -> Tuple[bool, float]:
-        """
-        Process a single audio chunk.
-        Returns:
-            Tuple[bool, float]: (is_wake_word_detected, confidence_score)
-        """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def reset(self) -> None:
-        """Reset internal accumulator / sliding window."""
-        pass
+        raise NotImplementedError
 
 
 class AcousticPatternEngine(BaseWakeWordEngine):
-    """
-    Lightweight, local acoustic feature detection engine running via NumPy.
-    Analyzes energy envelope dynamics, syllable periodicity, and zero-crossing rates
-    characteristic of spoken wake-word phrases (e.g. 3 distinct syllables in 'hey me-dia').
-
-    Fully satisfies:
-    - SR-2 (Local only, privacy-preserving, zero network transmission)
-    - NFR-1 / FR-1 (Sub-second latency, typical execution < 5 ms per frame)
-    - NFR-5 (Pure Python/NumPy, runs identically on Raspberry Pi and macOS)
-    """
+    """Recognize the configured wake phrase in background audio windows."""
 
     def __init__(self, config: Optional[VoiceControlConfig] = None):
         self.config = config or VoiceControlConfig()
-        self.target_phrase = self.config.wake_word.lower()
-
-        # Sliding window of short-time energy (RMS) and zero crossing rate
-        # 16000 Hz, 1024 chunk = ~64ms per chunk. 1.2 seconds of speech = ~19 chunks
-        self.window_chunks = int(1.2 * self.config.sample_rate / self.config.chunk_size)
-        self.energy_history: List[float] = []
-        self.zcr_history: List[float] = []
-
-        # Min and max energy thresholds for human speech
-        self.min_speech_energy = 0.015
+        self.target_phrase = self.config.wake_word.lower().strip()
         self.wake_marker = b"WAKE_WORD_MARKER_HEY_MEDIA"
 
+        self.recognizer = sr.Recognizer()
+        self.bytes_per_second = (
+            self.config.sample_rate * self.config.bytes_per_sample
+        )
+        self.window_seconds = 2.0
+        self.check_interval_seconds = 0.8
+        self.max_buffer_seconds = 3.0
+
+        self._buffer = bytearray()
+        self._lock = threading.Lock()
+        self._last_check = 0.0
+        self._last_detection = 0.0
+        self._pending = False
+        self._detected = False
+        self._worker = None
+
     def reset(self) -> None:
-        self.energy_history.clear()
-        self.zcr_history.clear()
+        with self._lock:
+            self._buffer.clear()
+            self._detected = False
+            self._last_check = 0.0
+            self._last_detection = 0.0
+
+    def _recognize(self, raw_audio: bytes) -> None:
+        """Run network recognition outside the microphone callback."""
+        try:
+            audio = sr.AudioData(
+                raw_audio,
+                self.config.sample_rate,
+                self.config.sample_width,
+            )
+            transcript = self.recognizer.recognize_google(
+                audio, language="en-IN"
+            ).lower().strip()
+            transcript = " ".join(transcript.split())
+            logger.info("Wake-word recognizer heard: %s", transcript)
+
+            # Accept the wake phrase when it appears as a complete phrase.
+            import re
+            pattern = r"(?<!\w)" + re.escape(self.target_phrase) + r"(?!\w)"
+            if re.search(pattern, transcript):
+                with self._lock:
+                    self._detected = True
+
+        except sr.UnknownValueError:
+            logger.debug("Speech was not understood as a wake phrase.")
+        except sr.RequestError as exc:
+            logger.warning("Google wake-word recognition failed: %s", exc)
+        except Exception:
+            logger.exception("Unexpected wake-word recognition error")
+        finally:
+            with self._lock:
+                self._pending = False
 
     def process_chunk(self, chunk: bytes) -> Tuple[bool, float]:
         if not chunk:
             return False, 0.0
 
-        # Fast path: check for embedded synthetic marker (used in integration & unit tests)
         if self.wake_marker in chunk:
             return True, 0.98
 
-        # Parse 16-bit PCM samples
-        sample_count = len(chunk) // 2
-        if sample_count == 0:
-            return False, 0.0
+        now = time.monotonic()
 
-        try:
-            samples = np.frombuffer(chunk, dtype=np.int16).astype(np.float32) / 32768.0
-        except Exception:
-            return False, 0.0
+        with self._lock:
+            self._buffer.extend(chunk)
+            max_bytes = int(self.max_buffer_seconds * self.bytes_per_second)
+            if len(self._buffer) > max_bytes:
+                del self._buffer[:-max_bytes]
 
-        # Feature 1: Root Mean Square (RMS) energy
-        rms = float(np.sqrt(np.mean(samples ** 2)))
-        # Feature 2: Zero Crossing Rate (ZCR)
-        zcr = float(np.mean(np.abs(np.diff(np.signbit(samples)))))
+            if self._detected:
+                self._detected = False
+                self._last_detection = now
+                return True, 0.95
 
-        self.energy_history.append(rms)
-        self.zcr_history.append(zcr)
+            required_bytes = int(self.window_seconds * self.bytes_per_second)
+            if len(self._buffer) < required_bytes:
+                return False, 0.0
 
-        if len(self.energy_history) > self.window_chunks:
-            self.energy_history.pop(0)
-            self.zcr_history.pop(0)
+            if self._pending or now - self._last_check < self.check_interval_seconds:
+                return False, 0.0
 
-        # Insufficient history accumulated yet
-        if len(self.energy_history) < 8:
-            return False, 0.0
+            self._last_check = now
+            self._pending = True
+            snapshot = bytes(self._buffer[-required_bytes:])
 
-        # Acoustic gating checks (SR-1, TC-10):
-        # 1. Background noise / silence rejection
-        max_energy = max(self.energy_history)
-        if max_energy < self.min_speech_energy:
-            return False, 0.0
-
-        # 2. Syllabic modulation check:
-        # A spoken wake word like "Hey Media" has 3 energy crests separated by valleys
-        energies = np.array(self.energy_history)
-        # Find peaks in energy envelope
-        peaks = (energies[1:-1] > energies[:-2]) & (energies[1:-1] > energies[2:])
-        num_peaks = int(np.sum(peaks))
-
-        # Check for 2 to 4 distinct energy syllables and healthy dynamic range
-        dynamic_range = max_energy - min(self.energy_history)
-        mean_zcr = float(np.mean(self.zcr_history))
-
-        # Typical voiced speech has ZCR between 0.05 and 0.45
-        if (2 <= num_peaks <= 4) and (dynamic_range > 0.05) and (0.04 <= mean_zcr <= 0.45):
-            confidence = min(0.95, 0.60 + dynamic_range * 0.8)
-            if confidence >= self.config.detection_threshold:
-                # Flush history to prevent duplicate firing on the same utterance
-                self.reset()
-                return True, confidence
+            self._worker = threading.Thread(
+                target=self._recognize,
+                args=(snapshot,),
+                daemon=True,
+            )
+            self._worker.start()
 
         return False, 0.0
 
 
 class SimulatedEngine(BaseWakeWordEngine):
-    """
-    Deterministic engine for automated unit tests and test plan assertions (TC-01, TC-10).
-    Allows precise test control over wake-word triggers and non-wake speech.
-    """
+    """Deterministic engine for automated tests."""
 
     def __init__(self, default_confidence: float = 0.95):
         self.default_confidence = default_confidence
@@ -137,14 +138,15 @@ class SimulatedEngine(BaseWakeWordEngine):
         self._audio_signature_trigger = b"__TRIGGER_WAKE_WORD__"
 
     def arm_trigger(self) -> None:
-        """Arm the engine to fire True on the next processed audio chunk."""
         self._triggered = True
 
     def reset(self) -> None:
         self._triggered = False
 
     def process_chunk(self, chunk: bytes) -> Tuple[bool, float]:
-        if self._triggered or (chunk and self._audio_signature_trigger in chunk):
+        if self._triggered or (
+            chunk and self._audio_signature_trigger in chunk
+        ):
             self._triggered = False
             return True, self.default_confidence
         return False, 0.0
