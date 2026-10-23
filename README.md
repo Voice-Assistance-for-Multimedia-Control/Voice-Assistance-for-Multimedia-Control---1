@@ -5,13 +5,26 @@
 
 ---
 
-## Team & User Story Allocations (Sprint 1)
+## Sprint Allocations & Status
 
-| Member | Role / GitHub | Assigned User Stories | Story Points | Status |
+### Sprint 1 (Core Multimedia Control Pipeline)
+| User Story | Assignee | Role | Story Points | Status |
 |---|---|---|:---:|:---:|
-| **Abhay S** | Project Lead (`abhayS-pixel`) | **US-01 — Wake-Word Detection**<br>**US-09 — Command Feedback**<br>**US-13 — Microphone Error Handling** | 5 + 3 + 3 = 11 | **Completed** |
-| **Aarohi Jaiswal** | Developer (`aarohijaiswal`) | **US-05** (Next), **US-06** (Previous), **US-07** (Volume Control) | 3 + 3 + 3 = 9 | **Completed (Merged)** |
-| **Aaditya Vashisht** | Developer (`aadityaV-goat`) | **US-02** (Play), **US-03** (Pause), **US-04** (Resume) | 3 + 3 + 3 = 9 | In Progress |
+| **US-01 — Wake-Word Detection** | Abhay S (`abhayS-pixel`) | Project Lead | 5 | **Completed (Merged PR #32)** |
+| **US-05 — Next Track** | Aarohi Jaiswal (`aarohijaiswal`) | Developer | 3 | **Completed (Merged PR #30)** |
+| **US-06 — Previous Track** | Aarohi Jaiswal (`aarohijaiswal`) | Developer | 3 | **Completed (Merged PR #31)** |
+| **US-07 — Volume Control** | Aarohi Jaiswal (`aarohijaiswal`) | Developer | 3 | **Completed (Merged PR #33)** |
+| **US-02 — Play Media** | Aaditya Vashisht (`aadityaV-goat`) | Developer | 3 | In Progress |
+| **US-03 — Pause Media** | Aaditya Vashisht (`aadityaV-goat`) | Developer | 3 | In Progress |
+| **US-04 — Resume Media** | Aaditya Vashisht (`aadityaV-goat`) | Developer | 3 | In Progress |
+
+---
+
+### Sprint 2 (Robustness, Feedback & System Diagnostics)
+| User Story | Assignee | Role | Story Points | Status |
+|---|---|---|:---:|:---:|
+| **US-09 — Command Feedback** | Abhay S (`abhayS-pixel`) | Project Lead | 3 | **Completed (Merged PR #34)** |
+| **US-13 — Microphone Error Handling** | Abhay S (`abhayS-pixel`) | Project Lead | 3 | **Completed (Merged PR #34)** |
 
 ---
 
@@ -22,6 +35,7 @@ The codebase implements the layered architecture specified in the [Software Arch
 - **Wake-Word Gating (US-01 / SR-1, SO-1)**: Audio input is monitored in an `IDLE` state. The system never executes downstream media commands unless the exact wake word (default: `"hey media"`) is detected.
 - **Sub-Second Activation (US-01 / FR-1, TC-01)**: On wake-word detection, the system activates a short, authorized listening session window (default: 4.0s) within `< 1.0 second` (measured latency ~0.3ms).
 - **In-Memory Privacy Buffer (US-01 / SR-2)**: The audio stream is buffered exclusively in volatile RAM (`AudioBuffer`) with automatic eviction of stale audio. Raw audio is never persisted to disk.
+- **Media Controls (US-05, US-06, US-07)**: Integrated YouTube/system keyboard shortcut controls for next track (`Shift+N`), previous track (`Shift+P`), and volume adjustment (`Up`/`Down`).
 - **Command Feedback & Distinct Indications (US-09 / FR-10)**: `FeedbackModule` provides visible acknowledgements (`LEDColor.GREEN`) and audible chimes upon every successful command, plus distinct indications (`LEDColor.RED` and buzzing tone) upon command rejection or failure.
 - **Microphone Error Handling & Gating (US-13 / Architecture 3.4)**: `AudioCaptureComponent.check_microphone_availability()` validates device access; on hardware disconnection or stream fault, listening is suspended, warning feedback is emitted (`FeedbackModule.notify("mic_error")`), and command execution without valid audio is strictly blocked until restored.
 - **Central Error Handling (Architecture 3.3)**: `ErrorHandler.handle_error(error)` logs and categorizes all faults without crashing.
@@ -76,16 +90,16 @@ Voice-Assistance-for-Multimedia-Control---1/
 
 ## Traceability to Requirements & Test Cases
 
-| Req / Story ID | Description | Implementation Module | Test File | Status |
-|---|---|---|---|:---:|
-| **US-01 (FR-1)** | Wake / Listen within 1s | `WakeWordDetector.detect_wake_word()` | `test_tc01_wake_word.py` | **PASSED** |
-| **US-01 (SR-1)** | Wake-Word Gating | `SessionManager`, `SecurityValidator` | `test_tc10_security_gating.py` | **PASSED** |
-| **US-01 (SR-2)** | Local-Only Audio Processing | `AudioBuffer` (in-memory rolling deque) | `test_audio_buffer.py` | **PASSED** |
-| **US-09 (FR-10)**| Visible & Audible Command Feedback | `FeedbackModule.notify()`, `synthesize_tone()` | `test_us09_feedback.py` | **PASSED** |
-| **US-13 (NFR-3)**| Microphone Diagnostics & Fault Gating | `AudioCaptureComponent`, `ErrorHandler` | `test_us13_mic_error_handling.py` | **PASSED** |
-| **US-05 (FR-5)** | Next Track Command | `media_controls.next_track()` | Integrated via PR #30 | **PASSED** |
-| **US-06 (FR-6)** | Previous Track Command | `media_controls.previous_track()` | Integrated via PR #31 | **PASSED** |
-| **US-07 (FR-7/8)**| Volume Control Command | `media_controls.adjust_volume()` | Integrated via PR #33 | **PASSED** |
+| Req / Story ID | Sprint | Description | Implementation Module | Test File | Status |
+|---|:---:|---|---|---|:---:|
+| **US-01 (FR-1)** | S1 | Wake / Listen within 1s | `WakeWordDetector.detect_wake_word()` | `test_tc01_wake_word.py` | **PASSED** |
+| **US-01 (SR-1)** | S1 | Wake-Word Gating | `SessionManager`, `SecurityValidator` | `test_tc10_security_gating.py` | **PASSED** |
+| **US-01 (SR-2)** | S1 | Local-Only Audio Processing | `AudioBuffer` (in-memory rolling deque) | `test_audio_buffer.py` | **PASSED** |
+| **US-05 (FR-5)** | S1 | Next Track Command | `media_controls.next_track()` | Integrated via PR #30 | **PASSED** |
+| **US-06 (FR-6)** | S1 | Previous Track Command | `media_controls.previous_track()` | Integrated via PR #31 | **PASSED** |
+| **US-07 (FR-7/8)**| S1 | Volume Control Command | `media_controls.adjust_volume()` | Integrated via PR #33 | **PASSED** |
+| **US-09 (FR-10)**| S2 | Visible & Audible Command Feedback | `FeedbackModule.notify()`, `synthesize_tone()` | `test_us09_feedback.py` | **PASSED** |
+| **US-13 (NFR-3)**| S2 | Microphone Diagnostics & Fault Gating | `AudioCaptureComponent`, `ErrorHandler` | `test_us13_mic_error_handling.py` | **PASSED** |
 
 ---
 
