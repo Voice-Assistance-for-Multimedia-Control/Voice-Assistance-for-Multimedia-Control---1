@@ -2,3 +2,6 @@
 PyAudio
 PyAutoGUI
 PyGetWindow
+selenium
+sounddevice 
+

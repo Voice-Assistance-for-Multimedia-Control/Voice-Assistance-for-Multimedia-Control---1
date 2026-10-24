@@ -23,3 +23,5 @@ wheels/
 htmlcov/
 .DS_Store
 *.swp
+debug_audio/
+last_command.wav
