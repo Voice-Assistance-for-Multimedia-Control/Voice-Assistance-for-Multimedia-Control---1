@@ -14,33 +14,34 @@ def fake_player(monkeypatch):
     monkeypatch.setattr(media_controls, "get_player", lambda: player)
     return player
 
-
 def test_next_track_success(fake_player):
-    assert media_controls.next_track() is True
+    fake_player._driver.execute_script.return_value = True
 
-    fake_player._driver.find_element.assert_called_once_with(
-        "css selector", ".ytp-next-button"
+    assert media_controls.next_track() is True
+    fake_player._driver.execute_script.assert_called_once()
+    assert ".ytp-next-button" in (
+        fake_player._driver.execute_script.call_args.args[0]
     )
-    fake_player._driver.find_element.return_value.click.assert_called_once()
 
 
 def test_next_track_failure(fake_player):
-    fake_player._driver.find_element.side_effect = RuntimeError("not found")
+    fake_player._driver.execute_script.return_value = False
 
     assert media_controls.next_track() is False
 
 
 def test_previous_track_success(fake_player):
-    assert media_controls.previous_track() is True
+    fake_player._driver.execute_script.return_value = True
 
-    fake_player._driver.find_element.assert_called_once_with(
-        "css selector", ".ytp-prev-button"
+    assert media_controls.previous_track() is True
+    fake_player._driver.execute_script.assert_called_once()
+    assert ".ytp-prev-button" in (
+        fake_player._driver.execute_script.call_args.args[0]
     )
-    fake_player._driver.find_element.return_value.click.assert_called_once()
 
 
 def test_previous_track_failure(fake_player):
-    fake_player._driver.find_element.side_effect = RuntimeError("not found")
+    fake_player._driver.execute_script.return_value = False
 
     assert media_controls.previous_track() is False
 

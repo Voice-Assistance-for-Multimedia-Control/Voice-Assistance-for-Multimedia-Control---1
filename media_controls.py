@@ -46,10 +46,13 @@ def next_track():
     """Skip to the next YouTube track."""
     try:
         player = get_player()
-        player._driver.find_element(
-            "css selector", ".ytp-next-button"
-        ).click()
-        return True
+        result = player._driver.execute_script("""
+            const button = document.querySelector('.ytp-next-button');
+            if (!button || button.disabled) return false;
+            button.click();
+            return true;
+        """)
+        return bool(result)
     except Exception as error:
         print(f"Could not skip to the next track: {error}")
         return False
@@ -57,13 +60,16 @@ def next_track():
 
 # US-06
 def previous_track():
-    """Skip to the previous track in a YouTube playlist."""
+    """Skip to the previous YouTube track."""
     try:
         player = get_player()
-        player._driver.find_element(
-            "css selector", ".ytp-prev-button"
-        ).click()
-        return True
+        result = player._driver.execute_script("""
+            const button = document.querySelector('.ytp-prev-button');
+            if (!button || button.disabled) return false;
+            button.click();
+            return true;
+        """)
+        return bool(result)
     except Exception as error:
         print(f"Could not go to the previous track: {error}")
         return False
