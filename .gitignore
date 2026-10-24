@@ -25,3 +25,6 @@ htmlcov/
 *.swp
 debug_audio/
 last_command.wav
+
+# Downloaded speech models (large; each developer downloads their own)
+models/
