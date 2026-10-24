@@ -3,6 +3,7 @@
 import logging
 import threading
 
+
 import speech_recognition as sr
 
 from voice_control.config import VoiceControlConfig
@@ -59,8 +60,9 @@ def main():
     service = PlaybackCommandService(validator, player, feedback)
 
     recognizer = sr.Recognizer()
-    recognizer.dynamic_energy_threshold = True
+    recognizer.dynamic_energy_threshold = False
     recognizer.pause_threshold = 0.6
+    recognizer.operation_timeout = 8
 
     wake_event = threading.Event()
     wake_info = {}
@@ -94,6 +96,7 @@ def main():
         with sr.Microphone() as source:
             print("Calibrating microphone; stay quiet briefly...")
             recognizer.adjust_for_ambient_noise(source, duration=1)
+            recognizer.energy_threshold = min(max(recognizer.energy_threshold, 300), 1000)
 
         print("Wake-word detector is listening for live microphone audio.")
         capture.start_stream()
@@ -130,6 +133,7 @@ def main():
                             source, timeout=5, phrase_time_limit=3
                         )
 
+
                     transcript = recognizer.recognize_google(
                         audio, language="en-IN"
                     ).lower().strip()
@@ -159,6 +163,8 @@ def main():
                     print("Command wasn't clear. Waiting for the wake word again.")
                 except sr.RequestError as exc:
                     print(f"Speech recognition service error: {exc}")
+                except (TimeoutError, OSError) as exc:
+                    print(f"Speech service timed out or failed: {exc}. Waiting for the wake word again.")
 
             finally:
                 sessions.close_session()

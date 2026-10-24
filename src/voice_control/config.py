@@ -26,7 +26,7 @@ class VoiceControlConfig:
     rolling_buffer_seconds: float = 3.0
 
     # Listening window duration (Architecture 2.5: short fixed duration after wake word)
-    listening_window_seconds: float = 4.0
+    listening_window_seconds: float = 10.0
 
     # Timing constraints (SRS FR-1: enter listening within 1.0s)
     max_wake_latency_seconds: float = 1.0
