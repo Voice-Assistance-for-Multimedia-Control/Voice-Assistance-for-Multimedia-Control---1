@@ -1,92 +1,97 @@
 
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
-from media_controls import next_track, previous_track, adjust_volume
+import media_controls
 
 
 @pytest.fixture
-def youtube_window():
-    window = MagicMock()
-    window.isMinimized = False
-    return window
+def fake_player(monkeypatch):
+    """Provide a fake shared Selenium player without opening Chrome."""
+    player = MagicMock()
+    player._driver = MagicMock()
+
+    monkeypatch.setattr(media_controls, "get_player", lambda: player)
+    return player
 
 
-@patch("media_controls.pyautogui.hotkey")
-@patch("media_controls.gw.getWindowsWithTitle")
-def test_next_track_success(mock_get_windows, mock_hotkey, youtube_window):
-    mock_get_windows.return_value = [youtube_window]
+def test_next_track_success(fake_player):
+    assert media_controls.next_track() is True
 
-    assert next_track() is True
-
-    mock_get_windows.assert_called_once_with("YouTube")
-    youtube_window.activate.assert_called_once()
-    mock_hotkey.assert_called_once_with("shift", "n")
+    fake_player._driver.find_element.assert_called_once_with(
+        "css selector", ".ytp-next-button"
+    )
+    fake_player._driver.find_element.return_value.click.assert_called_once()
 
 
-@patch("media_controls.gw.getWindowsWithTitle", return_value=[])
-def test_next_track_no_youtube_window(mock_get_windows):
-    assert next_track() is False
+def test_next_track_failure(fake_player):
+    fake_player._driver.find_element.side_effect = RuntimeError("not found")
 
-    mock_get_windows.assert_called_once_with("YouTube")
-
-
-@patch("media_controls.pyautogui.hotkey")
-@patch("media_controls.gw.getWindowsWithTitle")
-def test_previous_track_success(mock_get_windows, mock_hotkey, youtube_window):
-    mock_get_windows.return_value = [youtube_window]
-
-    assert previous_track() is True
-
-    mock_get_windows.assert_called_once_with("YouTube")
-    youtube_window.activate.assert_called_once()
-    mock_hotkey.assert_called_once_with("shift", "p")
+    assert media_controls.next_track() is False
 
 
-@patch("media_controls.gw.getWindowsWithTitle", return_value=[])
-def test_previous_track_no_youtube_window(mock_get_windows):
-    assert previous_track() is False
+def test_previous_track_success(fake_player):
+    assert media_controls.previous_track() is True
 
-    mock_get_windows.assert_called_once_with("YouTube")
+    fake_player._driver.find_element.assert_called_once_with(
+        "css selector", ".ytp-prev-button"
+    )
+    fake_player._driver.find_element.return_value.click.assert_called_once()
+
+
+def test_previous_track_failure(fake_player):
+    fake_player._driver.find_element.side_effect = RuntimeError("not found")
+
+    assert media_controls.previous_track() is False
 
 
 @pytest.mark.parametrize(
-    ("direction", "expected_key"),
+    ("direction", "initial_volume", "expected_volume"),
     [
-        ("up", "up"),
-        ("down", "down"),
+        ("up", 0.5, 0.6),
+        ("down", 0.5, 0.4),
+        ("up", 1.0, 1.0),
+        ("down", 0.0, 0.0),
+        ("up", 0.0, 0.1),
+        ("down", 1.0, 0.9),
     ],
 )
-@patch("media_controls.pyautogui.press")
-@patch("media_controls.gw.getWindowsWithTitle")
-def test_adjust_volume_success(
-    mock_get_windows,
-    mock_press,
-    direction,
-    expected_key,
-    youtube_window,
-):
-    mock_get_windows.return_value = [youtube_window]
+def test_adjust_volume(fake_player, direction, initial_volume, expected_volume):
+    fake_player._driver.execute_script.return_value = True
 
-    assert adjust_volume(direction) is True
+    assert media_controls.adjust_volume(direction) is True
 
-    mock_get_windows.assert_called_once_with("YouTube")
-    youtube_window.activate.assert_called_once()
-    mock_press.assert_called_once_with(expected_key)
+    script = fake_player._driver.execute_script.call_args.args[0]
+    assert "video.volume" in script
+    assert "Math.max" in script
+    assert "Math.min" in script
+
+    assert fake_player._driver.execute_script.call_args.args[1] == direction
 
 
-@patch("media_controls.gw.getWindowsWithTitle")
-def test_adjust_volume_invalid_direction(mock_get_windows, youtube_window):
-    mock_get_windows.return_value = [youtube_window]
+def test_adjust_volume_invalid_direction(fake_player):
+    assert media_controls.adjust_volume("sideways") is False
 
-    assert adjust_volume("sideways") is False
-
-    mock_get_windows.assert_called_once_with("YouTube")
-    youtube_window.activate.assert_called_once()
+    fake_player._driver.execute_script.assert_not_called()
 
 
-@patch("media_controls.gw.getWindowsWithTitle", return_value=[])
-def test_adjust_volume_no_youtube_window(mock_get_windows):
-    assert adjust_volume("up") is False
+def test_adjust_volume_failure(fake_player):
+    fake_player._driver.execute_script.side_effect = RuntimeError("no video")
 
-    mock_get_windows.assert_called_once_with("YouTube")
+    assert media_controls.adjust_volume("up") is False
+
+@pytest.mark.parametrize(
+    ("initial_volume", "direction", "expected"),
+    [
+        (0.5, "up", 0.6),
+        (0.5, "down", 0.4),
+        (0.9, "up", 1.0),
+        (1.0, "up", 1.0),
+        (0.1, "down", 0.0),
+        (0.0, "down", 0.0),
+    ],
+)
+def test_volume_calculation(initial_volume, direction, expected):
+    change = 0.1 if direction == "up" else -0.1
+    result = max(0, min(1, round((initial_volume + change) * 10) / 10))
+    assert result == pytest.approx(expected)

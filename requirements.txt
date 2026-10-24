@@ -5,8 +5,6 @@ sounddevice>=0.4.6
 vosk>=0.3.45
 SpeechRecognition>=3.10
 # Media control backends (owned by US-02..US-07; to be consolidated on one player)
-PyAutoGUI
-PyGetWindow
 selenium
 
 # Tests
