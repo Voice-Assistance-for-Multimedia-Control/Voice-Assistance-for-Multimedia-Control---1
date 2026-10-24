@@ -7,7 +7,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional
-import uuid
 
 
 class SystemState(str, Enum):
@@ -24,11 +23,14 @@ class Command:
     Structured command object.
     Architecture 3.5: {type: string, confidence: float, timestamp: datetime}.
     Includes session_id to enable security validator gating (SO-1, SR-1).
+
+    session_id defaults to None on purpose: a command is only authorized when the
+    caller explicitly passes the active session token issued by the WakeWordDetector.
     """
     type: str
     confidence: float
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    session_id: Optional[str] = field(default_factory=lambda: str(uuid.uuid4()))
+    session_id: Optional[str] = None
 
     def to_dict(self) -> dict:
         return {

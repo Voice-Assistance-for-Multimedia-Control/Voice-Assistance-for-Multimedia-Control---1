@@ -13,8 +13,23 @@ class VoiceControlConfig:
 
     # Wake-word settings (SRS FR-1, SR-1)
     wake_word: str = "hey media"
-    wake_word_aliases: List[str] = field(default_factory=lambda: ["hey media", "assistant", "computer"])
     detection_threshold: float = 0.65  # Confidence threshold for detection
+
+    # Minimum recognizer confidence for a command to be executed (SO-1).
+    # Enforced by SecurityValidator.
+    min_command_confidence: float = 0.5
+
+    # Speech recognition backend: "vosk" (local, satisfies SR-2) or "google"
+    # (cloud; sends command audio off-device, a documented SR-2 deviation).
+    recognizer_backend: str = "vosk"
+    vosk_model_path: str = "models/vosk-model-small-en-in-0.4"
+    google_language: str = "en-IN"
+
+    # Voice-activity segmentation (shared by wake-word and command capture)
+    vad_energy_threshold: float = 0.02   # RMS (0..1) above which a frame counts as speech
+    vad_end_silence_seconds: float = 0.5  # silence that ends an utterance
+    vad_max_utterance_seconds: float = 3.0
+    vad_min_utterance_seconds: float = 0.2
 
     # Audio format settings (16 kHz, 16-bit PCM Mono - standard for embedded ASR)
     sample_rate: int = 16000

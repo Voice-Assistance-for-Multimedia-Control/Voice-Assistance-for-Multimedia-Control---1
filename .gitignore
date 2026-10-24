@@ -23,3 +23,6 @@ wheels/
 htmlcov/
 .DS_Store
 *.swp
+
+# Downloaded speech models (large; each developer downloads their own)
+models/
