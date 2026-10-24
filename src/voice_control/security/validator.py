@@ -25,8 +25,11 @@ class SecurityValidator:
     Confirms each command originated from an active, authorized wake-word-gated session.
     """
 
-    def __init__(self, session_manager: SessionManager):
+    def __init__(self, session_manager: SessionManager, min_confidence: float = 0.5):
+        if not 0.0 <= min_confidence <= 1.0:
+            raise ValueError("min_confidence must be between 0 and 1")
         self.session_manager = session_manager
+        self.min_confidence = min_confidence
         self.security_violations_count = 0
 
     def validate_source(self, command: Command) -> bool:
@@ -56,6 +59,13 @@ class SecurityValidator:
 
         if command.confidence < 0.0 or command.confidence > 1.0:
             self._log_security_violation(f"Command '{command.type}' has invalid confidence: {command.confidence}")
+            return False
+
+        if command.confidence < self.min_confidence:
+            self._log_security_violation(
+                f"Command '{command.type}' confidence {command.confidence:.2f} is below "
+                f"the minimum {self.min_confidence:.2f}"
+            )
             return False
 
         logger.info(f"Security validation passed for command '{command.type}' in session '{command.session_id}'.")
