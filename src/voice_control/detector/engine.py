@@ -5,14 +5,17 @@ Zero external C library dependencies required for core functionality.
 """
 
 from abc import ABC, abstractmethod
-import math
-import struct
-import time
+import logging
+import re
 from typing import List, Optional, Tuple
 
 import numpy as np
 
+from voice_control.audio.segmenter import UtteranceSegmenter
 from voice_control.config import VoiceControlConfig
+from voice_control.recognition.transcriber import BaseTranscriber
+
+logger = logging.getLogger(__name__)
 
 
 class BaseWakeWordEngine(ABC):
@@ -35,14 +38,13 @@ class BaseWakeWordEngine(ABC):
 
 class AcousticPatternEngine(BaseWakeWordEngine):
     """
-    Lightweight, local acoustic feature detection engine running via NumPy.
-    Analyzes energy envelope dynamics, syllable periodicity, and zero-crossing rates
-    characteristic of spoken wake-word phrases (e.g. 3 distinct syllables in 'hey me-dia').
+    Lightweight, local acoustic feature detector running via NumPy.
+    Analyzes energy envelope dynamics, syllable periodicity, and zero-crossing rates.
 
-    Fully satisfies:
-    - SR-2 (Local only, privacy-preserving, zero network transmission)
-    - NFR-1 / FR-1 (Sub-second latency, typical execution < 5 ms per frame)
-    - NFR-5 (Pure Python/NumPy, runs identically on Raspberry Pi and macOS)
+    WARNING: this engine does NOT verify which words were spoken. It fires on any
+    2-4 syllable utterance (any short phrase, a TV, a radio), so on its own it does
+    not satisfy SR-1. It is kept as a cheap voice-activity heuristic and for the
+    existing unit tests. The application uses TranscriptWakeWordEngine instead.
     """
 
     def __init__(self, config: Optional[VoiceControlConfig] = None):
@@ -148,3 +150,53 @@ class SimulatedEngine(BaseWakeWordEngine):
             self._triggered = False
             return True, self.default_confidence
         return False, 0.0
+
+
+class TranscriptWakeWordEngine(BaseWakeWordEngine):
+    """
+    Word-verifying wake-word engine (SR-1, SO-1).
+
+    Audio is split into utterances by energy; each complete utterance is
+    transcribed and the wake phrase must appear in the text as whole words.
+    With a local transcriber (Vosk) no audio leaves the device (SR-2).
+    """
+
+    def __init__(
+        self,
+        transcriber: BaseTranscriber,
+        config: Optional[VoiceControlConfig] = None,
+        segmenter: Optional[UtteranceSegmenter] = None,
+    ):
+        self.config = config or VoiceControlConfig()
+        self.transcriber = transcriber
+        self.segmenter = segmenter or UtteranceSegmenter(self.config)
+        phrase = " ".join(self.config.wake_word.lower().split())
+        self._pattern = re.compile(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)")
+        self.last_transcript: Optional[str] = None
+
+    def reset(self) -> None:
+        self.segmenter.reset()
+
+    def process_chunk(self, chunk: bytes) -> Tuple[bool, float]:
+        utterance = self.segmenter.feed(chunk)
+        if utterance is None:
+            return False, 0.0
+
+        try:
+            result = self.transcriber.transcribe(utterance)
+        except Exception as exc:  # recognizer failure must never open a session
+            logger.warning("Wake-word transcription failed: %s", exc)
+            return False, 0.0
+
+        if result is None:
+            return False, 0.0
+
+        text = " ".join(result.text.lower().split())
+        self.last_transcript = text
+        if not self._pattern.search(text):
+            logger.debug("Ignored non-wake utterance: %r", text)
+            return False, 0.0
+        if result.confidence < self.config.detection_threshold:
+            logger.info("Wake phrase heard with low confidence %.2f; ignored", result.confidence)
+            return False, 0.0
+        return True, result.confidence
