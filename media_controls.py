@@ -1,28 +1,26 @@
-﻿try:
-    import pyautogui
-    import pygetwindow as gw
-except Exception:  # PyGetWindow does not support macOS
-    pyautogui = None
-    gw = None
+﻿
+"""Shared Selenium controls for YouTube media playback."""
 
 
-# US-02 / US-03 / US-04: Play, Pause, Resume on one shared Selenium player
 _player = None
 
 
 def get_player():
-    """Open Chrome once and return the same player on every call."""
+    """Open Chrome once and reuse the same YouTube player."""
     global _player
+
     if _player is None:
         from voice_control.youtube_player import YouTubePlayer
 
         player = YouTubePlayer()
         player.open()
         _player = player
+
     return _player
 
 
 def _run(action):
+    """Run a player action and return False if it fails."""
     try:
         return bool(getattr(get_player(), action)())
     except Exception as error:
@@ -30,6 +28,7 @@ def _run(action):
         return False
 
 
+# US-02 / US-03 / US-04
 def play_media():
     return _run("play")
 
@@ -41,68 +40,66 @@ def pause_media():
 def resume_media():
     return _run("resume")
 
+
+# US-05
 def next_track():
-    """Skip to the next track in a YouTube browser window."""
+    """Skip to the next YouTube track."""
     try:
-        windows = gw.getWindowsWithTitle("YouTube")
-        if not windows:
-            print("YouTube window not found.")
-            return False
-
-        window = windows[0]
-        if window.isMinimized:
-            window.restore()
-        window.activate()
-        pyautogui.hotkey("shift", "n")
-        return True
-
+        player = get_player()
+        result = player._driver.execute_script("""
+            const button = document.querySelector('.ytp-next-button');
+            if (!button || button.disabled) return false;
+            button.click();
+            return true;
+        """)
+        return bool(result)
     except Exception as error:
         print(f"Could not skip to the next track: {error}")
         return False
 
 
+# US-06
 def previous_track():
-    """Go to the previous track in a YouTube browser window."""
+    """Skip to the previous YouTube track."""
     try:
-        windows = gw.getWindowsWithTitle("YouTube")
-        if not windows:
-            print("YouTube window not found.")
-            return False
-
-        window = windows[0]
-        if window.isMinimized:
-            window.restore()
-        window.activate()
-        pyautogui.hotkey("shift", "p")
-        return True
-
+        player = get_player()
+        result = player._driver.execute_script("""
+            const button = document.querySelector('.ytp-prev-button');
+            if (!button || button.disabled) return false;
+            button.click();
+            return true;
+        """)
+        return bool(result)
     except Exception as error:
         print(f"Could not go to the previous track: {error}")
         return False
 
 
+# US-07
 def adjust_volume(direction):
-    """Increase or decrease YouTube volume."""
+    """Adjust YouTube volume by exactly 10 percentage points."""
+    if direction not in ("up", "down"):
+        print("Invalid volume direction. Use 'up' or 'down'.")
+        return False
+
     try:
-        windows = gw.getWindowsWithTitle("YouTube")
-        if not windows:
-            print("YouTube window not found.")
-            return False
+        player = get_player()
+        driver = player._driver
 
-        window = windows[0]
-        if window.isMinimized:
-            window.restore()
-        window.activate()
+        result = driver.execute_script("""
+            const video = document.querySelector('video');
+            if (!video) return false;
 
-        if direction == "up":
-            pyautogui.press("up")
-        elif direction == "down":
-            pyautogui.press("down")
-        else:
-            print("Invalid volume direction. Use 'up' or 'down'.")
-            return False
+            const change = arguments[0] === 'up' ? 0.1 : -0.1;
+            video.volume = Math.max(
+                0,
+                Math.min(1, Math.round((video.volume + change) * 10) / 10)
+            );
 
-        return True
+            return true;
+        """, direction)
+
+        return bool(result)
 
     except Exception as error:
         print(f"Could not adjust volume: {error}")
