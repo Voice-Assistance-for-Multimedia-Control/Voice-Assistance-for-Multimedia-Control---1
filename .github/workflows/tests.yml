@@ -1,0 +1,36 @@
+name: Tests
+
+# Runs the full test suite on every push and on every pull request into main,
+# so each PR shows a green tick (all tests pass) or a red cross before merging.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.9 = the macOS system Python the team uses; 3.12 = current Python
+        python-version: ["3.9", "3.12"]
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install the project and test tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]" selenium
+
+      - name: Run the tests
+        run: python -m pytest tests -v
