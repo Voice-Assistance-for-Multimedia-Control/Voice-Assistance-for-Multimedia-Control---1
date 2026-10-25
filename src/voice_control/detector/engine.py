@@ -173,9 +173,13 @@ class TranscriptWakeWordEngine(BaseWakeWordEngine):
         phrase = " ".join(self.config.wake_word.lower().split())
         self._pattern = re.compile(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)")
         self.last_transcript: Optional[str] = None
+        self.last_confidence: float = 0.0
+        # Words spoken after the wake phrase in the same breath ("hey media play" -> "play")
+        self.trailing_text: str = ""
 
     def reset(self) -> None:
         self.segmenter.reset()
+        self.trailing_text = ""
 
     def process_chunk(self, chunk: bytes) -> Tuple[bool, float]:
         utterance = self.segmenter.feed(chunk)
@@ -193,10 +197,14 @@ class TranscriptWakeWordEngine(BaseWakeWordEngine):
 
         text = " ".join(result.text.lower().split())
         self.last_transcript = text
-        if not self._pattern.search(text):
+        self.trailing_text = ""
+        matches = list(self._pattern.finditer(text))
+        if not matches:
             logger.debug("Ignored non-wake utterance: %r", text)
             return False, 0.0
         if result.confidence < self.config.detection_threshold:
             logger.info("Wake phrase heard with low confidence %.2f; ignored", result.confidence)
             return False, 0.0
+        self.last_confidence = result.confidence
+        self.trailing_text = text[matches[-1].end():].strip()
         return True, result.confidence

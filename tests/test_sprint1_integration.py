@@ -303,3 +303,40 @@ def test_map_command_accepts_vocabulary(text, expected):
 @pytest.mark.parametrize("text", ["", "hello", "pause and play", "play next", "volume", "up"])
 def test_map_command_rejects_everything_else(text):
     assert map_command(text) is None
+
+
+# ------------------------------------------- wake word + command in one breath
+@pytest.mark.parametrize(
+    "heard, expected",
+    [
+        ("hey media play", "play_media"),
+        ("hey media pause the video", "pause_media"),
+        ("hey media volume up", "adjust_volume:up"),
+        ("okay hey media next", "next_track"),
+    ],
+)
+def test_wake_word_and_command_in_one_utterance(heard, expected):
+    assistant, media, feedback, _ = make_assistant([heard])
+    say(assistant, 1)
+    assert media.calls == [expected]
+    assert statuses(feedback) == ["ok"]
+    assert assistant.sessions.current_state == SystemState.IDLE
+
+
+def test_wake_word_with_non_command_words_keeps_window_open():
+    assistant, media, _, _ = make_assistant(["hey media um", "pause"])
+    say(assistant, 2)
+    assert media.calls == ["pause_media"]
+
+
+def test_command_before_wake_word_is_not_executed():
+    assistant, media, _, _ = make_assistant(["play hey media"])
+    say(assistant, 1)
+    assert media.calls == []
+    assert assistant.sessions.current_state == SystemState.LISTENING
+
+
+def test_one_breath_command_still_needs_confidence():
+    assistant, media, _, _ = make_assistant([("hey media play", 0.3)])
+    say(assistant, 1)
+    assert media.calls == []

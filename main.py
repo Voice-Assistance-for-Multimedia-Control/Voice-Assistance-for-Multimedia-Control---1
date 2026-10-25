@@ -79,6 +79,15 @@ def main(argv=None) -> int:
         print(f"[WARNING] Not available in media_controls yet: {', '.join(missing)}. "
               "Those commands will be rejected with an error tone.")
 
+    # Open the shared media player now, so the first command does not have to.
+    get_player = getattr(module, "get_player", None)
+    if callable(get_player):
+        try:
+            get_player()
+            print("Media player opened. Start a YouTube video in that window, then speak.")
+        except Exception as exc:
+            print(f"[WARNING] Could not open the media player yet: {exc}")
+
     assistant = VoiceAssistant(transcriber, bind_media_actions(module, import_error), config)
     return assistant.run()
 

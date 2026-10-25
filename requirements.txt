@@ -2,7 +2,7 @@
 numpy>=1.22.0
 sounddevice>=0.4.6
 # Speech recognition: Vosk is the default (offline, SR-2); SpeechRecognition for --backend google
-vosk>=0.3.45
+vosk>=0.3.44
 SpeechRecognition>=3.10
 # Media control backends (owned by US-02..US-07; to be consolidated on one player)
 selenium
