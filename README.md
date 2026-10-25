@@ -9,19 +9,19 @@ Say **"Hey Media"**, then one command within 4 seconds: *play, pause, resume, ne
 
 ## Sprint Allocations & Status
 
-Statuses describe what is verified, not just what is merged. "Unit tested" means automated tests pass with fake audio and a fake player; "Hardware verified" requires TC-01..TC-10 run on the Raspberry Pi with results logged.
+Statuses describe what is verified, not just what is merged. "Unit tested" means automated tests pass with fake audio and a fake player; "Verified" means TC-01..TC-10 were run on the test laptop with results logged (see [Deviations](#deviations-from-the-submitted-documents)).
 
 ### Sprint 1 (Core Multimedia Control Pipeline)
 | User Story | Assignee | Story Points | Status |
 |---|---|:---:|---|
-| **US-01 — Wake-Word Detection** | Abhay S (`abhayS-pixel`) | 5 | Unit tested; word-verifying wake engine; hardware verification pending |
-| **Integration — `main.py` entry point** | Abhay S | — | Unit tested end-to-end for all 7 commands with a fake player |
-| **US-02 — Play Media** | Aaditya Vashisht (`aadityaV-goat`) | 3 | In progress — `play_media()` not yet in `media_controls.py` |
-| **US-03 — Pause Media** | Aaditya Vashisht | 3 | In progress — `pause_media()` not yet in `media_controls.py` |
-| **US-04 — Resume Media** | Aaditya Vashisht | 3 | In progress — `resume_media()` not yet in `media_controls.py` |
-| **US-05 — Next Track** | Aarohi Jaiswal (`aarohijaiswal`) | 3 | Merged; uses PyGetWindow, which does not run on Linux / Raspberry Pi |
-| **US-06 — Previous Track** | Aarohi Jaiswal | 3 | Merged; same Linux limitation |
-| **US-07 — Volume Control** | Aarohi Jaiswal | 3 | Merged; same Linux limitation; YouTube arrow keys step 5%, SRS requires 10% |
+| **US-01 — Wake-Word Detection** | Abhay S (`abhayS-pixel`) | 5 | Merged (PR #36, #38); unit tested; live wake word confirmed on laptop |
+| **Integration — `main.py` entry point** | Abhay S | — | Merged (PR #36, #38); unit tested end-to-end for all 7 commands |
+| **US-02 — Play Media** | Aaditya Vashisht (`aadityaV-goat`) | 3 | Merged (PR #35); unit tested; laptop verification pending |
+| **US-03 — Pause Media** | Aaditya Vashisht | 3 | Merged (PR #35); unit tested; laptop verification pending |
+| **US-04 — Resume Media** | Aaditya Vashisht | 3 | Merged (PR #35); unit tested; laptop verification pending |
+| **US-05 — Next Track** | Aarohi Jaiswal (`aarohijaiswal`) | 3 | Merged (PR #37); unit tested; laptop verification pending |
+| **US-06 — Previous Track** | Aarohi Jaiswal | 3 | Merged (PR #37); unit tested; laptop verification pending |
+| **US-07 — Volume Control** | Aarohi Jaiswal | 3 | Merged (PR #37); unit tested (exact 10% step); laptop verification pending |
 
 ### Sprint 2 (Robustness, Feedback & System Diagnostics)
 | User Story | Assignee | Story Points | Status |
@@ -40,7 +40,7 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[vosk,dev]"          # add ,google to use the cloud recognizer
 ```
 
-Raspberry Pi also needs PortAudio for the microphone: `sudo apt install libportaudio2`.
+Requires Python 3.9+ and Google Chrome. On Linux (or a Raspberry Pi) the microphone also needs PortAudio: `sudo apt install libportaudio2`.
 
 Download the offline speech model (about 36 MB) once:
 
@@ -96,6 +96,19 @@ The binding lives in `src/voice_control/control/media_actions.py`.
 
 ---
 
+## Deviations from the Submitted Documents
+
+The SRS, Software Architecture & Design Specification (SAD) and Test Plan were followed, with the four deviations below. None changes the seven Sprint 1 commands or their acceptance criteria.
+
+| ID | Submitted documents said | What we did instead | Why | Impact |
+|---|---|---|---|---|
+| **D-1** | Runs on embedded hardware, a Raspberry Pi / ESP32 board (SRS 1.1, 1.2; SAD 2.6), and is tested on that target hardware (Test Plan, Section 9 Test Environment) | Developed and tested on a laptop (macOS) with its built-in microphone | No Raspberry Pi or ESP32 was available to the team | No change in behaviour. The code is plain Python with no board-specific parts, so it can move to a Raspberry Pi unchanged (plus `sudo apt install libportaudio2` and Chromium). Response times (NFR-1, TC-09) are measured on the laptop, not the board |
+| **D-2** | Controls a local audio/video player on the same device (SRS 1.1, 1.2), with no mandatory network dependency (SAD 2.6) | Controls YouTube in a Chrome window driven by Selenium | One shared player that behaves the same on Windows, macOS and Linux for all seven commands, through a controllable interface as SRS 2.5 allows | Video playback needs an internet connection. Speech recognition still runs on the device (D-3, SR-2). Previous track (US-06) needs a YouTube playlist |
+| **D-3** | Speech processing with a library such as MediaPipe or SpeechRecognition (SRS 1.2), lightweight offline models preferred (SRS 2.4) | Vosk offline recognizer with a grammar limited to "hey media" and the seven commands; Google recognition only with `--backend google` | Keeps all audio on the device (SR-2) and gives a real confidence score for the security check | A ~36 MB model is downloaded once (see Setup). Google mode sends audio off-device and is not used for testing or the demo |
+| **D-4** | US-09 (command feedback) and US-13 (microphone error handling) planned for Sprint 2 | Delivered during Sprint 1 (PR #34) | Sprint 1's command flow depends on them: feedback after every command (FR-10) and an error tone for rejected commands (FR-9) | Sprint 2 has two fewer stories; no other Sprint 2 work was started during Sprint 1 |
+
+---
+
 ## Repository Structure
 
 ```
@@ -131,12 +144,12 @@ The binding lives in `src/voice_control/control/media_actions.py`.
 | Req / Test case | Implementation | Automated test | Status |
 |---|---|---|---|
 | FR-1 / TC-01 | `WakeWordDetector`, `TranscriptWakeWordEngine` | `test_tc01_wake_word.py` | Unit tested |
-| FR-2..FR-8 / TC-02..TC-08 | `map_command`, `CommandExecutor`, `media_controls` | `test_sprint1_integration.py` (fake player) | Unit tested; real player functions pending |
+| FR-2..FR-8 / TC-02..TC-08 | `map_command`, `CommandExecutor`, `media_controls` | `test_sprint1_integration.py`, `test_player_controls.py`, `test_media_controls.py` | Unit tested; laptop verification pending |
 | FR-9 | `map_command`, `ErrorHandler` | `test_sprint1_integration.py` | Unit tested |
 | FR-10 | `FeedbackModule` | `test_us09_feedback.py`, `test_sprint1_integration.py` | Unit tested |
 | NFR-1 / TC-09 | Whole pipeline | — | Needs hardware measurement |
 | SR-1 / TC-10 | `TranscriptWakeWordEngine`, `SecurityValidator` | `test_tc10_security_gating.py`, `test_sprint1_integration.py` | Unit tested |
-| SR-2 | `VoskTranscriber`, `AudioBuffer` | `test_audio_buffer.py`, `test_transcriber.py` | Unit tested; network check on hardware pending |
+| SR-2 | `VoskTranscriber`, `AudioBuffer` | `test_audio_buffer.py`, `test_transcriber.py` | Unit tested; speech stays on the device (D-3) |
 | US-13 | `AudioCaptureComponent` | `test_us13_mic_error_handling.py` | Unit tested |
 
 ---
@@ -147,4 +160,4 @@ The binding lives in `src/voice_control/control/media_actions.py`.
 python -m pytest tests/ -v
 ```
 
-86 tests. They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the Raspberry Pi with the Test Plan.
+122 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
