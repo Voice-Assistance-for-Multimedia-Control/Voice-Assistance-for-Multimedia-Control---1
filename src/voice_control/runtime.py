@@ -77,6 +77,11 @@ class VoiceAssistant:
             if self.detector.detect_wake_word(chunk):
                 self._session_token = self.detector.active_session_token
                 self.command_segmenter.reset()
+                # "Hey Media play" said in one breath: the command is already here.
+                trailing = getattr(self.detector.engine, "trailing_text", "")
+                if trailing and map_command(trailing) is not None:
+                    confidence = getattr(self.detector.engine, "last_confidence", 1.0)
+                    return self._execute_text(trailing, confidence)
                 logger.info("Wake word heard. Say a command within %.1fs.",
                             self.config.listening_window_seconds)
             return None
@@ -106,29 +111,33 @@ class VoiceAssistant:
         return False
 
     def _handle_command(self, utterance: bytes) -> ExecutionResult:
+        try:
+            transcript = self.transcriber.transcribe(utterance)
+        except Exception as exc:
+            self.error_handler.handle_error(exc)
+            self._end_session()
+            return self._record(ExecutionResult(False, f"recognition failed: {exc}"))
+
+        if transcript is None:
+            self.error_handler.handle_error(UnrecognizedCommandError("Speech was not understood"))
+            self._end_session()
+            return self._record(ExecutionResult(False, "not understood"))
+
+        return self._execute_text(transcript.text, transcript.confidence)
+
+    def _execute_text(self, text: str, confidence: float) -> ExecutionResult:
+        """Map recognized text to a command and run it inside the current session."""
         token = self._session_token
         try:
-            try:
-                transcript = self.transcriber.transcribe(utterance)
-            except Exception as exc:
-                self.error_handler.handle_error(exc)
-                return self._record(ExecutionResult(False, f"recognition failed: {exc}"))
-
-            if transcript is None:
-                self.error_handler.handle_error(
-                    UnrecognizedCommandError("Speech was not understood")
-                )
-                return self._record(ExecutionResult(False, "not understood"))
-
-            command = map_command(transcript.text, transcript.confidence, session_id=token)
+            command = map_command(text, confidence, session_id=token)
             if command is None:
                 self.error_handler.handle_error(
-                    UnrecognizedCommandError(f"'{transcript.text}' is not a supported command")
+                    UnrecognizedCommandError(f"'{text}' is not a supported command")
                 )
-                return self._record(ExecutionResult(False, f"unsupported: {transcript.text}"))
+                return self._record(ExecutionResult(False, f"unsupported: {text}"))
 
             logger.info("Heard '%s' -> %s (confidence %.2f)",
-                        transcript.text, command.type, command.confidence)
+                        text, command.type, command.confidence)
             # The validator re-checks the session now, after recognition, so a
             # command that finished after the window closed is rejected.
             return self._record(self.executor.execute(command))
