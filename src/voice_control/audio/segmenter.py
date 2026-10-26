@@ -36,6 +36,9 @@ class UtteranceSegmenter:
         self._in_speech = False
         self._silence_bytes = 0
         self._speech_bytes = 0
+        # Silence (seconds) that ended the most recent utterance. The speaker
+        # actually stopped this long before feed() returned it (NFR-1 timing).
+        self.last_trailing_silence_seconds = 0.0
 
     def reset(self) -> None:
         self._buffer.clear()
@@ -83,6 +86,7 @@ class UtteranceSegmenter:
 
         utterance = bytes(self._buffer)
         speech_seconds = self._speech_bytes / self._bytes_per_second
+        self.last_trailing_silence_seconds = silence
         self.reset()
         if speech_seconds < self.config.vad_min_utterance_seconds:
             return None  # a click or a cough, not an utterance

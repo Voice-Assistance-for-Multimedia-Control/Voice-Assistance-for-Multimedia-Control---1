@@ -10,7 +10,9 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest moved to 26.04, which has no Python 3.9 (the macOS
+    # system Python the team uses), so the 3.9 job could not start.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -19,10 +21,10 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip

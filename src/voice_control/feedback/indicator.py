@@ -179,6 +179,18 @@ class FeedbackModule:
                 message="[FEEDBACK ⚠] Microphone unavailable or audio stream faulted.",
                 tone_type=ToneType.HARDWARE_FAULT,
             )
+        elif status_key == "muted":
+            self._record_and_dispatch(
+                status="muted",
+                color=LEDColor.YELLOW,
+                message="[FEEDBACK] Microphone OFF: not listening. Type m + Enter to turn it on.",
+            )
+        elif status_key == "unmuted":
+            self._record_and_dispatch(
+                status="unmuted",
+                color=LEDColor.OFF,
+                message="[FEEDBACK] Microphone ON: say 'hey media' to give a command.",
+            )
         else:
             self._record_and_dispatch(
                 status=status_key,
