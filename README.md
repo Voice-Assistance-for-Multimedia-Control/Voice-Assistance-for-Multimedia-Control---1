@@ -9,27 +9,42 @@ Say **"Hey Media"**, then one command within 4 seconds: *play, pause, resume, ne
 
 ## Sprint Allocations & Status
 
-Statuses describe what is verified, not just what is merged. "Unit tested" means automated tests pass with fake audio and a fake player; "Verified" means TC-01..TC-10 were run on the test laptop with results logged (see [Deviations](#deviations-from-the-submitted-documents)).
+Statuses describe what is verified, not just what is merged. "Unit tested" means automated tests pass with fake audio and a fake player; "Demonstrated" means it works live in the sprint demo video; "Verified" means the test case was run on the test laptop with results recorded in the test log (see [Deviations](#deviations-from-the-submitted-documents)).
+
+**Sprint 1 demo video:** [`sprint_1_demo.mp4`](sprint_1_demo.mp4) (about 1 minute, YouTube playlist controlled by voice on the test laptop).
 
 ### Sprint 1 (Core Multimedia Control Pipeline)
 | User Story | Assignee | Story Points | Status |
 |---|---|:---:|---|
-| **US-01 — Wake-Word Detection** | Abhay S (`abhayS-pixel`) | 5 | Merged (PR #36, #38); unit tested; live wake word confirmed on laptop |
-| **Integration — `main.py` entry point** | Abhay S | — | Merged (PR #36, #38); unit tested end-to-end for all 7 commands |
-| **US-02 — Play Media** | Aaditya Vashisht (`aadityaV-goat`) | 3 | Merged (PR #35); unit tested; laptop verification pending |
-| **US-03 — Pause Media** | Aaditya Vashisht | 3 | Merged (PR #35); unit tested; laptop verification pending |
-| **US-04 — Resume Media** | Aaditya Vashisht | 3 | Merged (PR #35); unit tested; laptop verification pending |
-| **US-05 — Next Track** | Aarohi Jaiswal (`aarohijaiswal`) | 3 | Merged (PR #37); unit tested; laptop verification pending |
-| **US-06 — Previous Track** | Aarohi Jaiswal | 3 | Merged (PR #37); unit tested; laptop verification pending |
-| **US-07 — Volume Control** | Aarohi Jaiswal | 3 | Merged (PR #37); unit tested (exact 10% step); laptop verification pending |
+| **US-01 — Wake-Word Detection** | Abhay S (`abhayS-pixel`) | 5 | Done (PR #32, #36, #38); unit tested; demonstrated in Sprint 1 video |
+| **Integration — `main.py` entry point** | Abhay S | — | Done (PR #36, #38); unit tested end-to-end for all 7 commands |
+| **US-02 — Play Media** | Aaditya Vashisht (`aadityaV-goat`) | 3 | Done (PR #35); unit tested; demonstrated in Sprint 1 video |
+| **US-03 — Pause Media** | Aaditya Vashisht | 3 | Done (PR #35); unit tested; demonstrated in Sprint 1 video |
+| **US-04 — Resume Media** | Aaditya Vashisht | 3 | Done (PR #35); unit tested; demonstrated in Sprint 1 video |
+| **US-05 — Next Track** | Aarohi Jaiswal (`aarohijaiswal`) | 3 | Done (PR #37); unit tested; demonstrated in Sprint 1 video |
+| **US-06 — Previous Track** | Aarohi Jaiswal | 3 | Done (PR #37); unit tested; demonstrated in Sprint 1 video |
+| **US-07 — Volume Control** | Aarohi Jaiswal | 3 | Done (PR #37); unit tested (exact 10% step); demonstrated in Sprint 1 video |
 
-### Sprint 2 (Robustness, Feedback & System Diagnostics)
+Sprint 1 total: 7 stories, 23 points.
+
+### Sprint 2 (Robustness, Feedback & System Diagnostics) — 26–30 Oct
 | User Story | Assignee | Story Points | Status |
 |---|---|:---:|---|
-| **US-09 — Command Feedback** | Abhay S | 3 | Merged (PR #34), unit tested |
-| **US-13 — Microphone Error Handling** | Abhay S | 3 | Merged (PR #34), unit tested |
+| **US-09 — Command Feedback** | Abhay S | 3 | Done (PR #34, delivered early); unit tested |
+| **US-13 — Microphone Error Handling** | Abhay S | 3 | Done (PR #34, delivered early); unit tested |
+| **US-16 — Microphone Privacy Control** | Abhay S | 5 | Implemented: type `m` + Enter to turn the microphone off/on; unit tested; live check pending |
+| **US-17 — Local Voice Processing** | Abhay S | 5 | Offline Vosk in place; network check pending |
+| **US-19 — Listening Status Indicator** | Abhay S | 3 | To do |
+| **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | To do (8-hour run) |
+| **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | To do (timing log ready: see Run) |
+| **US-15 — Recover from Recognition Errors** | Aaditya Vashisht | 5 | To do |
+| **US-18 — Startup System Check** | Aaditya Vashisht | 3 | To do |
+| **US-08 — Reject Unsupported Commands** | Aarohi Jaiswal | 5 | To do |
+| **US-12 — Handle Unclear Voice Commands** | Aarohi Jaiswal | 3 | To do |
+| **US-14 — Media Player Error Handling** | Aarohi Jaiswal | 3 | To do |
+| **US-20 — Prevent Duplicate Command Execution** | Aarohi Jaiswal | 5 | To do |
 
-No further Sprint 2 work until Sprint 1 is hardware verified.
+Sprint 2 total: 13 stories, 53 points (Abhay 19, Aaditya 18, Aarohi 16).
 
 ---
 
@@ -60,6 +75,11 @@ python main.py -v                 # debug logging
 ```
 
 `main.py` is the only entry point. On start it reports any agreed `media_controls.py` function that is missing or fails to import; those commands are rejected with an error tone instead of crashing the assistant.
+
+While it runs:
+
+- **Microphone off/on (US-16):** type `m` and press Enter. While off, the microphone stream is closed and nothing is heard or processed; type `m` again to turn it back on.
+- **Response time (NFR-1, US-11):** every command prints a line such as `[TIMING] 'pause' executed in 640 ms (end of speech -> action; target < 2000 ms)`. Press Ctrl+C to stop; a summary (count, average, slowest) is printed. The time includes the 0.5 s of silence the system waits for to know you have finished speaking.
 
 ## How a command flows
 
@@ -160,4 +180,4 @@ The SRS, Software Architecture & Design Specification (SAD) and Test Plan were f
 python -m pytest tests/ -v
 ```
 
-122 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
+145 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
