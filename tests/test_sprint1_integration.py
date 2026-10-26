@@ -189,7 +189,23 @@ def test_one_command_per_wake_word():
     say(assistant, 3)
     assert media.calls == ["play_media"]
 
+def test_one_command_executes_only_once_per_wake_word():
+    assistant, media, _, _ = make_assistant(["hey media", "play"])
 
+    say(assistant, 2)
+
+    assert media.calls.count("play_media") == 1
+    assert len(assistant.results) == 1
+
+def test_replayed_command_without_new_wake_word_is_ignored():
+    assistant, media, _, _ = make_assistant(
+        ["hey media", "play", "pause"]
+    )
+
+    say(assistant, 3)
+
+    assert media.calls == ["play_media"]
+    assert assistant.sessions.current_state == SystemState.IDLE
 def test_command_after_window_expired_is_ignored():
     assistant, media, _, _ = make_assistant(["hey media", "play"], window=0.3)
     say(assistant, 1)

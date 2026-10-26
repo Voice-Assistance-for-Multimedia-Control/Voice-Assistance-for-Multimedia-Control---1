@@ -68,8 +68,19 @@ def map_command(
     if command_type is None:
         return None
     return Command(type=command_type, confidence=confidence, session_id=session_id)
-
-
 def recognizer_phrases(wake_word: str) -> List[str]:
-    """Every phrase the recognizer needs to know: wake word, commands, fillers."""
-    return [wake_word.lower()] + list(PHRASES) + sorted(FILLER_WORDS)
+    """Phrases needed for wake-word, command, and rejection testing."""
+    unsupported_test_phrases = [
+        "open instagram",
+        "take a screenshot",
+        "send an email",
+        "turn on the lights",
+        "check the weather",
+    ]
+
+    return (
+        [wake_word.lower()]
+        + list(PHRASES)
+        + sorted(FILLER_WORDS)
+        + unsupported_test_phrases
+    )
