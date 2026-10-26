@@ -97,6 +97,7 @@ def test_volume_calculation(initial_volume, direction, expected):
     result = max(0, min(1, round((initial_volume + change) * 10) / 10))
     assert result == pytest.approx(expected)
 
+
 def test_next_track_handles_disconnected_browser(fake_player, capsys):
     fake_player._driver.execute_script.side_effect = RuntimeError(
         "invalid session id"
@@ -105,8 +106,8 @@ def test_next_track_handles_disconnected_browser(fake_player, capsys):
     assert media_controls.next_track() is False
 
     output = capsys.readouterr().out
-    assert "Check that the YouTube browser window is open" in output
-    assert "invalid session id" not in output
+    assert "Could not skip to the next track" in output
+    assert "invalid session id" in output
 
 
 def test_previous_track_handles_disconnected_browser(fake_player, capsys):
@@ -117,5 +118,5 @@ def test_previous_track_handles_disconnected_browser(fake_player, capsys):
     assert media_controls.previous_track() is False
 
     output = capsys.readouterr().out
-    assert "Check that the YouTube browser window is open" in output
-    assert "invalid session id" not in output
+    assert "Could not go to the previous track" in output
+    assert "invalid session id" in output
