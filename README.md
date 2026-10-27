@@ -35,7 +35,7 @@ Sprint 1 total: 7 stories, 23 points.
 | **US-16 — Microphone Privacy Control** | Abhay S | 5 | Implemented: type `m` + Enter to turn the microphone off/on; unit tested; live check pending |
 | **US-17 — Local Voice Processing** | Abhay S | 5 | Offline Vosk; automated checks: pipeline runs with network blocked, no audio written to disk, audio discarded after use; live network check pending |
 | **US-19 — Listening Status Indicator** | Abhay S | 3 | Implemented: READY / LISTENING / MUTED / MICROPHONE UNAVAILABLE status lines; unit tested |
-| **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | To do (8-hour run) |
+| **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | To do (2-hour run; NFR-3 revised from 8 h with instructor approval, see D-5) |
 | **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | To do (timing log ready: see Run) |
 | **US-15 — Recover from Recognition Errors** | Aaditya Vashisht | 5 | To do |
 | **US-18 — Startup System Check** | Aaditya Vashisht | 3 | To do |
@@ -119,7 +119,9 @@ The binding lives in `src/voice_control/control/media_actions.py`.
 
 ## Deviations from the Submitted Documents
 
-The SRS, Software Architecture & Design Specification (SAD) and Test Plan were followed, with the four deviations below. None changes the seven Sprint 1 commands or their acceptance criteria.
+The SRS, Software Architecture & Design Specification (SAD) and Test Plan were followed, with the five deviations below. None changes the seven Sprint 1 commands or their acceptance criteria.
+
+The revised SRS, [`1_Software_Requirements_Specification_v1.1.pdf`](1_Software_Requirements_Specification_v1.1.pdf) (editable: [`.docx`](1_Software_Requirements_Specification_v1.1.docx)), records D-1, D-2, D-3 and D-5 in the requirements themselves; the original version 1.0 is kept as [`1_Software_Requirements_Specification.pdf`](1_Software_Requirements_Specification.pdf) for comparison.
 
 | ID | Submitted documents said | What we did instead | Why | Impact |
 |---|---|---|---|---|
@@ -127,6 +129,7 @@ The SRS, Software Architecture & Design Specification (SAD) and Test Plan were f
 | **D-2** | Controls a local audio/video player on the same device (SRS 1.1, 1.2), with no mandatory network dependency (SAD 2.6) | Controls YouTube in a Chrome window driven by Selenium | One shared player that behaves the same on Windows, macOS and Linux for all seven commands, through a controllable interface as SRS 2.5 allows | Video playback needs an internet connection. Speech recognition still runs on the device (D-3, SR-2). Previous track (US-06) needs a YouTube playlist |
 | **D-3** | Speech processing with a library such as MediaPipe or SpeechRecognition (SRS 1.2), lightweight offline models preferred (SRS 2.4) | Vosk offline recognizer with a grammar limited to "hey media" and the seven commands; Google recognition only with `--backend google` | Keeps all audio on the device (SR-2) and gives a real confidence score for the security check | A ~36 MB model is downloaded once (see Setup). Google mode sends audio off-device and is not used for testing or the demo |
 | **D-4** | US-09 (command feedback) and US-13 (microphone error handling) planned for Sprint 2 | Delivered during Sprint 1 (PR #34) | Sprint 1's command flow depends on them: feedback after every command (FR-10) and an error tone for rejected commands (FR-9) | Sprint 2 has two fewer stories; no other Sprint 2 work was started during Sprint 1 |
+| **D-5** | Remains listening-ready for at least 8 continuous hours (SRS NFR-3, v1.0) | At least 2 continuous hours (SRS NFR-3, v1.1); tested with a 2-hour run (US-10) | Approved by the course instructor on 27 Oct 2026: a 1–2 hour run is acceptable | Shorter availability evidence; recorded as a revised requirement, not a pass against the original 8 hours |
 
 ---
 
