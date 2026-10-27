@@ -70,12 +70,12 @@ The earlier recorded live checks reported successful recognition and execution f
 | Resume | 652 ms | Reported executed successfully |
 | Next | 653 ms | Reported executed successfully |
 | Previous | 626 ms | Reported executed successfully |
-| Volume up | 613â€“657 ms | Reported executed successfully |
-| Volume down | 619â€“645 ms | Reported executed successfully |
+| Volume up | 613–657 ms | Reported executed successfully |
+| Volume down | 619–645 ms | Reported executed successfully |
 
 The measurements above are from earlier recorded attempts. They should not be treated as a complete performance test.
 
-### 4.3 Additional live verification â€” 26 October
+### 4.3 Additional live verification — 26 October
 
 The following additional results were recorded during the live application session:
 
@@ -89,7 +89,7 @@ For volume up and pause, the application logged the response time from the end o
 
 **Interpretation:** A successful execution message in the logs does not independently establish that the visible YouTube playback state or volume changed. Verify visible media behavior during the final end-to-end test.
 
-## 5. US-08 â€” Reject Unsupported Commands
+## 5. US-08 — Reject Unsupported Commands
 
 **Date:** 26 October 2026
 **Method:** Live microphone test after activating the wake word `hey media`.
@@ -108,13 +108,13 @@ Some additional attempts returned `Speech was not understood`. These were inconc
 
 **Status:** Verified for the five listed live attempts.
 
-## 6. US-12 â€” Handle Unclear Voice Commands
+## 6. US-12 — Handle Unclear Voice Commands
 
 **Date:** 26 October 2026
 
 | Test scenario | Observed result | Status |
 |---|---|---|
-| Unrecognized speech after wake word | Assistant displayed â€œDidn't catch that, please repeatâ€ | PASS |
+| Unrecognized speech after wake word | Assistant displayed “Didn't catch that, please repeat” | PASS |
 | Recognition error handling | `UnrecognizedCommandError` was handled and rejection/failure feedback was emitted | PASS |
 | Session recovery | Application returned to `IDLE` | PASS |
 | No unintended media action | No media action was observed during the live unclear-speech test | PASS for the observed test |
@@ -130,7 +130,7 @@ Some additional attempts returned `Speech was not understood`. These were inconc
 
 **Conclusion:** US-12 passed for the observed live scenario. Broader testing with different unclear phrases may still be useful.
 
-## 7. US-14 â€” Media Player Error Handling
+## 7. US-14 — Media Player Error Handling
 
 ### Automated tests
 
@@ -156,7 +156,7 @@ The successful command logs do not independently prove that every visible YouTub
 
 **Status:** Automated error handling passed; visible success behavior requires final end-to-end confirmation.
 
-## 8. US-20 â€” Prevent Duplicate Command Execution
+## 8. US-20 — Prevent Duplicate Command Execution
 
 **Automated evidence:**
 
@@ -175,13 +175,13 @@ The successful command logs do not independently prove that every visible YouTub
 
 **Conclusion:** The tested one-command-per-wake-word behavior passes. Keep US-20 partially verified until the direct identical raw-audio replay scenario is tested.
 
-## 9. TC-09 / NFR-1 â€” Response-Time Performance
+## 9. TC-09 / NFR-1 — Response-Time Performance
 
 **Requirement:** Valid voice commands should execute within the specified 2,000 ms target. The application also logs tighter targets for particular commands.
 
 ### Recorded evidence
 
-- Earlier live command measurements ranged from 613â€“673 ms.
+- Earlier live command measurements ranged from 613–673 ms.
 - Additional live measurements were 688 ms for volume up and 719 ms for pause.
 - The two additional measurements were within their respective logged targets.
 - Timing-related automated tests passed.
@@ -202,7 +202,7 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 
 **Conclusion:** The preliminary results are encouraging, but the complete performance requirement remains pending until the planned measurement procedure is completed and its acceptance criteria are confirmed.
 
-## 10. SR-2 â€” Local Audio Processing
+## 10. SR-2 — Local Audio Processing
 
 **Requirement:** Raw audio is processed locally and is not transmitted off-device during normal operation.
 
@@ -221,7 +221,7 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 
 **Status:** Local backend configuration and runtime startup verified; network-traffic verification pending.
 
-## 11. NFR-2 â€” Recognition Reliability
+## 11. NFR-2 — Recognition Reliability
 
 **Requirement:** Correctly recognize at least 90% of 50 valid-command utterances in a quiet room.
 
@@ -231,7 +231,7 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 
 **Status:** PASS based on the recorded 50-utterance test results.
 
-## 12. NFR-3 â€” Availability
+## 12. NFR-3 — Availability
 
 **Requirement:** Application remains running continuously for at least 15 minutes without restarting.
 
@@ -239,7 +239,7 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 
 **Status:** PASS based on the recorded availability test.
 
-## 13. NFR-4 â€” First-Time-User Usability
+## 13. NFR-4 — First-Time-User Usability
 
 **Requirement:** A first-time user can use the application successfully without a manual, according to the approved Test Plan.
 
@@ -271,7 +271,7 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 | SR-2 local audio processing | Configuration and runtime startup verified | Complete and record network-traffic verification |
 | Deprecation warnings | Non-blocking warnings | Investigate separately if time permits |
 
-## 16. Final Summary â€” 26 October 2026
+## 16. Final Summary — 26 October 2026
 
 - The latest recorded full automated test run passed: **167 passed, 0 failed**.
 - Live Vosk startup, wake-word detection, volume up, and pause were observed working at runtime.
