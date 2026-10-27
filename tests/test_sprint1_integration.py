@@ -272,11 +272,15 @@ def test_media_function_exception_does_not_crash():
 
 
 def test_media_function_returning_false_gives_error_feedback():
-    assistant, media, feedback, _ = make_assistant(["hey media", "next"], media=FakeMedia(False))
+    assistant, media, feedback, _ = make_assistant(
+        ["hey media", "next"],
+        media=FakeMedia(False),
+    )
     say(assistant, 2)
-    assert media.calls == ["next_track"]
-    assert statuses(feedback) == ["error"]
 
+    assert media.calls == ["next_track"]
+    assert assistant.results[-1].success is False 
+    assert statuses(feedback) == ["error"]
 
 # ------------------------------------------------------------- wiring checks
 def test_detector_and_validator_share_one_session_manager():
@@ -316,7 +320,20 @@ def test_map_command_accepts_vocabulary(text, expected):
     assert cmd.confidence == 0.9
 
 
-@pytest.mark.parametrize("text", ["", "hello", "pause and play", "play next", "volume", "up"])
+@pytest.mark.parametrize(
+    "text",
+    [
+        "",
+        "hello",
+        "pause and play",
+        "play next",
+        "volume",
+        "up",
+        "stop music",
+        "send an email",
+        "turn on the lights",
+    ],
+)
 def test_map_command_rejects_everything_else(text):
     assert map_command(text) is None
 
