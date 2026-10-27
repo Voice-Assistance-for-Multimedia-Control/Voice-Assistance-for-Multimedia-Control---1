@@ -189,6 +189,17 @@ def test_one_command_per_wake_word():
     say(assistant, 3)
     assert media.calls == ["play_media"]
 
+def test_new_wake_word_allows_next_command_after_session_ends():
+    assistant, media, _, _ = make_assistant(
+        ["hey media", "play", "hey media", "pause"]
+    )
+
+    say(assistant, 4)
+
+    assert media.calls == ["play_media", "pause_media"]
+    assert len(assistant.results) == 2
+    assert assistant.sessions.current_state == SystemState.IDLE
+
 def test_one_command_executes_only_once_per_wake_word():
     assistant, media, _, _ = make_assistant(["hey media", "play"])
 
@@ -305,7 +316,7 @@ def test_media_function_returning_false_gives_error_feedback():
     say(assistant, 2)
 
     assert media.calls == ["next_track"]
-    assert assistant.results[-1].success is False 
+    assert assistant.results[-1].success is False
     assert statuses(feedback) == ["error"]
 
 # ------------------------------------------------------------- wiring checks

@@ -18,7 +18,7 @@
 
 | Test / Requirement | Current status | Evidence / Remaining work |
 |---|---|---|
-| Full automated test suite | PASS | 167 passed, 0 failed |
+| Full automated test suite | PASS | 172 passed, 0 failed; 11 warnings |
 | US-08: Unsupported commands | Verified for tested phrases | 5/5 confirmed live attempts rejected |
 | US-12: Unclear commands | Verified for observed test | Unclear speech rejected, no media action observed, application returned to IDLE |
 | US-14: Media player error handling | Automated tests passed; manual failure path exercised | Verify visible results for successful media actions |
@@ -35,8 +35,8 @@
 **Full test suite**
 
 - Command: `python -m pytest tests/ -v`
-- Result: **167 passed, 0 failed**
-- Recorded duration: 13.71 seconds
+- Result: **172 passed, 0 failed**
+- Recorded duration: 13.77 seconds
 - Warnings: 11 deprecation warnings originating from `sounddevice.py` related to NumPy 2.5.
 
 **Targeted test results**
@@ -164,7 +164,8 @@ The successful command logs do not independently prove that every visible YouTub
 - `test_one_command_executes_only_once_per_wake_word` passed.
 - `test_replayed_command_without_new_wake_word_is_ignored` passed.
 - The selected duplicate, replay and wake-word test group passed: 30 passed, 137 deselected.
-- The full project test suite passed: 167 passed, 0 failed.
+- The full project test suite passed: 172 passed, 0 failed, with 11 non-blocking deprecation warnings.
+- `test_new_wake_word_allows_next_command_after_session_ends` passed, confirming that a new wake word allows a separate command after the previous session ends.
 
 | Scenario | Status |
 |---|---|
@@ -285,12 +286,12 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 
 ## 16. Final Summary — 26 October 2026
 
-- The latest recorded full automated test run passed: **167 passed, 0 failed**.
+- The latest full automated test run passed: **172 passed, 0 failed, with 11 deprecation warnings**.
 - Live Vosk startup, wake-word detection, volume up, and pause were observed working at runtime.
 - The live unclear-speech test handled the recognition error, returned to `IDLE`, and did not trigger a media action.
 - US-08 passed for the five listed unsupported phrases.
 - US-14 automated error-handling tests passed; visible success behavior still needs end-to-end confirmation.
-- US-20 passes the recorded one-command-per-wake-word tests, but direct identical raw-audio replay remains untested.
+- US-20 automated regression tests pass, including identical-audio replay handling and acceptance of a new wake word; live microphone replay remains unverified.
 - Performance results are promising, but the full performance test remains pending.
 - SR-2 configuration and runtime startup are verified; network-traffic verification remains pending.
 - NFR-4 usability testing with two first-time users is planned for 28 October.
