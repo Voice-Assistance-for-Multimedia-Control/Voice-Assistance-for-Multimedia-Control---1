@@ -1,6 +1,6 @@
 # Voice Assistance for Multimedia Control
 
-**Hardware-Based Voice Control System using Raspberry Pi / ESP32**  
+**Voice-Controlled Media Playback System (Python; tested on a laptop, Raspberry Pi-ready)**  
 *Course Mini-Project — Software Engineering (UE24CS242B)*
 
 Say **"Hey Media"**, then one command within 4 seconds: *play, pause, resume, next, previous, volume up, volume down*.
@@ -32,19 +32,21 @@ Sprint 1 total: 7 stories, 23 points.
 |---|---|:---:|---|
 | **US-09 — Command Feedback** | Abhay S | 3 | Done (PR #34, delivered early); unit tested |
 | **US-13 — Microphone Error Handling** | Abhay S | 3 | Done (PR #34, delivered early); unit tested |
-| **US-16 — Microphone Privacy Control** | Abhay S | 5 | Implemented: type `m` + Enter to turn the microphone off/on; unit tested; live check pending |
-| **US-17 — Local Voice Processing** | Abhay S | 5 | Offline Vosk; automated checks: pipeline runs with network blocked, no audio written to disk, audio discarded after use; live network check pending |
-| **US-19 — Listening Status Indicator** | Abhay S | 3 | Implemented: READY / LISTENING / MUTED / MICROPHONE UNAVAILABLE status lines; unit tested |
-| **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | To do (2-hour run; NFR-3 revised from 8 h with instructor approval, see D-5) |
-| **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | To do (timing log ready: see Run) |
-| **US-15 — Recover from Recognition Errors** | Aaditya Vashisht | 5 | To do |
-| **US-18 — Startup System Check** | Aaditya Vashisht | 3 | To do |
-| **US-08 — Reject Unsupported Commands** | Aarohi Jaiswal | 5 | To do |
-| **US-12 — Handle Unclear Voice Commands** | Aarohi Jaiswal | 3 | To do |
-| **US-14 — Media Player Error Handling** | Aarohi Jaiswal | 3 | To do |
-| **US-20 — Prevent Duplicate Command Execution** | Aarohi Jaiswal | 5 | To do |
+| **US-16 — Microphone Privacy Control** | Abhay S | 5 | Done (PR #42): type `m` + Enter to turn the microphone off/on; unit tested; verified live 26 Oct |
+| **US-17 — Local Voice Processing** | Abhay S | 5 | Done (PR #44): offline Vosk; automated checks with network blocked; live network check passed 27 Oct ([evidence](docs/evidence/us17-network-check.md)) |
+| **US-19 — Listening Status Indicator** | Abhay S | 3 | Done (PR #44): READY / LISTENING / MUTED / MICROPHONE UNAVAILABLE status lines; unit tested |
+| **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | In progress: 2-hour run (NFR-3 revised from 8 h with instructor approval, see D-5) |
+| **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | In progress: accuracy and response-time measurements (timing log ready: see Run) |
+| **US-15 — Recover from Recognition Errors** | Aaditya Vashisht | 5 | Done (PR #41); unit tested; live check reported |
+| **US-18 — Startup System Check** | Aaditya Vashisht | 3 | To do (due 28 Oct) |
+| **US-08 — Reject Unsupported Commands** | Aarohi Jaiswal | 5 | Done; unit tested; verified live (two tests of 5 phrases each, see test log) |
+| **US-12 — Handle Unclear Voice Commands** | Aarohi Jaiswal | 3 | Done (PR #43): "Didn't catch that, please repeat"; unit tested; checked live |
+| **US-14 — Media Player Error Handling** | Aarohi Jaiswal | 3 | Done (PR #43): media actions confirm the result before reporting success; unit tested; verified live |
+| **US-20 — Prevent Duplicate Command Execution** | Aarohi Jaiswal | 5 | Done (PR #43); unit tested; checked live |
 
-Sprint 2 total: 13 stories, 53 points (Abhay 19, Aaditya 18, Aarohi 16).
+Sprint 2 total: 13 stories, 53 points (Abhay 19, Aaditya 18, Aarohi 16). Done: 10 stories, 40 points. Remaining: US-10, US-11, US-18 (Aaditya, 13 points).
+
+Full test results: [`docs/test-log.md`](docs/test-log.md).
 
 ---
 
@@ -184,4 +186,4 @@ The revised SRS, [`1_Software_Requirements_Specification_v1.1.pdf`](1_Software_R
 python -m pytest tests/ -v
 ```
 
-181 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
+190 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
