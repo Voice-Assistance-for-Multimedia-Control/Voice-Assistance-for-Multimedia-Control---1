@@ -175,6 +175,18 @@ The successful command logs do not independently prove that every visible YouTub
 
 **Conclusion:** The tested one-command-per-wake-word behavior passes. Keep US-20 partially verified until the direct identical raw-audio replay scenario is tested.
 
+**Additional regression test — identical command audio replay**
+
+- Test: `test_identical_command_audio_replay_without_new_wake_word_is_ignored`
+- Result: PASS
+- Verification: The same command audio bytes were replayed after the first command completed, without a new wake word.
+- Assertions: The media action executed only once, exactly one result was recorded, and the session remained in `IDLE`.
+- Integration suite: 62 passed.
+- Full test suite: 171 passed, 0 failed, 11 deprecation warnings.
+- Limitation: This is a synthetic-audio integration test using a scripted transcriber; live microphone replay behavior has not been verified.
+
+**Conclusion:** Automated replay protection is verified for the tested scenario. Do not claim all possible duplicate replay scenarios are covered.
+
 ## 9. TC-09 / NFR-1 — Response-Time Performance
 
 **Requirement:** Valid voice commands should execute within the specified 2,000 ms target. The application also logs tighter targets for particular commands.

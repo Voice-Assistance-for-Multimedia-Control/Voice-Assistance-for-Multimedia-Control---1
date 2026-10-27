@@ -206,6 +206,32 @@ def test_replayed_command_without_new_wake_word_is_ignored():
 
     assert media.calls == ["play_media"]
     assert assistant.sessions.current_state == SystemState.IDLE
+
+
+def test_identical_command_audio_replay_without_new_wake_word_is_ignored():
+    assistant, media, _, _ = make_assistant(["hey media", "play"])
+
+    wake_audio = utterance()
+    command_audio = utterance()
+
+    # Open a session, then execute one command.
+    for chunk in wake_audio:
+        assistant.process_chunk(chunk)
+
+    for chunk in command_audio:
+        assistant.process_chunk(chunk)
+
+    assert media.calls == ["play_media"]
+
+    # Replay the exact same command audio without a new wake word.
+    for chunk in command_audio:
+        assistant.process_chunk(chunk)
+
+    assert media.calls == ["play_media"]
+    assert len(assistant.results) == 1
+    assert assistant.sessions.current_state == SystemState.IDLE
+
+
 def test_command_after_window_expired_is_ignored():
     assistant, media, _, _ = make_assistant(["hey media", "play"], window=0.3)
     say(assistant, 1)
