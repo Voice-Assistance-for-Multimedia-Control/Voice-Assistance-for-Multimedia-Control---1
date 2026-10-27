@@ -30,7 +30,7 @@
 | NFR-4: First-time-user usability | PENDING | Test with two first-time users on 28 October |
 | US-09: Command feedback (Abhay) | Automated tests pass | `test_us09_feedback.py` passes (PR #34); live feedback tones seen in the live sessions above |
 | US-13: Microphone error handling (Abhay) | Automated tests pass | `test_us13_mic_error_handling.py` passes (PR #34) |
-| US-16: Microphone privacy / mute (Abhay) | Automated tests pass; live check pending | `test_us16_mute_and_timing.py` passes (23 tests) |
+| US-16: Microphone privacy / mute (Abhay) | Verified | `test_us16_mute_and_timing.py` passes (23 tests); live mute/unmute check passed on 26 October (see US-16 live verification below) |
 | US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
 | US-15: Recover from recognition errors (Aaditya) | Automated tests pass; live check reported done (PR #41) | `test_us15_recovery.py` passes (18 tests); add Aaditya's live-check details when he sends them |
 | US-17 / SR-2: Local voice processing (Abhay) | Verified | Automated checks pass; live network check PASS (see Section 10) |
@@ -336,6 +336,7 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 - US-20 is verified: automated regression tests pass (including identical-audio replay and acceptance of a new wake word), and the live microphone check passed on 27 October.
 - Performance results are promising, but the full performance test remains pending.
 - SR-2 is verified: Vosk is the default backend and Abhay's network check (27 October) showed no outside connection and no audio-sized traffic.
+- US-16 is verified: automated tests pass and the live mute/unmute check passed on 26 October.
 - NFR-3 remains PENDING until Aaditya completes the 8-hour run.
 - NFR-4 usability testing with two first-time users is planned for 28 October.
 - The 11 deprecation warnings did not cause test failures.
@@ -355,3 +356,22 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 **Result:** Live microphone verification passed for one-command-per-wake-word behavior and normal processing of a new command.
 
 **Limitation:** This test repeated a spoken command; it did not replay the exact same recorded audio.
+
+### US-16 — Live Microphone Mute Verification
+
+**Date:** 26 October 2026 · **Tester:** Abhay · **Machine:** MacBook Air (macOS)
+
+**Method:** `python main.py` running with a YouTube video open. The tester typed `m` + Enter to turn the microphone off, then `m` + Enter again to turn it back on, then gave a voice command.
+
+| Time | Action | Observed log output | Status |
+|---|---|---|---|
+| 19:25:25 | Typed `m` + Enter | `Microphone OFF: not listening` shown; `AudioCaptureComponent stopped` (microphone stream closed) | PASS |
+| 19:25:25 – 19:25:30 | Microphone off | No wake-word or command processing logged while muted | PASS |
+| 19:25:30 | Typed `m` + Enter | `Microphone ON` shown; `AudioCaptureComponent started` | PASS |
+| 19:25:33 | Said "hey media play" | Wake word detected (confidence 1.00); `play` recognized and executed | PASS |
+
+**Result:** Muting closed the microphone stream and showed a clear indication; unmuting restored listening and the next command worked without restarting the application.
+
+**Limitation:** The log does not show whether speech was attempted during the muted period. Speech while muted is covered by the automated tests (`test_nothing_is_processed_while_muted`, `test_muting_cancels_an_open_listening_window`).
+
+**Status:** Verified.
