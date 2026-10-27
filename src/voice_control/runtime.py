@@ -156,14 +156,23 @@ class VoiceAssistant:
         except Exception as exc:
             self.error_handler.handle_error(exc)
             self._end_session()
-            return self._record(ExecutionResult(False, f"recognition failed: {exc}"))
+            return self._record(
+                ExecutionResult(False, f"recognition failed: {exc}")
+            )
 
         if transcript is None:
-            self.error_handler.handle_error(UnrecognizedCommandError("Speech was not understood"))
+            print("Didn't catch that, please repeat")
+            self.error_handler.handle_error(
+                UnrecognizedCommandError("Speech was not understood")
+            )
             self._end_session()
-            return self._record(ExecutionResult(False, "not understood"))
+            return self._record(
+                ExecutionResult(False, "not understood")
+            )
 
-        return self._execute_text(transcript.text, transcript.confidence)
+        return self._execute_text(
+            transcript.text, transcript.confidence
+        )
 
     def _execute_text(self, text: str, confidence: float) -> ExecutionResult:
         """Map recognized text to a command and run it inside the current session."""
@@ -413,7 +422,6 @@ class VoiceAssistant:
     def _end_session_if_open(self) -> None:
         if self._session_token is not None or self.sessions.current_state != SystemState.IDLE:
             self._end_session()
-
 
 def _drain(chunks: "queue.Queue[bytes]") -> None:
     """Throw away queued audio (it was captured before a mute / unmute)."""

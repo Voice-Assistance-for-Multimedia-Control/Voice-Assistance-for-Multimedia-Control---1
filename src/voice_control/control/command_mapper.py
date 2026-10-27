@@ -27,7 +27,6 @@ COMMAND_TYPES: List[str] = [PLAY, PAUSE, RESUME, NEXT, PREVIOUS, VOLUME_UP, VOLU
 PHRASES: Dict[str, str] = {
     "play": PLAY,
     "pause": PAUSE,
-    "stop": PAUSE,
     "resume": RESUME,
     "continue": RESUME,
     "next": NEXT,
@@ -68,8 +67,10 @@ def map_command(
     if command_type is None:
         return None
     return Command(type=command_type, confidence=confidence, session_id=session_id)
-
-
 def recognizer_phrases(wake_word: str) -> List[str]:
-    """Every phrase the recognizer needs to know: wake word, commands, fillers."""
-    return [wake_word.lower()] + list(PHRASES) + sorted(FILLER_WORDS)
+    """Phrases to recognize the wake word and supported commands."""
+    return (
+        [wake_word.lower()]
+        + list(PHRASES)
+        + sorted(FILLER_WORDS)
+    )

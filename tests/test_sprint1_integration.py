@@ -189,6 +189,59 @@ def test_one_command_per_wake_word():
     say(assistant, 3)
     assert media.calls == ["play_media"]
 
+def test_new_wake_word_allows_next_command_after_session_ends():
+    assistant, media, _, _ = make_assistant(
+        ["hey media", "play", "hey media", "pause"]
+    )
+
+    say(assistant, 4)
+
+    assert media.calls == ["play_media", "pause_media"]
+    assert len(assistant.results) == 2
+    assert assistant.sessions.current_state == SystemState.IDLE
+
+def test_one_command_executes_only_once_per_wake_word():
+    assistant, media, _, _ = make_assistant(["hey media", "play"])
+
+    say(assistant, 2)
+
+    assert media.calls.count("play_media") == 1
+    assert len(assistant.results) == 1
+
+def test_replayed_command_without_new_wake_word_is_ignored():
+    assistant, media, _, _ = make_assistant(
+        ["hey media", "play", "pause"]
+    )
+
+    say(assistant, 3)
+
+    assert media.calls == ["play_media"]
+    assert assistant.sessions.current_state == SystemState.IDLE
+
+
+def test_identical_command_audio_replay_without_new_wake_word_is_ignored():
+    assistant, media, _, _ = make_assistant(["hey media", "play"])
+
+    wake_audio = utterance()
+    command_audio = utterance()
+
+    # Open a session, then execute one command.
+    for chunk in wake_audio:
+        assistant.process_chunk(chunk)
+
+    for chunk in command_audio:
+        assistant.process_chunk(chunk)
+
+    assert media.calls == ["play_media"]
+
+    # Replay the exact same command audio without a new wake word.
+    for chunk in command_audio:
+        assistant.process_chunk(chunk)
+
+    assert media.calls == ["play_media"]
+    assert len(assistant.results) == 1
+    assert assistant.sessions.current_state == SystemState.IDLE
+
 
 def test_command_after_window_expired_is_ignored():
     assistant, media, _, _ = make_assistant(["hey media", "play"], window=0.3)
@@ -256,11 +309,15 @@ def test_media_function_exception_does_not_crash():
 
 
 def test_media_function_returning_false_gives_error_feedback():
-    assistant, media, feedback, _ = make_assistant(["hey media", "next"], media=FakeMedia(False))
+    assistant, media, feedback, _ = make_assistant(
+        ["hey media", "next"],
+        media=FakeMedia(False),
+    )
     say(assistant, 2)
-    assert media.calls == ["next_track"]
-    assert statuses(feedback) == ["error"]
 
+    assert media.calls == ["next_track"]
+    assert assistant.results[-1].success is False
+    assert statuses(feedback) == ["error"]
 
 # ------------------------------------------------------------- wiring checks
 def test_detector_and_validator_share_one_session_manager():
@@ -300,7 +357,20 @@ def test_map_command_accepts_vocabulary(text, expected):
     assert cmd.confidence == 0.9
 
 
-@pytest.mark.parametrize("text", ["", "hello", "pause and play", "play next", "volume", "up"])
+@pytest.mark.parametrize(
+    "text",
+    [
+        "",
+        "hello",
+        "pause and play",
+        "play next",
+        "volume",
+        "up",
+        "stop music",
+        "send an email",
+        "turn on the lights",
+    ],
+)
 def test_map_command_rejects_everything_else(text):
     assert map_command(text) is None
 

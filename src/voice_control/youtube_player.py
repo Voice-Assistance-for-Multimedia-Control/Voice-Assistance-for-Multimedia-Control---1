@@ -43,45 +43,68 @@ class YouTubePlayer:
                 "(`python -m pip install selenium`) and ensure Google Chrome is installed."
             ) from exc
 
+
     def _execute(self, action: str) -> bool:
         if action not in {"play", "pause", "resume"}:
             raise ValueError(f"Unsupported media action: {action}")
+
         if self._driver is None:
             raise YouTubePlayerError(
                 "Chrome automation is not open. Call player.open() first."
             )
+
         try:
-            result = self._driver.execute_script("""
+            result = self._driver.execute_async_script("""
                 const action = arguments[0];
+                const done = arguments[arguments.length - 1];
                 const video = document.querySelector('video');
-                if (!video) return 'no-video';
+
+                if (!video) {
+                    done('no-video');
+                    return;
+                }
+
                 if (action === 'pause') {
-                    if (!video.paused) video.pause();
-                    return video.paused ? 'ok' : 'failed';
-                }
-                if (action === 'play' || action === 'resume') {
-                    if (video.paused || video.ended) {
-                        const p = video.play();
-                        if (p && p.catch) p.catch(() => {});
+                    if (video.paused) {
+                        done('ok');
+                        return;
                     }
-                    return 'requested';
+
+                    video.pause();
+                    done(video.paused ? 'ok' : 'failed');
+                    return;
                 }
-                return 'unsupported';
+
+                if (!video.paused && !video.ended) {
+                    done('ok');
+                    return;
+                }
+
+                video.play().then(() => {
+                    done(
+                        (!video.paused && !video.ended)
+                            ? 'ok'
+                            : 'failed'
+                    );
+                }).catch(() => {
+                    done('failed');
+                });
             """, action)
+
             if result == "no-video":
                 raise YouTubePlayerError(
                     "No YouTube video is available in the controlled Chrome tab. "
                     "Open a video in the automation window first."
                 )
-            if result == "failed":
-                return False
-            if result in {"ok", "requested"}:
-                return True
-            return False
+
+            return result == "ok"
+
         except YouTubePlayerError:
             raise
         except Exception as exc:
-            raise YouTubePlayerError(f"YouTube {action} failed: {exc}") from exc
+            raise YouTubePlayerError(
+                f"YouTube {action} failed: {exc}"
+            ) from exc
 
     def play(self) -> bool:
         """Start playback if paused; leave an already-playing video alone."""
