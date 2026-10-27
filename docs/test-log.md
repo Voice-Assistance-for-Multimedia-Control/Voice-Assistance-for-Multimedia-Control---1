@@ -18,15 +18,15 @@
 
 | Test / Requirement | Current status | Evidence / Remaining work |
 |---|---|---|
-| Full automated test suite | PASS | 172 passed, 0 failed; 11 warnings |
+| Full automated test suite | PASS | 190 passed, 0 failed; 11 warnings (27 October, after merging main) |
 | US-08: Unsupported commands | Verified for tested phrases | 5/5 confirmed live attempts rejected |
 | US-12: Unclear commands | Verified for observed test | Unclear speech rejected, no media action observed, application returned to IDLE |
 | US-14: Media player error handling | Automated tests passed; manual failure path exercised | Verify visible results for successful media actions |
-| US-20: Duplicate execution prevention | Partially verified | Direct identical raw-audio replay test remains outstanding |
+| US-20: Duplicate execution prevention | Verified | Automated one-command-per-wake-word and identical-audio replay tests pass; live microphone check passed on 27 October |
 | SR-2: Local audio processing | Configuration and runtime support verified; network verification pending | Record a network-traffic check |
 | TC-09 / NFR-1: Performance | Preliminary evidence available | Complete the planned performance test |
 | NFR-2: Recognition reliability | PASS based on recorded results | 45 of 50 valid-command utterances succeeded (90%) |
-| NFR-3: Availability | PASS based on recorded test | Application remained running for 15 minutes without restart |
+| NFR-3: Availability | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | SRS requires the application to run at least 8 hours without restarting |
 | NFR-4: First-time-user usability | PENDING | Test with two first-time users on 28 October |
 | Deprecation warnings | Not blocking tests | 11 warnings related to NumPy 2.5 and `sounddevice.py` |
 
@@ -35,8 +35,8 @@
 **Full test suite**
 
 - Command: `python -m pytest tests/ -v`
-- Result: **172 passed, 0 failed**
-- Recorded duration: 13.77 seconds
+- Result: **190 passed, 0 failed** (27 October, after merging `main`)
+- Recorded duration: 12.44 seconds
 - Warnings: 11 deprecation warnings originating from `sounddevice.py` related to NumPy 2.5.
 
 **Targeted test results**
@@ -164,7 +164,7 @@ The successful command logs do not independently prove that every visible YouTub
 - `test_one_command_executes_only_once_per_wake_word` passed.
 - `test_replayed_command_without_new_wake_word_is_ignored` passed.
 - The selected duplicate, replay and wake-word test group passed: 30 passed, 137 deselected.
-- The full project test suite passed: 172 passed, 0 failed, with 11 non-blocking deprecation warnings.
+- The full project test suite passed: 190 passed, 0 failed, with 11 non-blocking deprecation warnings (27 October, after merging main).
 - `test_new_wake_word_allows_next_command_after_session_ends` passed, confirming that a new wake word allows a separate command after the previous session ends.
 
 | Scenario | Status |
@@ -172,9 +172,9 @@ The successful command logs do not independently prove that every visible YouTub
 | One command per wake-word session | PASS in automated tests |
 | Command without a new wake word is ignored | PASS in automated tests |
 | Session returns to IDLE after processing | PASS in recorded integration tests |
-| Identical raw-audio replay cannot execute the same action twice | NOT TESTED directly |
+| Identical raw-audio replay cannot execute the same action twice | PASS in automated test (`test_identical_command_audio_replay_without_new_wake_word_is_ignored`) |
 
-**Conclusion:** The tested one-command-per-wake-word behavior passes. Keep US-20 partially verified until the direct identical raw-audio replay scenario is tested.
+**Conclusion:** One-command-per-wake-word behavior and identical-audio replay protection pass in automated tests. See the 27 October live microphone verification at the end of this log.
 
 **Additional regression test — identical command audio replay**
 
@@ -246,11 +246,11 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 
 ## 12. NFR-3 — Availability
 
-**Requirement:** Application remains running continuously for at least 15 minutes without restarting.
+**Requirement:** Application remains running continuously for at least 8 hours without restarting (SRS).
 
-- Recorded result: Application remained running and responsive for 15 continuous minutes without restart.
+- Preliminary result: Application remained running and responsive for 15 continuous minutes without restart. This is only a preliminary run and does not satisfy the 8-hour requirement.
 
-**Status:** PASS based on the recorded availability test.
+**Status:** PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed
 
 ## 13. NFR-4 — First-Time-User Usability
 
@@ -258,6 +258,15 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 
 - The planned usability test with two first-time users has not yet been recorded.
 - Planned test date: 28 October 2026.
+| US-09: Command feedback (Abhay) | Automated tests pass | `test_us09_feedback.py` passes (PR #34); live feedback tones seen in the live sessions above |
+| US-13: Microphone error handling (Abhay) | Automated tests pass | `test_us13_mic_error_handling.py` passes (PR #34) |
+| US-16: Microphone privacy / mute (Abhay) | Automated tests pass; live check pending | `test_us16_mute_and_timing.py` passes (23 tests) |
+| US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
+| US-15: Recover from recognition errors (Aaditya) | Automated tests pass; live check reported done (PR #41) | `test_us15_recovery.py` passes (18 tests); add Aaditya's live-check details when he sends them |
+| US-17 / SR-2: Local voice processing (Abhay) | AWAITING EVIDENCE | Automated local-processing checks pass; waiting for Abhay's network-check result (10 commands) |
+| US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | AWAITING EVIDENCE | Waiting for Aaditya's formal results (50 utterances; 7 commands × 5). Preliminary figures are in sections 9 and 11 |
+| US-10 / NFR-3: Continuous availability (Aaditya) | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | See NFR-3 row above |
+| US-18: Startup system check (Aaditya) | NOT STARTED | Due Wednesday 28 October |
 
 **Status:** PENDING.
 
@@ -276,22 +285,22 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 | US-08 unsupported commands | Verified for five live phrases | Retain the recorded results |
 | US-12 unclear commands | Passed for the observed live scenario | Test additional phrases if required |
 | US-14 media error handling | Automated tests passed | Verify visible results for successful media actions |
-| US-20 duplicate execution | Partially verified | Test replay of identical raw audio directly |
+| US-20 duplicate execution | Verified | None; retain the automated and live evidence |
 | TC-09 / NFR-1 performance | Preliminary measurements available | Complete the planned performance test |
 | NFR-2 recognition reliability | PASS in recorded test | Retain the 45/50 evidence |
-| NFR-3 availability | PASS in recorded test | Retain the 15-minute evidence |
+| NFR-3 availability | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | Aaditya completes the 8-hour run; record the result here |
 | NFR-4 usability | PENDING | Test two first-time users on 28 October |
 | SR-2 local audio processing | Configuration and runtime startup verified | Complete and record network-traffic verification |
 | Deprecation warnings | Non-blocking warnings | Investigate separately if time permits |
 
 ## 16. Final Summary — 26 October 2026
 
-- The latest full automated test run passed: **172 passed, 0 failed, with 11 deprecation warnings**.
+- The latest full automated test run passed: **190 passed, 0 failed, with 11 deprecation warnings** (27 October, after merging `main`).
 - Live Vosk startup, wake-word detection, volume up, and pause were observed working at runtime.
 - The live unclear-speech test handled the recognition error, returned to `IDLE`, and did not trigger a media action.
 - US-08 passed for the five listed unsupported phrases.
 - US-14 automated error-handling tests passed; visible success behavior still needs end-to-end confirmation.
-- US-20 automated regression tests pass, including identical-audio replay handling and acceptance of a new wake word; live microphone replay remains unverified.
+- US-20 is verified: automated regression tests pass (including identical-audio replay and acceptance of a new wake word), and the live microphone check passed on 27 October.
 - Performance results are promising, but the full performance test remains pending.
 - SR-2 configuration and runtime startup are verified; network-traffic verification remains pending.
 - NFR-4 usability testing with two first-time users is planned for 28 October.
