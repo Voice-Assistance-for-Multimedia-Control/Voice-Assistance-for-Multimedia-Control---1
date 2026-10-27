@@ -298,3 +298,17 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 - The 11 deprecation warnings did not cause test failures.
 
 **Overall assessment:** The automated test suite and the recorded live checks are encouraging. Do not mark any remaining item fully complete until its required evidence has been collected and documented.
+
+### US-20 — Live Microphone Verification
+
+**Date:** 27 October 2026
+
+- Started the application using `python main.py`.
+- Spoke the wake word followed by `play`; the command executed successfully.
+- Repeated a command without saying the wake word again; no additional action occurred.
+- Spoke the wake word again followed by `pause`; the command executed successfully.
+- Confirmed that the application returned to IDLE after each executed command.
+
+**Result:** Live microphone verification passed for one-command-per-wake-word behavior and normal processing of a new command.
+
+**Limitation:** This test repeated a spoken command; it did not replay the exact same recorded audio.
