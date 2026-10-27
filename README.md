@@ -33,8 +33,8 @@ Sprint 1 total: 7 stories, 23 points.
 | **US-09 — Command Feedback** | Abhay S | 3 | Done (PR #34, delivered early); unit tested |
 | **US-13 — Microphone Error Handling** | Abhay S | 3 | Done (PR #34, delivered early); unit tested |
 | **US-16 — Microphone Privacy Control** | Abhay S | 5 | Implemented: type `m` + Enter to turn the microphone off/on; unit tested; live check pending |
-| **US-17 — Local Voice Processing** | Abhay S | 5 | Offline Vosk in place; network check pending |
-| **US-19 — Listening Status Indicator** | Abhay S | 3 | To do |
+| **US-17 — Local Voice Processing** | Abhay S | 5 | Offline Vosk; automated checks: pipeline runs with network blocked, no audio written to disk, audio discarded after use; live network check pending |
+| **US-19 — Listening Status Indicator** | Abhay S | 3 | Implemented: READY / LISTENING / MUTED / MICROPHONE UNAVAILABLE status lines; unit tested |
 | **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | To do (8-hour run) |
 | **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | To do (timing log ready: see Run) |
 | **US-15 — Recover from Recognition Errors** | Aaditya Vashisht | 5 | To do |
@@ -78,6 +78,7 @@ python main.py -v                 # debug logging
 
 While it runs:
 
+- **Status line (US-19):** one line shows what the assistant is doing whenever it changes: `[STATUS] READY`, `[STATUS] LISTENING` (say one command now), `[STATUS] MUTED`, or `[STATUS] MICROPHONE UNAVAILABLE`. It never shows LISTENING while the microphone is off or missing.
 - **Microphone off/on (US-16):** type `m` and press Enter. While off, the microphone stream is closed and nothing is heard or processed; type `m` again to turn it back on.
 - **Response time (NFR-1, US-11):** every command prints a line such as `[TIMING] 'pause' executed in 640 ms (end of speech -> action; target < 2000 ms)`. Press Ctrl+C to stop; a summary (count, average, slowest) is printed. The time includes the 0.5 s of silence the system waits for to know you have finished speaking.
 
@@ -180,4 +181,4 @@ The SRS, Software Architecture & Design Specification (SAD) and Test Plan were f
 python -m pytest tests/ -v
 ```
 
-145 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
+181 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
