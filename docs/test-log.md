@@ -1,7 +1,7 @@
 ﻿# Sprint 2 Test Log
 
 **Project:** Voice Assistance for Multimedia Control
-**Date:** 26 October 2026
+**Date:** 26 October 2026 (updated 27 October 2026)
 **Tester:** Aarohi
 
 ## 1. Test Environment
@@ -19,15 +19,24 @@
 | Test / Requirement | Current status | Evidence / Remaining work |
 |---|---|---|
 | Full automated test suite | PASS | 190 passed, 0 failed; 11 warnings (27 October, after merging main) |
-| US-08: Unsupported commands | Verified for tested phrases | 5/5 confirmed live attempts rejected |
+| US-08: Unsupported commands | Verified | First live test 5/5 rejected; re-test with 5 new phrases 5/5 rejected, no media action (27 October) |
 | US-12: Unclear commands | Verified for observed test | Unclear speech rejected, no media action observed, application returned to IDLE |
-| US-14: Media player error handling | Automated tests passed; manual failure path exercised | Verify visible results for successful media actions |
+| US-14: Media player error handling | Verified | Automated tests passed; failure path and all seven successful actions confirmed live (27 October) |
 | US-20: Duplicate execution prevention | Verified | Automated one-command-per-wake-word and identical-audio replay tests pass; live microphone check passed on 27 October |
-| SR-2: Local audio processing | Configuration and runtime support verified; network verification pending | Record a network-traffic check |
+| SR-2: Local audio processing | Verified | Vosk configured as default; network check during 10 commands showed no outside connection and no audio-sized traffic (Abhay, 27 October, macOS) |
 | TC-09 / NFR-1: Performance | Preliminary evidence available | Complete the planned performance test |
 | NFR-2: Recognition reliability | PASS based on recorded results | 45 of 50 valid-command utterances succeeded (90%) |
 | NFR-3: Availability | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | SRS requires the application to run at least 8 hours without restarting |
 | NFR-4: First-time-user usability | PENDING | Test with two first-time users on 28 October |
+| US-09: Command feedback (Abhay) | Automated tests pass | `test_us09_feedback.py` passes (PR #34); live feedback tones seen in the live sessions above |
+| US-13: Microphone error handling (Abhay) | Automated tests pass | `test_us13_mic_error_handling.py` passes (PR #34) |
+| US-16: Microphone privacy / mute (Abhay) | Automated tests pass; live check pending | `test_us16_mute_and_timing.py` passes (23 tests) |
+| US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
+| US-15: Recover from recognition errors (Aaditya) | Automated tests pass; live check reported done (PR #41) | `test_us15_recovery.py` passes (18 tests); add Aaditya's live-check details when he sends them |
+| US-17 / SR-2: Local voice processing (Abhay) | Verified | Automated checks pass; live network check PASS (see Section 10) |
+| US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | AWAITING EVIDENCE | Waiting for Aaditya's formal results (50 utterances; 7 commands × 5). Preliminary figures are in sections 9 and 11 |
+| US-10 / NFR-3: Continuous availability (Aaditya) | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | See NFR-3 row above |
+| US-18: Startup system check (Aaditya) | NOT STARTED | Due Wednesday 28 October |
 | Deprecation warnings | Not blocking tests | 11 warnings related to NumPy 2.5 and `sounddevice.py` |
 
 ## 3. Automated Test Results
@@ -87,7 +96,7 @@ The following additional results were recorded during the live application sessi
 
 For volume up and pause, the application logged the response time from the end of speech to the action. Both were within their respective logged timing targets.
 
-**Interpretation:** A successful execution message in the logs does not independently establish that the visible YouTube playback state or volume changed. Verify visible media behavior during the final end-to-end test.
+**Interpretation:** A successful execution message in the logs does not by itself establish that the visible YouTube playback state or volume changed. The visible results were checked separately; see the live verification in Section 7 (27 October).
 
 ## 5. US-08 — Reject Unsupported Commands
 
@@ -106,7 +115,25 @@ For volume up and pause, the application logged the response time from the end o
 
 Some additional attempts returned `Speech was not understood`. These were inconclusive and were not counted as confirmed unsupported-command passes.
 
-**Status:** Verified for the five listed live attempts.
+**Status of the first test:** Passed for the five listed live attempts. The phrases had been temporarily added to the recognizer's vocabulary for that test, so a re-test with new phrases was carried out (below).
+
+### 5.1 Re-test with five new phrases — 27 October 2026
+
+**Method:** Live microphone test after saying "hey media". The five phrases below were not used in the first test, and no phrase was taught to the recognizer.
+
+| # | Phrase spoken | Observed result | Media action? | Status |
+|---|---|---|---|---|
+| 1 | open facebook | Rejected: "Speech was not understood"; error feedback logged; returned to IDLE | None | PASS |
+| 2 | set an alarm | Same | None | PASS |
+| 3 | what time is it | Same | None | PASS |
+| 4 | call my mother | Same | None | PASS |
+| 5 | open Netflix | Same | None | PASS |
+
+**Note:** The Vosk grammar is closed, so out-of-vocabulary speech is rejected by the recognizer before the command mapper runs. All five attempts were rejected, logged, and caused no media action. Mapper-level rejection of recognized-but-unsupported text (for example "open netflix" and "send an email") is covered by the automated tests `test_unsupported_or_unclear_command_is_rejected` and `test_map_command_rejects_everything_else`.
+
+**Result:** 5/5 passed. No unsupported phrase caused a media action.
+
+**Status:** Verified.
 
 ## 6. US-12 — Handle Unclear Voice Commands
 
@@ -145,16 +172,23 @@ Some additional attempts returned `Speech was not understood`. These were inconc
 - Tests verify that technical exception details are not unnecessarily printed as user-facing error messages.
 - A live disconnected-session path was previously exercised: the command failed safely, failure feedback appeared, and the system returned to `IDLE`.
 
-### Remaining verification
+### Live verification of successful actions — 27 October 2026
 
-The successful command logs do not independently prove that every visible YouTube action occurred as expected. During the final end-to-end test, verify:
+**Method:** Live microphone test with a YouTube playlist open in the Chrome window controlled by the application. Each command was spoken after "hey media", and the visible result in the browser was checked.
 
-- Play and pause change playback state.
-- Resume restarts playback.
-- Next and previous change the video or track as expected.
-- Volume up and volume down change the volume.
+| Command | Expected visible result | Observed | Status |
+|---|---|---|---|
+| Play | Video starts playing | Video started playing | PASS |
+| Pause | Video pauses | Video paused | PASS |
+| Resume | Video continues | Video continued | PASS |
+| Next | Switches to the next video | Switched to the next video | PASS |
+| Previous | Returns to the previous video | Returned to the previous video | PASS |
+| Volume up | Volume increases one step | Volume increased | PASS |
+| Volume down | Volume decreases one step | Volume decreased | PASS |
 
-**Status:** Automated error handling passed; visible success behavior requires final end-to-end confirmation.
+**Conclusion:** All three US-14 criteria are covered. A failed operation is detected and gives an error indication (automated tests and the earlier live failure check). Success is never reported when an operation fails (the media functions verify the result before returning True). All seven successful actions were confirmed visibly.
+
+**Status:** Verified: automated error-handling tests passed, and visible success behavior was confirmed live on 27 October.
 
 ## 8. US-20 — Prevent Duplicate Command Execution
 
@@ -182,9 +216,9 @@ The successful command logs do not independently prove that every visible YouTub
 - Result: PASS
 - Verification: The same command audio bytes were replayed after the first command completed, without a new wake word.
 - Assertions: The media action executed only once, exactly one result was recorded, and the session remained in `IDLE`.
-- Integration suite: 62 passed.
-- Full test suite: 171 passed, 0 failed, 11 deprecation warnings.
-- Limitation: This is a synthetic-audio integration test using a scripted transcriber; live microphone replay behavior has not been verified.
+- Integration suite: 62 passed (at the time this test was added).
+- Full test suite at that time: 171 passed, 0 failed, 11 deprecation warnings. The latest full-suite result is 190 passed (Section 3).
+- Limitation: This is a synthetic-audio integration test using a scripted transcriber; it does not replay recorded audio through the microphone.
 
 **Conclusion:** Automated replay protection is verified for the tested scenario. Do not claim all possible duplicate replay scenarios are covered.
 
@@ -228,11 +262,19 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 - `main.py` calls `create_transcriber()` using the selected backend.
 - The application started successfully with `python main.py`, and live wake-word and command recognition worked.
 
-### Remaining verification
+### Network-traffic check — 27 October 2026 (performed by Abhay, MacBook Air, macOS)
 
-The configuration and successful runtime behavior support the use of Vosk for local speech recognition. However, a network-traffic check has not conclusively established that raw audio is never transmitted off-device during normal operation.
+**Method:** The application was run with the offline Vosk backend and 10 voice commands were given. Network activity of the Python process was observed in Activity Monitor (Network tab), and its open connections were listed with `lsof -i -n -P -a -p <pid>`.
 
-**Status:** Local backend configuration and runtime startup verified; network-traffic verification pending.
+| Check | Observation |
+|---|---|
+| Activity Monitor, process "Python" | Sent packets rose from 4 to 24 over the 10 commands (about 2 per command), as reported by the tester. The final screenshot shows 24 sent / 25 received packets, about 11 KB sent and 5 KB received in total |
+| `lsof` while running | The only connection was `[::1]:62918 -> [::1]:62910` (localhost, Chrome's local driver). No connection to any outside address |
+| Expected traffic if audio were sent | Roughly 30–60 KB per command (tester's estimate); nothing of that size was observed |
+
+**Limitations:** `lsof` is a single snapshot. The test ran on a macOS laptop, not the Windows test laptop. The starting packet count (4) is from the tester's notes and is not shown in the screenshots.
+
+**Status:** PASS for the observed test. No outside connection and no audio-sized traffic were seen, consistent with local processing.
 
 ## 11. NFR-2 — Recognition Reliability
 
@@ -258,15 +300,6 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 
 - The planned usability test with two first-time users has not yet been recorded.
 - Planned test date: 28 October 2026.
-| US-09: Command feedback (Abhay) | Automated tests pass | `test_us09_feedback.py` passes (PR #34); live feedback tones seen in the live sessions above |
-| US-13: Microphone error handling (Abhay) | Automated tests pass | `test_us13_mic_error_handling.py` passes (PR #34) |
-| US-16: Microphone privacy / mute (Abhay) | Automated tests pass; live check pending | `test_us16_mute_and_timing.py` passes (23 tests) |
-| US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
-| US-15: Recover from recognition errors (Aaditya) | Automated tests pass; live check reported done (PR #41) | `test_us15_recovery.py` passes (18 tests); add Aaditya's live-check details when he sends them |
-| US-17 / SR-2: Local voice processing (Abhay) | AWAITING EVIDENCE | Automated local-processing checks pass; waiting for Abhay's network-check result (10 commands) |
-| US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | AWAITING EVIDENCE | Waiting for Aaditya's formal results (50 utterances; 7 commands × 5). Preliminary figures are in sections 9 and 11 |
-| US-10 / NFR-3: Continuous availability (Aaditya) | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | See NFR-3 row above |
-| US-18: Startup system check (Aaditya) | NOT STARTED | Due Wednesday 28 October |
 
 **Status:** PENDING.
 
@@ -282,27 +315,28 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 | Item | Current status | Next action |
 |---|---|---|
 | Automated project tests | PASS | Rerun before final merge or release |
-| US-08 unsupported commands | Verified for five live phrases | Retain the recorded results |
+| US-08 unsupported commands | Verified | None; retain both live test results |
 | US-12 unclear commands | Passed for the observed live scenario | Test additional phrases if required |
-| US-14 media error handling | Automated tests passed | Verify visible results for successful media actions |
+| US-14 media error handling | Verified | None; retain the automated and live evidence |
 | US-20 duplicate execution | Verified | None; retain the automated and live evidence |
 | TC-09 / NFR-1 performance | Preliminary measurements available | Complete the planned performance test |
 | NFR-2 recognition reliability | PASS in recorded test | Retain the 45/50 evidence |
 | NFR-3 availability | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | Aaditya completes the 8-hour run; record the result here |
 | NFR-4 usability | PENDING | Test two first-time users on 28 October |
-| SR-2 local audio processing | Configuration and runtime startup verified | Complete and record network-traffic verification |
+| SR-2 local audio processing | Verified | None; retain the network-check evidence |
 | Deprecation warnings | Non-blocking warnings | Investigate separately if time permits |
 
-## 16. Final Summary — 26 October 2026
+## 16. Final Summary — 27 October 2026
 
 - The latest full automated test run passed: **190 passed, 0 failed, with 11 deprecation warnings** (27 October, after merging `main`).
-- Live Vosk startup, wake-word detection, volume up, and pause were observed working at runtime.
+- Live Vosk startup, wake-word detection, and all seven commands were observed working at runtime.
 - The live unclear-speech test handled the recognition error, returned to `IDLE`, and did not trigger a media action.
-- US-08 passed for the five listed unsupported phrases.
-- US-14 automated error-handling tests passed; visible success behavior still needs end-to-end confirmation.
+- US-08 is verified: the first live test passed 5/5, and the re-test with five new phrases passed 5/5 with no media action.
+- US-14 is verified: automated error-handling tests passed and all seven successful actions were confirmed visibly on 27 October.
 - US-20 is verified: automated regression tests pass (including identical-audio replay and acceptance of a new wake word), and the live microphone check passed on 27 October.
 - Performance results are promising, but the full performance test remains pending.
-- SR-2 configuration and runtime startup are verified; network-traffic verification remains pending.
+- SR-2 is verified: Vosk is the default backend and Abhay's network check (27 October) showed no outside connection and no audio-sized traffic.
+- NFR-3 remains PENDING until Aaditya completes the 8-hour run.
 - NFR-4 usability testing with two first-time users is planned for 28 October.
 - The 11 deprecation warnings did not cause test failures.
 
