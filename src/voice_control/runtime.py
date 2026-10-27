@@ -17,9 +17,14 @@ Sprint 2 additions:
 - Microphone privacy control (US-16): ``set_muted`` / ``toggle_mute``; in
   ``run``, typing ``m`` + Enter turns the microphone off and on. While muted the
   audio stream is stopped and nothing is processed.
+- Listening status indicator (US-19): one status at a time, READY, LISTENING,
+  MUTED or MICROPHONE UNAVAILABLE, printed whenever it changes. It is worked
+  out from the real state, so it never shows LISTENING (or "awaiting the wake
+  word") while the microphone is off or unavailable.
 """
 
 from collections import deque
+from enum import Enum
 import logging
 import queue
 import sys
@@ -48,6 +53,14 @@ class ListeningWindowExpired(Exception):
     """The user started a command but the listening window closed first."""
 
 
+class AssistantStatus(str, Enum):
+    """What the user should know about the assistant right now (US-19)."""
+    READY = "READY"                # waiting for the wake word
+    LISTENING = "LISTENING"        # wake word heard; say one command
+    MUTED = "MUTED"                # microphone turned off by the user (US-16)
+    UNAVAILABLE = "UNAVAILABLE"    # microphone missing or faulted (US-13)
+
+
 class VoiceAssistant:
     def __init__(
         self,
@@ -64,7 +77,7 @@ class VoiceAssistant:
 
         # The single shared session manager (detector + validator).
         self.sessions = SessionManager(self.config.listening_window_seconds)
-        self.sessions.register_state_callback(self.feedback.on_state_change)
+        self.sessions.register_state_callback(self._on_session_state)
 
         self.detector = WakeWordDetector(
             config=self.config,
@@ -86,6 +99,11 @@ class VoiceAssistant:
         # US-16 microphone privacy control
         self._muted = False
         self._controls: "queue.Queue[str]" = queue.Queue()
+
+        # US-19 listening status indicator
+        self._mic_available = True
+        self._status: Optional[AssistantStatus] = None
+        self.status_history: Deque[AssistantStatus] = deque(maxlen=200)
 
     # ------------------------------------------------------------------ flow
     def process_chunk(self, chunk: bytes) -> Optional[ExecutionResult]:
@@ -218,6 +236,7 @@ class VoiceAssistant:
             self.command_segmenter.reset()
             self.detector.engine.reset()  # never act on audio from before the mute
             self.feedback.notify("unmuted")
+        self._update_status()
 
     def toggle_mute(self) -> bool:
         """Flip the microphone state. Returns True when now muted."""
@@ -247,6 +266,56 @@ class VoiceAssistant:
     def _record(self, result: ExecutionResult) -> ExecutionResult:
         self.results.append(result)
         return result
+
+    # ------------------------------------------------- status indicator (US-19)
+    STATUS_MESSAGES = {
+        AssistantStatus.READY: "[STATUS] READY: say 'hey media' to give a command.",
+        AssistantStatus.LISTENING: "[STATUS] LISTENING: say one command now ({window:.0f} s).",
+        AssistantStatus.MUTED: "[STATUS] MUTED: microphone off. Type m + Enter to turn it on.",
+        AssistantStatus.UNAVAILABLE: "[STATUS] MICROPHONE UNAVAILABLE: commands paused until it is back.",
+    }
+
+    @property
+    def status(self) -> AssistantStatus:
+        """The current status, worked out from the real state (never stored guesses)."""
+        if self._muted:
+            return AssistantStatus.MUTED
+        if not self._mic_available:
+            return AssistantStatus.UNAVAILABLE
+        if self.sessions.current_state == SystemState.LISTENING:
+            return AssistantStatus.LISTENING
+        return AssistantStatus.READY
+
+    def status_message(self, status: Optional[AssistantStatus] = None) -> str:
+        status = status or self.status
+        return self.STATUS_MESSAGES[status].format(window=self.config.listening_window_seconds)
+
+    def _update_status(self) -> None:
+        """Show the status line when (and only when) the status changes."""
+        current = self.status
+        if current == self._status:
+            return
+        self._status = current
+        self.status_history.append(current)
+        message = self.status_message(current)
+        logger.info(message)
+        print(message, flush=True)
+
+    def _on_session_state(self, state: SystemState, token: Optional[str]) -> None:
+        # The listening window closing while the microphone is off must not be
+        # announced as "awaiting wake word": the status line says MUTED instead.
+        if not (state == SystemState.IDLE and (self._muted or not self._mic_available)):
+            self.feedback.on_state_change(state, token)
+        self._update_status()
+
+    def set_microphone_available(self, available: bool) -> None:
+        """Called by the run loop when the microphone fails or comes back (US-13)."""
+        if available == self._mic_available:
+            return
+        self._mic_available = available
+        if not available:
+            self._end_session_if_open()
+        self._update_status()
 
     def _apply_controls(self, capture: AudioCaptureComponent, chunks: "queue.Queue[bytes]") -> None:
         """Apply typed controls on the main loop thread; start/stop the microphone."""
@@ -312,6 +381,7 @@ class VoiceAssistant:
         print(f"Listening. Say '{self.config.wake_word}', then one of: "
               "play, pause, resume, next, previous, volume up, volume down.")
         print("Type m + Enter at any time to turn the microphone off or on.")
+        self._update_status()
         self._start_keyboard_listener()
         try:
             while True:
@@ -321,11 +391,12 @@ class VoiceAssistant:
                     continue
                 if capture.is_suspended or not capture.is_running:
                     # US-13: no commands without audio; retry the microphone.
-                    self._end_session_if_open()
+                    self.set_microphone_available(False)
                     time.sleep(5.0)
                     capture.stop_stream()
                     capture.start_stream()
                     continue
+                self.set_microphone_available(True)
                 try:
                     chunk = chunks.get(timeout=0.2)
                 except queue.Empty:
