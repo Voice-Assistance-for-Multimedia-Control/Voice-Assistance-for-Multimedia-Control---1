@@ -23,7 +23,7 @@
 | US-12: Unclear commands | Verified for observed test | Unclear speech rejected, no media action observed, application returned to IDLE |
 | US-14: Media player error handling | Verified | Automated tests passed; failure path and all seven successful actions confirmed live (27 October) |
 | US-20: Duplicate execution prevention | Verified | Automated one-command-per-wake-word and identical-audio replay tests pass; live microphone check passed on 27 October |
-| SR-2: Local audio processing | Configuration and runtime support verified; network verification pending | Record a network-traffic check |
+| SR-2: Local audio processing | Verified | Vosk configured as default; network check during 10 commands showed no outside connection and no audio-sized traffic (Abhay, 27 October, macOS) |
 | TC-09 / NFR-1: Performance | Preliminary evidence available | Complete the planned performance test |
 | NFR-2: Recognition reliability | PASS based on recorded results | 45 of 50 valid-command utterances succeeded (90%) |
 | NFR-3: Availability | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | SRS requires the application to run at least 8 hours without restarting |
@@ -33,7 +33,7 @@
 | US-16: Microphone privacy / mute (Abhay) | Automated tests pass; live check pending | `test_us16_mute_and_timing.py` passes (23 tests) |
 | US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
 | US-15: Recover from recognition errors (Aaditya) | Automated tests pass; live check reported done (PR #41) | `test_us15_recovery.py` passes (18 tests); add Aaditya's live-check details when he sends them |
-| US-17 / SR-2: Local voice processing (Abhay) | AWAITING EVIDENCE | Automated local-processing checks pass; waiting for Abhay's network-check result (10 commands) |
+| US-17 / SR-2: Local voice processing (Abhay) | Verified | Automated checks pass; live network check PASS (see Section 10) |
 | US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | AWAITING EVIDENCE | Waiting for Aaditya's formal results (50 utterances; 7 commands × 5). Preliminary figures are in sections 9 and 11 |
 | US-10 / NFR-3: Continuous availability (Aaditya) | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | See NFR-3 row above |
 | US-18: Startup system check (Aaditya) | NOT STARTED | Due Wednesday 28 October |
@@ -262,11 +262,19 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 - `main.py` calls `create_transcriber()` using the selected backend.
 - The application started successfully with `python main.py`, and live wake-word and command recognition worked.
 
-### Remaining verification
+### Network-traffic check — 27 October 2026 (performed by Abhay, MacBook Air, macOS)
 
-The configuration and successful runtime behavior support the use of Vosk for local speech recognition. However, a network-traffic check has not conclusively established that raw audio is never transmitted off-device during normal operation.
+**Method:** The application was run with the offline Vosk backend and 10 voice commands were given. Network activity of the Python process was observed in Activity Monitor (Network tab), and its open connections were listed with `lsof -i -n -P -a -p <pid>`.
 
-**Status:** Local backend configuration and runtime startup verified; network-traffic verification pending.
+| Check | Observation |
+|---|---|
+| Activity Monitor, process "Python" | Sent packets rose from 4 to 24 over the 10 commands (about 2 per command), as reported by the tester. The final screenshot shows 24 sent / 25 received packets, about 11 KB sent and 5 KB received in total |
+| `lsof` while running | The only connection was `[::1]:62918 -> [::1]:62910` (localhost, Chrome's local driver). No connection to any outside address |
+| Expected traffic if audio were sent | Roughly 30–60 KB per command (tester's estimate); nothing of that size was observed |
+
+**Limitations:** `lsof` is a single snapshot. The test ran on a macOS laptop, not the Windows test laptop. The starting packet count (4) is from the tester's notes and is not shown in the screenshots.
+
+**Status:** PASS for the observed test. No outside connection and no audio-sized traffic were seen, consistent with local processing.
 
 ## 11. NFR-2 — Recognition Reliability
 
@@ -315,7 +323,7 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 | NFR-2 recognition reliability | PASS in recorded test | Retain the 45/50 evidence |
 | NFR-3 availability | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | Aaditya completes the 8-hour run; record the result here |
 | NFR-4 usability | PENDING | Test two first-time users on 28 October |
-| SR-2 local audio processing | Configuration and runtime startup verified | Complete and record network-traffic verification |
+| SR-2 local audio processing | Verified | None; retain the network-check evidence |
 | Deprecation warnings | Non-blocking warnings | Investigate separately if time permits |
 
 ## 16. Final Summary — 27 October 2026
@@ -327,7 +335,7 @@ The configuration and successful runtime behavior support the use of Vosk for lo
 - US-14 is verified: automated error-handling tests passed and all seven successful actions were confirmed visibly on 27 October.
 - US-20 is verified: automated regression tests pass (including identical-audio replay and acceptance of a new wake word), and the live microphone check passed on 27 October.
 - Performance results are promising, but the full performance test remains pending.
-- SR-2 configuration and runtime startup are verified; network-traffic verification remains pending.
+- SR-2 is verified: Vosk is the default backend and Abhay's network check (27 October) showed no outside connection and no audio-sized traffic.
 - NFR-3 remains PENDING until Aaditya completes the 8-hour run.
 - NFR-4 usability testing with two first-time users is planned for 28 October.
 - The 11 deprecation warnings did not cause test failures.
