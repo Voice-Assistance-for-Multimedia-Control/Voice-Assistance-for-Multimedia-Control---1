@@ -26,16 +26,16 @@
 | SR-2: Local audio processing | Verified | Vosk configured as default; network check during 10 commands showed no outside connection and no audio-sized traffic (Abhay, 27 October, macOS) |
 | TC-09 / NFR-1: Performance | Preliminary evidence available | Complete the planned performance test |
 | NFR-2: Recognition reliability | PASS based on recorded results | 45 of 50 valid-command utterances succeeded (90%) |
-| NFR-3: Availability | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | SRS requires the application to run at least 8 hours without restarting |
+| NFR-3: Availability | PENDING — 2-hour run by Aaditya (US-10, approved change D-5); 15-minute preliminary run passed | Requirement reduced from 8 hours to 2 hours with teacher approval (SRS v1.1, D-5) |
 | NFR-4: First-time-user usability | PENDING | Test with two first-time users on 28 October |
 | US-09: Command feedback (Abhay) | Automated tests pass | `test_us09_feedback.py` passes (PR #34); live feedback tones seen in the live sessions above |
 | US-13: Microphone error handling (Abhay) | Automated tests pass | `test_us13_mic_error_handling.py` passes (PR #34) |
 | US-16: Microphone privacy / mute (Abhay) | Verified | `test_us16_mute_and_timing.py` passes (23 tests); live mute/unmute check passed on 26 October (see US-16 live verification below) |
 | US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
 | US-15: Recover from recognition errors (Aaditya) | Automated tests pass; live check reported done (PR #41) | `test_us15_recovery.py` passes (18 tests); add Aaditya's live-check details when he sends them |
-| US-17 / SR-2: Local voice processing (Abhay) | Verified | Automated checks pass; live network check PASS (see Section 10) |
+| US-17 / SR-2: Local voice processing (Abhay) | Verified | Automated checks pass; live network check PASS (see Section 10 and [docs/evidence/us17-network-check.md](evidence/us17-network-check.md)) |
 | US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | AWAITING EVIDENCE | Waiting for Aaditya's formal results (50 utterances; 7 commands × 5). Preliminary figures are in sections 9 and 11 |
-| US-10 / NFR-3: Continuous availability (Aaditya) | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | See NFR-3 row above |
+| US-10 / NFR-3: Continuous availability (Aaditya) | PENDING — 2-hour run by Aaditya (US-10, approved change D-5); 15-minute preliminary run passed | See NFR-3 row above |
 | US-18: Startup system check (Aaditya) | NOT STARTED | Due Wednesday 28 October |
 | Deprecation warnings | Not blocking tests | 11 warnings related to NumPy 2.5 and `sounddevice.py` |
 
@@ -288,11 +288,11 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 
 ## 12. NFR-3 — Availability
 
-**Requirement:** Application remains running continuously for at least 8 hours without restarting (SRS).
+**Requirement:** Application remains running continuously for 2 hours without restarting. The original SRS requirement of 8 hours was changed to 2 hours with the teacher's approval (SRS v1.1, deviation D-5).
 
-- Preliminary result: Application remained running and responsive for 15 continuous minutes without restart. This is only a preliminary run and does not satisfy the 8-hour requirement.
+- Preliminary result: Application remained running and responsive for 15 continuous minutes without restart. This is only a preliminary run and does not satisfy the 2-hour requirement.
 
-**Status:** PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed
+**Status:** PENDING — 2-hour run by Aaditya (US-10, approved change D-5); 15-minute preliminary run passed
 
 ## 13. NFR-4 — First-Time-User Usability
 
@@ -321,7 +321,7 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 | US-20 duplicate execution | Verified | None; retain the automated and live evidence |
 | TC-09 / NFR-1 performance | Preliminary measurements available | Complete the planned performance test |
 | NFR-2 recognition reliability | PASS in recorded test | Retain the 45/50 evidence |
-| NFR-3 availability | PENDING — 8-hour run by Aaditya (US-10); 15-minute preliminary run passed | Aaditya completes the 8-hour run; record the result here |
+| NFR-3 availability | PENDING — 2-hour run by Aaditya (US-10, approved change D-5); 15-minute preliminary run passed | Aaditya completes the 2-hour run; record the result here |
 | NFR-4 usability | PENDING | Test two first-time users on 28 October |
 | SR-2 local audio processing | Verified | None; retain the network-check evidence |
 | Deprecation warnings | Non-blocking warnings | Investigate separately if time permits |
@@ -337,7 +337,7 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 - Performance results are promising, but the full performance test remains pending.
 - SR-2 is verified: Vosk is the default backend and Abhay's network check (27 October) showed no outside connection and no audio-sized traffic.
 - US-16 is verified: automated tests pass and the live mute/unmute check passed on 26 October.
-- NFR-3 remains PENDING until Aaditya completes the 8-hour run.
+- NFR-3 remains PENDING until Aaditya completes the 2-hour run (approved change D-5).
 - NFR-4 usability testing with two first-time users is planned for 28 October.
 - The 11 deprecation warnings did not cause test failures.
 
