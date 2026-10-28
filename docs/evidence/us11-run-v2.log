@@ -1,0 +1,656 @@
+Media player opened. Start a YouTube video in that window, then speak.
+2026-10-28 20:24:32,380 INFO voice_control.audio.capture: AudioCaptureComponent started.
+Listening. Say 'hey media', then one of: play, pause, resume, next, previous, volume up, volume down.
+Type m + Enter at any time to turn the microphone off or on.
+2026-10-28 20:24:32,380 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:25:29,800 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: cb6b91d9-4f24-467d-a9e5-66d2e9733cff)
+2026-10-28 20:25:29,830 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:25:29,830 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: cb6b91d9-4f24-467d-a9e5-66d2e9733cff (latency: 33.10ms)
+2026-10-28 20:25:29,830 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:25:31,630 INFO voice_control.runtime: Heard 'play' -> play (confidence 1.00)
+2026-10-28 20:25:31,630 INFO voice_control.security.validator: Security validation passed for command 'play' in session 'cb6b91d9-4f24-467d-a9e5-66d2e9733cff'.
+2026-10-28 20:25:31,641 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:25:31,749 INFO voice_control.control.executor: Executed 'play'
+2026-10-28 20:25:31,749 INFO voice_control.runtime: [TIMING] 'play' executed in 642 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:25:31,749 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:25:31,749 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:25:34,000 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 1c03ab2e-4040-4a1a-aed0-aed70887c229)
+2026-10-28 20:25:34,112 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:25:34,112 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 1c03ab2e-4040-4a1a-aed0-aed70887c229 (latency: 12.61ms)
+2026-10-28 20:25:34,112 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:25:35,671 INFO voice_control.runtime: Heard 'pause' -> pause (confidence 0.87)
+2026-10-28 20:25:35,671 INFO voice_control.security.validator: Security validation passed for command 'pause' in session '1c03ab2e-4040-4a1a-aed0-aed70887c229'.
+2026-10-28 20:25:35,680 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:25:35,798 INFO voice_control.control.executor: Executed 'pause'
+2026-10-28 20:25:35,798 INFO voice_control.runtime: [TIMING] 'pause' executed in 659 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:25:35,798 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:25:35,798 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:25:37,917 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: e2380ff5-b839-45c7-9e42-615adefea933)
+2026-10-28 20:25:38,027 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:25:38,027 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: e2380ff5-b839-45c7-9e42-615adefea933 (latency: 25.75ms)
+2026-10-28 20:25:38,027 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:25:39,564 INFO voice_control.runtime: Heard 'resume' -> resume (confidence 1.00)
+2026-10-28 20:25:39,565 INFO voice_control.security.validator: Security validation passed for command 'resume' in session 'e2380ff5-b839-45c7-9e42-615adefea933'.
+2026-10-28 20:25:39,575 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:25:39,686 INFO voice_control.control.executor: Executed 'resume'
+2026-10-28 20:25:39,686 INFO voice_control.runtime: [TIMING] 'resume' executed in 643 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:25:39,686 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:25:39,686 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:25:42,012 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 5b9bbcfa-e468-42a1-9d35-20c16584480b)
+2026-10-28 20:25:42,123 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:25:42,123 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 5b9bbcfa-e468-42a1-9d35-20c16584480b (latency: 24.64ms)
+2026-10-28 20:25:42,124 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:25:43,533 INFO voice_control.runtime: Heard 'next' -> next (confidence 0.53)
+2026-10-28 20:25:43,533 INFO voice_control.security.validator: Security validation passed for command 'next' in session '5b9bbcfa-e468-42a1-9d35-20c16584480b'.
+2026-10-28 20:25:43,956 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:25:44,066 INFO voice_control.control.executor: Executed 'next'
+2026-10-28 20:25:44,066 INFO voice_control.runtime: [TIMING] 'next' executed in 1055 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:25:44,066 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:25:44,066 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:25:47,125 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 4b0b7038-4aab-4085-97ce-07051f7bb21a)
+2026-10-28 20:25:47,234 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:25:47,234 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 4b0b7038-4aab-4085-97ce-07051f7bb21a (latency: 18.03ms)
+2026-10-28 20:25:47,234 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:25:49,244 INFO voice_control.runtime: Heard 'previous' -> previous (confidence 1.00)
+2026-10-28 20:25:49,244 INFO voice_control.security.validator: Security validation passed for command 'previous' in session '4b0b7038-4aab-4085-97ce-07051f7bb21a'.
+2026-10-28 20:25:52,307 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:25:52,425 WARNING voice_control.control.executor: Media action 'previous' reported failure
+2026-10-28 20:25:52,425 INFO voice_control.runtime: [TIMING] 'previous' failed in 3718 ms (end of speech -> action; target < 2000 ms)  <-- SLOWER THAN TARGET
+2026-10-28 20:25:52,426 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:25:52,426 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:25:52,447 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 0d6360c5-3231-4f79-bd9b-246460f8ef8c)
+2026-10-28 20:25:52,596 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:25:52,596 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 0d6360c5-3231-4f79-bd9b-246460f8ef8c (latency: 18.84ms)
+2026-10-28 20:25:52,597 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:25:54,555 INFO voice_control.runtime: Heard 'volume up' -> volume up (confidence 1.00)
+2026-10-28 20:25:54,555 INFO voice_control.security.validator: Security validation passed for command 'volume up' in session '0d6360c5-3231-4f79-bd9b-246460f8ef8c'.
+2026-10-28 20:25:54,560 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:25:54,672 INFO voice_control.control.executor: Executed 'volume up'
+2026-10-28 20:25:54,673 INFO voice_control.runtime: [TIMING] 'volume up' executed in 653 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:25:54,673 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:25:54,673 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:25:57,185 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 7d59c08c-f5bf-4487-975b-f2561107150c)
+2026-10-28 20:25:57,299 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:25:57,299 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 7d59c08c-f5bf-4487-975b-f2561107150c (latency: 29.42ms)
+2026-10-28 20:25:57,299 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:25:59,674 INFO voice_control.runtime: Heard 'volume down' -> volume down (confidence 1.00)
+2026-10-28 20:25:59,674 INFO voice_control.security.validator: Security validation passed for command 'volume down' in session '7d59c08c-f5bf-4487-975b-f2561107150c'.
+2026-10-28 20:25:59,679 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:25:59,789 INFO voice_control.control.executor: Executed 'volume down'
+2026-10-28 20:25:59,789 INFO voice_control.runtime: [TIMING] 'volume down' executed in 650 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:25:59,789 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:25:59,789 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:03,066 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 7fbec4f5-899d-4783-8cea-e61257d0031c)
+2026-10-28 20:26:03,179 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:03,179 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 7fbec4f5-899d-4783-8cea-e61257d0031c (latency: 22.54ms)
+2026-10-28 20:26:03,179 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:04,725 INFO voice_control.runtime: Heard 'play' -> play (confidence 1.00)
+2026-10-28 20:26:04,726 INFO voice_control.security.validator: Security validation passed for command 'play' in session '7fbec4f5-899d-4783-8cea-e61257d0031c'.
+2026-10-28 20:26:04,730 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:04,840 INFO voice_control.control.executor: Executed 'play'
+2026-10-28 20:26:04,840 INFO voice_control.runtime: [TIMING] 'play' executed in 644 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:26:04,840 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:04,840 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:07,421 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 272eea55-fd10-4019-9ba3-a074a8cb3817)
+2026-10-28 20:26:07,535 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:07,536 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 272eea55-fd10-4019-9ba3-a074a8cb3817 (latency: 26.04ms)
+2026-10-28 20:26:07,536 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:09,339 INFO voice_control.runtime: Heard 'pause' -> pause (confidence 1.00)
+2026-10-28 20:26:09,339 INFO voice_control.security.validator: Security validation passed for command 'pause' in session '272eea55-fd10-4019-9ba3-a074a8cb3817'.
+2026-10-28 20:26:09,350 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:09,464 INFO voice_control.control.executor: Executed 'pause'
+2026-10-28 20:26:09,464 INFO voice_control.runtime: [TIMING] 'pause' executed in 660 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:26:09,464 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:09,464 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:12,539 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: fced4c2d-9457-4d71-b1bb-0bda347650e6)
+2026-10-28 20:26:12,652 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:12,652 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: fced4c2d-9457-4d71-b1bb-0bda347650e6 (latency: 23.92ms)
+2026-10-28 20:26:12,652 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:14,461 INFO voice_control.runtime: Heard 'resume' -> resume (confidence 1.00)
+2026-10-28 20:26:14,461 INFO voice_control.security.validator: Security validation passed for command 'resume' in session 'fced4c2d-9457-4d71-b1bb-0bda347650e6'.
+2026-10-28 20:26:14,477 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:14,588 INFO voice_control.control.executor: Executed 'resume'
+2026-10-28 20:26:14,588 INFO voice_control.runtime: [TIMING] 'resume' executed in 665 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:26:14,588 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:14,588 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:17,215 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 489cccd1-6227-4a1e-a46f-1a6d906bc02c)
+2026-10-28 20:26:17,331 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:17,331 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 489cccd1-6227-4a1e-a46f-1a6d906bc02c (latency: 27.88ms)
+2026-10-28 20:26:17,331 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+Didn't catch that, please repeat
+2026-10-28 20:26:19,130 ERROR voice_control.security.error_handler: [ERROR HANDLER] Handled UnrecognizedCommandError: Speech was not understood
+2026-10-28 20:26:19,131 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:26:19,246 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:19,247 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:22,665 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: e8560396-aa0a-40c2-875a-7848a6d3a240)
+2026-10-28 20:26:22,778 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:22,778 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: e8560396-aa0a-40c2-875a-7848a6d3a240 (latency: 37.72ms)
+2026-10-28 20:26:22,778 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:25,218 INFO voice_control.runtime: Heard 'previous' -> previous (confidence 1.00)
+2026-10-28 20:26:25,218 INFO voice_control.security.validator: Security validation passed for command 'previous' in session 'e8560396-aa0a-40c2-875a-7848a6d3a240'.
+2026-10-28 20:26:28,281 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:26:28,394 WARNING voice_control.control.executor: Media action 'previous' reported failure
+2026-10-28 20:26:28,394 INFO voice_control.runtime: [TIMING] 'previous' failed in 3719 ms (end of speech -> action; target < 2000 ms)  <-- SLOWER THAN TARGET
+2026-10-28 20:26:28,394 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:28,395 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:28,420 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: fecb5597-fb60-4d7b-aa91-b8d896212373)
+2026-10-28 20:26:28,567 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:28,567 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: fecb5597-fb60-4d7b-aa91-b8d896212373 (latency: 24.08ms)
+2026-10-28 20:26:28,567 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:31,178 INFO voice_control.runtime: Heard 'volume up' -> volume up (confidence 1.00)
+2026-10-28 20:26:31,178 INFO voice_control.security.validator: Security validation passed for command 'volume up' in session 'fecb5597-fb60-4d7b-aa91-b8d896212373'.
+2026-10-28 20:26:31,181 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:31,292 INFO voice_control.control.executor: Executed 'volume up'
+2026-10-28 20:26:31,292 INFO voice_control.runtime: [TIMING] 'volume up' executed in 664 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:26:31,292 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:31,292 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:34,118 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: d472b028-8979-46fd-9a28-7ff6d9da32c1)
+2026-10-28 20:26:34,230 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:34,230 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: d472b028-8979-46fd-9a28-7ff6d9da32c1 (latency: 34.99ms)
+2026-10-28 20:26:34,231 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:36,353 INFO voice_control.runtime: Heard 'volume down' -> volume down (confidence 1.00)
+2026-10-28 20:26:36,354 INFO voice_control.security.validator: Security validation passed for command 'volume down' in session 'd472b028-8979-46fd-9a28-7ff6d9da32c1'.
+2026-10-28 20:26:36,357 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:36,473 INFO voice_control.control.executor: Executed 'volume down'
+2026-10-28 20:26:36,473 INFO voice_control.runtime: [TIMING] 'volume down' executed in 659 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:26:36,473 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:36,473 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:39,434 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: f1d6ce1b-af19-4e2d-8aae-e22ab6f185fa)
+2026-10-28 20:26:39,545 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:39,545 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: f1d6ce1b-af19-4e2d-8aae-e22ab6f185fa (latency: 38.48ms)
+2026-10-28 20:26:39,545 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:41,540 INFO voice_control.runtime: Heard 'play' -> play (confidence 1.00)
+2026-10-28 20:26:41,540 INFO voice_control.security.validator: Security validation passed for command 'play' in session 'f1d6ce1b-af19-4e2d-8aae-e22ab6f185fa'.
+2026-10-28 20:26:41,544 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:41,657 INFO voice_control.control.executor: Executed 'play'
+2026-10-28 20:26:41,657 INFO voice_control.runtime: [TIMING] 'play' executed in 662 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:26:41,657 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:41,658 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:44,353 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 12c82c9d-433d-4ed2-9951-59c43be62200)
+2026-10-28 20:26:44,466 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:44,466 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 12c82c9d-433d-4ed2-9951-59c43be62200 (latency: 29.14ms)
+2026-10-28 20:26:44,466 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:46,200 INFO voice_control.runtime: Heard 'pause' -> pause (confidence 0.90)
+2026-10-28 20:26:46,200 INFO voice_control.security.validator: Security validation passed for command 'pause' in session '12c82c9d-433d-4ed2-9951-59c43be62200'.
+2026-10-28 20:26:46,212 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:46,326 INFO voice_control.control.executor: Executed 'pause'
+2026-10-28 20:26:46,327 INFO voice_control.runtime: [TIMING] 'pause' executed in 659 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:26:46,327 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:46,327 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:48,956 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: df51d693-9e25-45eb-9878-a59d5e8dd12c)
+2026-10-28 20:26:49,068 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:49,068 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: df51d693-9e25-45eb-9878-a59d5e8dd12c (latency: 24.46ms)
+2026-10-28 20:26:49,068 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:51,206 INFO voice_control.runtime: Heard 'resume' -> resume (confidence 1.00)
+2026-10-28 20:26:51,206 INFO voice_control.security.validator: Security validation passed for command 'resume' in session 'df51d693-9e25-45eb-9878-a59d5e8dd12c'.
+2026-10-28 20:26:51,216 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:51,327 INFO voice_control.control.executor: Executed 'resume'
+2026-10-28 20:26:51,327 INFO voice_control.runtime: [TIMING] 'resume' executed in 668 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:26:51,327 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:51,327 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:53,964 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 955869e1-20b0-4847-9a58-d6e31131e14d)
+2026-10-28 20:26:54,077 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:54,077 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 955869e1-20b0-4847-9a58-d6e31131e14d (latency: 41.02ms)
+2026-10-28 20:26:54,077 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:26:55,801 INFO voice_control.runtime: Heard 'next' -> next (confidence 1.00)
+2026-10-28 20:26:55,801 INFO voice_control.security.validator: Security validation passed for command 'next' in session '955869e1-20b0-4847-9a58-d6e31131e14d'.
+2026-10-28 20:26:56,320 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:26:56,427 INFO voice_control.control.executor: Executed 'next'
+2026-10-28 20:26:56,428 INFO voice_control.runtime: [TIMING] 'next' executed in 1160 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:26:56,428 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:26:56,428 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:26:58,940 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 231cd1b0-9fb9-4d7d-9f9f-9f71e796ac65)
+2026-10-28 20:26:59,054 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:26:59,054 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 231cd1b0-9fb9-4d7d-9f9f-9f71e796ac65 (latency: 24.31ms)
+2026-10-28 20:26:59,054 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:00,739 INFO voice_control.runtime: Heard 'previous' -> previous (confidence 1.00)
+2026-10-28 20:27:00,739 INFO voice_control.security.validator: Security validation passed for command 'previous' in session '231cd1b0-9fb9-4d7d-9f9f-9f71e796ac65'.
+2026-10-28 20:27:03,799 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:27:03,923 WARNING voice_control.control.executor: Media action 'previous' reported failure
+2026-10-28 20:27:03,923 INFO voice_control.runtime: [TIMING] 'previous' failed in 3728 ms (end of speech -> action; target < 2000 ms)  <-- SLOWER THAN TARGET
+2026-10-28 20:27:03,923 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:03,923 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:03,942 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 3198d0ba-2403-4827-9c47-aac581697d6c)
+2026-10-28 20:27:04,089 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:04,089 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 3198d0ba-2403-4827-9c47-aac581697d6c (latency: 17.92ms)
+2026-10-28 20:27:04,089 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:07,337 INFO voice_control.runtime: Heard 'volume up' -> volume up (confidence 1.00)
+2026-10-28 20:27:07,337 INFO voice_control.security.validator: Security validation passed for command 'volume up' in session '3198d0ba-2403-4827-9c47-aac581697d6c'.
+2026-10-28 20:27:07,340 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:07,452 INFO voice_control.control.executor: Executed 'volume up'
+2026-10-28 20:27:07,452 INFO voice_control.runtime: [TIMING] 'volume up' executed in 665 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:27:07,452 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:07,452 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:10,472 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: a17685db-c2f2-40da-b81f-0bd704fe6bb5)
+2026-10-28 20:27:10,584 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:10,585 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: a17685db-c2f2-40da-b81f-0bd704fe6bb5 (latency: 37.15ms)
+2026-10-28 20:27:10,585 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:12,774 INFO voice_control.runtime: Heard 'volume down' -> volume down (confidence 1.00)
+2026-10-28 20:27:12,774 INFO voice_control.security.validator: Security validation passed for command 'volume down' in session 'a17685db-c2f2-40da-b81f-0bd704fe6bb5'.
+2026-10-28 20:27:12,777 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:12,887 INFO voice_control.control.executor: Executed 'volume down'
+2026-10-28 20:27:12,887 INFO voice_control.runtime: [TIMING] 'volume down' executed in 659 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:27:12,887 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:12,887 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:15,787 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 773a7c94-d566-465b-b0eb-9428e3e28f25)
+2026-10-28 20:27:15,899 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:15,899 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 773a7c94-d566-465b-b0eb-9428e3e28f25 (latency: 39.83ms)
+2026-10-28 20:27:15,899 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:17,825 INFO voice_control.runtime: Heard 'play' -> play (confidence 1.00)
+2026-10-28 20:27:17,825 INFO voice_control.security.validator: Security validation passed for command 'play' in session '773a7c94-d566-465b-b0eb-9428e3e28f25'.
+2026-10-28 20:27:17,829 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:17,942 INFO voice_control.control.executor: Executed 'play'
+2026-10-28 20:27:17,943 INFO voice_control.runtime: [TIMING] 'play' executed in 659 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:27:17,943 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:17,943 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:20,635 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 091fa6e4-c2dd-49fe-81bb-c4b8ca2abc94)
+2026-10-28 20:27:20,752 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:20,752 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 091fa6e4-c2dd-49fe-81bb-c4b8ca2abc94 (latency: 23.40ms)
+2026-10-28 20:27:20,752 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:22,684 INFO voice_control.runtime: Heard 'pause' -> pause (confidence 0.92)
+2026-10-28 20:27:22,684 INFO voice_control.security.validator: Security validation passed for command 'pause' in session '091fa6e4-c2dd-49fe-81bb-c4b8ca2abc94'.
+2026-10-28 20:27:22,693 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:22,811 INFO voice_control.control.executor: Executed 'pause'
+2026-10-28 20:27:22,811 INFO voice_control.runtime: [TIMING] 'pause' executed in 664 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:27:22,811 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:22,811 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:25,385 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: ddf6fa2e-0045-455e-ac47-27b3867a2023)
+2026-10-28 20:27:25,497 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:25,497 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: ddf6fa2e-0045-455e-ac47-27b3867a2023 (latency: 38.17ms)
+2026-10-28 20:27:25,497 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:27,303 INFO voice_control.runtime: Heard 'resume' -> resume (confidence 1.00)
+2026-10-28 20:27:27,303 INFO voice_control.security.validator: Security validation passed for command 'resume' in session 'ddf6fa2e-0045-455e-ac47-27b3867a2023'.
+2026-10-28 20:27:27,324 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:27,433 INFO voice_control.control.executor: Executed 'resume'
+2026-10-28 20:27:27,433 INFO voice_control.runtime: [TIMING] 'resume' executed in 678 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:27:27,433 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:27,433 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:30,501 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: d1d1e4a5-f91e-413d-a59d-91f3935749ab)
+2026-10-28 20:27:30,616 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:30,617 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: d1d1e4a5-f91e-413d-a59d-91f3935749ab (latency: 33.94ms)
+2026-10-28 20:27:30,617 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:32,402 INFO voice_control.runtime: Heard 'next' -> next (confidence 1.00)
+2026-10-28 20:27:32,403 INFO voice_control.security.validator: Security validation passed for command 'next' in session 'd1d1e4a5-f91e-413d-a59d-91f3935749ab'.
+2026-10-28 20:27:32,855 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:32,964 INFO voice_control.control.executor: Executed 'next'
+2026-10-28 20:27:32,964 INFO voice_control.runtime: [TIMING] 'next' executed in 1089 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:27:32,964 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:32,965 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:36,126 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: e1912c3a-ce4d-41cf-b794-c1f204bfe201)
+2026-10-28 20:27:36,236 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:36,236 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: e1912c3a-ce4d-41cf-b794-c1f204bfe201 (latency: 26.81ms)
+2026-10-28 20:27:36,236 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:40,038 INFO voice_control.runtime: Heard 'previous' -> previous (confidence 1.00)
+2026-10-28 20:27:40,038 INFO voice_control.security.validator: Security validation passed for command 'previous' in session 'e1912c3a-ce4d-41cf-b794-c1f204bfe201'.
+2026-10-28 20:27:43,098 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:27:43,218 WARNING voice_control.control.executor: Media action 'previous' reported failure
+2026-10-28 20:27:43,219 INFO voice_control.runtime: [TIMING] 'previous' failed in 3727 ms (end of speech -> action; target < 2000 ms)  <-- SLOWER THAN TARGET
+2026-10-28 20:27:43,219 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:43,219 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:46,125 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 5ededc4d-4502-4c19-a4f6-b58b7b8863fc)
+2026-10-28 20:27:46,235 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:46,235 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 5ededc4d-4502-4c19-a4f6-b58b7b8863fc (latency: 41.48ms)
+2026-10-28 20:27:46,235 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:48,414 INFO voice_control.runtime: Heard 'volume up' -> volume up (confidence 1.00)
+2026-10-28 20:27:48,414 INFO voice_control.security.validator: Security validation passed for command 'volume up' in session '5ededc4d-4502-4c19-a4f6-b58b7b8863fc'.
+2026-10-28 20:27:48,419 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:48,532 INFO voice_control.control.executor: Executed 'volume up'
+2026-10-28 20:27:48,532 INFO voice_control.runtime: [TIMING] 'volume up' executed in 657 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:27:48,532 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:48,532 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:51,805 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 8e23a5ea-eb77-4d8a-843f-d9b91ccdd5c4)
+2026-10-28 20:27:51,918 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:51,918 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 8e23a5ea-eb77-4d8a-843f-d9b91ccdd5c4 (latency: 25.86ms)
+2026-10-28 20:27:51,918 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:54,183 INFO voice_control.runtime: Heard 'volume down' -> volume down (confidence 1.00)
+2026-10-28 20:27:54,183 INFO voice_control.security.validator: Security validation passed for command 'volume down' in session '8e23a5ea-eb77-4d8a-843f-d9b91ccdd5c4'.
+2026-10-28 20:27:54,186 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:54,297 INFO voice_control.control.executor: Executed 'volume down'
+2026-10-28 20:27:54,297 INFO voice_control.runtime: [TIMING] 'volume down' executed in 661 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:27:54,297 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:54,297 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:27:57,251 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: c299499e-0f45-4e27-b4fd-3a593df15518)
+2026-10-28 20:27:57,365 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:27:57,365 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: c299499e-0f45-4e27-b4fd-3a593df15518 (latency: 31.89ms)
+2026-10-28 20:27:57,365 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:27:58,841 INFO voice_control.runtime: Heard 'play' -> play (confidence 1.00)
+2026-10-28 20:27:58,842 INFO voice_control.security.validator: Security validation passed for command 'play' in session 'c299499e-0f45-4e27-b4fd-3a593df15518'.
+2026-10-28 20:27:58,846 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:27:58,959 INFO voice_control.control.executor: Executed 'play'
+2026-10-28 20:27:58,959 INFO voice_control.runtime: [TIMING] 'play' executed in 652 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:27:58,959 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:27:58,959 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:01,348 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 2641af4f-041d-45b9-a398-6c6c2ba32f2d)
+2026-10-28 20:28:01,461 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:01,461 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 2641af4f-041d-45b9-a398-6c6c2ba32f2d (latency: 32.50ms)
+2026-10-28 20:28:01,462 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:28:04,390 INFO voice_control.runtime: Heard 'pause' -> pause (confidence 1.00)
+2026-10-28 20:28:04,390 INFO voice_control.security.validator: Security validation passed for command 'pause' in session '2641af4f-041d-45b9-a398-6c6c2ba32f2d'.
+2026-10-28 20:28:04,401 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:28:04,516 INFO voice_control.control.executor: Executed 'pause'
+2026-10-28 20:28:04,516 INFO voice_control.runtime: [TIMING] 'pause' executed in 705 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:28:04,516 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:28:04,516 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:07,044 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: d7f52417-8a98-4df7-b835-316bf92bf71d)
+2026-10-28 20:28:07,154 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:07,154 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: d7f52417-8a98-4df7-b835-316bf92bf71d (latency: 32.62ms)
+2026-10-28 20:28:07,154 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:28:09,091 INFO voice_control.runtime: Heard 'resume' -> resume (confidence 1.00)
+2026-10-28 20:28:09,091 INFO voice_control.security.validator: Security validation passed for command 'resume' in session 'd7f52417-8a98-4df7-b835-316bf92bf71d'.
+2026-10-28 20:28:09,105 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:28:09,216 INFO voice_control.control.executor: Executed 'resume'
+2026-10-28 20:28:09,216 INFO voice_control.runtime: [TIMING] 'resume' executed in 669 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:28:09,216 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:28:09,216 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:11,973 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: b9dc47c1-2afc-4e31-b293-58d0e39fc862)
+2026-10-28 20:28:12,086 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:12,086 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: b9dc47c1-2afc-4e31-b293-58d0e39fc862 (latency: 33.83ms)
+2026-10-28 20:28:12,086 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:28:16,035 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:28:16,036 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:16,036 INFO voice_control.runtime: Listening window closed with no command.
+2026-10-28 20:28:22,083 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 1701df9b-1550-4391-8556-0ec6f7623b24)
+2026-10-28 20:28:22,190 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:22,190 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 1701df9b-1550-4391-8556-0ec6f7623b24 (latency: 31.66ms)
+2026-10-28 20:28:22,190 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:28:25,602 INFO voice_control.runtime: Heard 'volume up' -> volume up (confidence 1.00)
+2026-10-28 20:28:25,602 INFO voice_control.security.validator: Security validation passed for command 'volume up' in session '1701df9b-1550-4391-8556-0ec6f7623b24'.
+2026-10-28 20:28:25,605 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:28:25,745 INFO voice_control.control.executor: Executed 'volume up'
+2026-10-28 20:28:25,745 INFO voice_control.runtime: [TIMING] 'volume up' executed in 686 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:28:25,746 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:28:25,746 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:28,869 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: c97a270c-4441-43da-8f32-567426ebc43f)
+2026-10-28 20:28:29,006 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:29,007 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: c97a270c-4441-43da-8f32-567426ebc43f (latency: 33.96ms)
+2026-10-28 20:28:29,007 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:28:32,932 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:28:32,933 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:32,933 INFO voice_control.runtime: Listening window closed with no command.
+2026-10-28 20:28:45,182 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: b784b260-4a7d-456c-9de7-ec4b19b2dd15)
+2026-10-28 20:28:45,311 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:45,311 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: b784b260-4a7d-456c-9de7-ec4b19b2dd15 (latency: 26.89ms)
+2026-10-28 20:28:45,311 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:28:47,563 INFO voice_control.runtime: Heard 'volume down' -> volume down (confidence 1.00)
+2026-10-28 20:28:47,563 INFO voice_control.security.validator: Security validation passed for command 'volume down' in session 'b784b260-4a7d-456c-9de7-ec4b19b2dd15'.
+2026-10-28 20:28:47,570 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:28:47,682 INFO voice_control.control.executor: Executed 'volume down'
+2026-10-28 20:28:47,682 INFO voice_control.runtime: [TIMING] 'volume down' executed in 670 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:28:47,682 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:28:47,682 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:50,182 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: e278ee21-f260-4f0a-9861-0ddb4daafa77)
+2026-10-28 20:28:50,294 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:50,294 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: e278ee21-f260-4f0a-9861-0ddb4daafa77 (latency: 34.49ms)
+2026-10-28 20:28:50,294 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:28:51,901 INFO voice_control.runtime: Heard 'play' -> play (confidence 1.00)
+2026-10-28 20:28:51,901 INFO voice_control.security.validator: Security validation passed for command 'play' in session 'e278ee21-f260-4f0a-9861-0ddb4daafa77'.
+2026-10-28 20:28:51,905 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:28:52,020 INFO voice_control.control.executor: Executed 'play'
+2026-10-28 20:28:52,020 INFO voice_control.runtime: [TIMING] 'play' executed in 657 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:28:52,020 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:28:52,020 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:54,411 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 63f7da8b-d9a1-43c9-a24f-e102677bf40b)
+2026-10-28 20:28:54,520 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:54,521 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 63f7da8b-d9a1-43c9-a24f-e102677bf40b (latency: 39.91ms)
+2026-10-28 20:28:54,521 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:28:56,309 INFO voice_control.runtime: Heard 'pause' -> pause (confidence 1.00)
+2026-10-28 20:28:56,309 INFO voice_control.security.validator: Security validation passed for command 'pause' in session '63f7da8b-d9a1-43c9-a24f-e102677bf40b'.
+2026-10-28 20:28:56,316 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:28:56,422 INFO voice_control.control.executor: Executed 'pause'
+2026-10-28 20:28:56,422 INFO voice_control.runtime: [TIMING] 'pause' executed in 643 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:28:56,422 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:28:56,423 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:28:58,677 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 82a9764e-b3da-4149-808c-d68245d6f2ec)
+2026-10-28 20:28:58,789 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:28:58,790 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 82a9764e-b3da-4149-808c-d68245d6f2ec (latency: 17.76ms)
+2026-10-28 20:28:58,790 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:00,870 INFO voice_control.runtime: Heard 'resume' -> resume (confidence 1.00)
+2026-10-28 20:29:00,870 INFO voice_control.security.validator: Security validation passed for command 'resume' in session '82a9764e-b3da-4149-808c-d68245d6f2ec'.
+2026-10-28 20:29:00,892 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:29:00,998 INFO voice_control.control.executor: Executed 'resume'
+2026-10-28 20:29:00,998 INFO voice_control.runtime: [TIMING] 'resume' executed in 675 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:29:00,998 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:00,998 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:04,054 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: b15e644b-9486-46d8-80de-148b663b2e63)
+2026-10-28 20:29:04,165 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:04,165 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: b15e644b-9486-46d8-80de-148b663b2e63 (latency: 19.35ms)
+2026-10-28 20:29:04,166 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:06,356 INFO voice_control.runtime: Heard 'next' -> next (confidence 1.00)
+2026-10-28 20:29:06,356 INFO voice_control.security.validator: Security validation passed for command 'next' in session 'b15e644b-9486-46d8-80de-148b663b2e63'.
+2026-10-28 20:29:06,782 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:29:06,891 INFO voice_control.control.executor: Executed 'next'
+2026-10-28 20:29:06,892 INFO voice_control.runtime: [TIMING] 'next' executed in 1064 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:29:06,892 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:06,892 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:09,752 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 13dd1b34-f8d0-4386-ab34-c1e738dd720e)
+2026-10-28 20:29:09,863 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:09,864 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 13dd1b34-f8d0-4386-ab34-c1e738dd720e (latency: 20.35ms)
+2026-10-28 20:29:09,864 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:12,191 INFO voice_control.runtime: Heard 'previous' -> previous (confidence 1.00)
+2026-10-28 20:29:12,192 INFO voice_control.security.validator: Security validation passed for command 'previous' in session '13dd1b34-f8d0-4386-ab34-c1e738dd720e'.
+2026-10-28 20:29:15,267 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:29:15,387 WARNING voice_control.control.executor: Media action 'previous' reported failure
+2026-10-28 20:29:15,387 INFO voice_control.runtime: [TIMING] 'previous' failed in 3735 ms (end of speech -> action; target < 2000 ms)  <-- SLOWER THAN TARGET
+2026-10-28 20:29:15,387 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:15,387 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:17,957 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 2997a390-2084-4e7e-b817-532ab69e0383)
+2026-10-28 20:29:18,068 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:18,068 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 2997a390-2084-4e7e-b817-532ab69e0383 (latency: 33.44ms)
+2026-10-28 20:29:18,068 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:19,882 INFO voice_control.runtime: Heard 'volume up' -> volume up (confidence 1.00)
+2026-10-28 20:29:19,882 INFO voice_control.security.validator: Security validation passed for command 'volume up' in session '2997a390-2084-4e7e-b817-532ab69e0383'.
+2026-10-28 20:29:19,885 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:29:20,000 INFO voice_control.control.executor: Executed 'volume up'
+2026-10-28 20:29:20,000 INFO voice_control.runtime: [TIMING] 'volume up' executed in 665 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:29:20,000 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:20,000 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:22,505 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: c254e59c-9684-47a3-a59e-d855fd5fb964)
+2026-10-28 20:29:22,617 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:22,617 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: c254e59c-9684-47a3-a59e-d855fd5fb964 (latency: 37.77ms)
+2026-10-28 20:29:22,617 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:24,619 INFO voice_control.runtime: Heard 'volume down' -> volume down (confidence 1.00)
+2026-10-28 20:29:24,619 INFO voice_control.security.validator: Security validation passed for command 'volume down' in session 'c254e59c-9684-47a3-a59e-d855fd5fb964'.
+2026-10-28 20:29:24,623 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:29:24,735 INFO voice_control.control.executor: Executed 'volume down'
+2026-10-28 20:29:24,735 INFO voice_control.runtime: [TIMING] 'volume down' executed in 668 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:29:24,735 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:24,735 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:27,494 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 1dd9c4c3-fd5b-4ba9-a665-e0cf8b223b4f)
+2026-10-28 20:29:27,608 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:27,608 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 1dd9c4c3-fd5b-4ba9-a665-e0cf8b223b4f (latency: 34.52ms)
+2026-10-28 20:29:27,608 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:29,470 INFO voice_control.runtime: Heard 'play' -> play (confidence 0.61)
+2026-10-28 20:29:29,470 INFO voice_control.security.validator: Security validation passed for command 'play' in session '1dd9c4c3-fd5b-4ba9-a665-e0cf8b223b4f'.
+2026-10-28 20:29:29,474 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:29:29,582 INFO voice_control.control.executor: Executed 'play'
+2026-10-28 20:29:29,582 INFO voice_control.runtime: [TIMING] 'play' executed in 650 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:29:29,582 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:29,582 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:31,717 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: bd6e9868-3518-493b-8f86-e04ecd5a1d40)
+2026-10-28 20:29:31,830 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:31,831 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: bd6e9868-3518-493b-8f86-e04ecd5a1d40 (latency: 33.71ms)
+2026-10-28 20:29:31,831 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:33,372 INFO voice_control.runtime: Heard 'pause' -> pause (confidence 1.00)
+2026-10-28 20:29:33,372 INFO voice_control.security.validator: Security validation passed for command 'pause' in session 'bd6e9868-3518-493b-8f86-e04ecd5a1d40'.
+2026-10-28 20:29:33,381 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:29:33,488 INFO voice_control.control.executor: Executed 'pause'
+2026-10-28 20:29:33,489 INFO voice_control.runtime: [TIMING] 'pause' executed in 653 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:29:33,489 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:33,491 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:36,140 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 1c19043e-2a96-4fa8-b48e-7e528c280868)
+2026-10-28 20:29:36,250 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:36,250 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 1c19043e-2a96-4fa8-b48e-7e528c280868 (latency: 40.21ms)
+2026-10-28 20:29:36,250 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:38,180 INFO voice_control.runtime: Heard 'resume' -> resume (confidence 1.00)
+2026-10-28 20:29:38,181 INFO voice_control.security.validator: Security validation passed for command 'resume' in session '1c19043e-2a96-4fa8-b48e-7e528c280868'.
+2026-10-28 20:29:38,194 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:29:38,304 INFO voice_control.control.executor: Executed 'resume'
+2026-10-28 20:29:38,304 INFO voice_control.runtime: [TIMING] 'resume' executed in 669 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:29:38,304 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:38,304 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:40,743 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 9effc1bd-bafe-4b0c-9492-89c2e180743a)
+2026-10-28 20:29:40,852 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:40,852 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 9effc1bd-bafe-4b0c-9492-89c2e180743a (latency: 35.87ms)
+2026-10-28 20:29:40,852 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:43,165 INFO voice_control.runtime: Heard 'next' -> next (confidence 1.00)
+2026-10-28 20:29:43,165 INFO voice_control.security.validator: Security validation passed for command 'next' in session '9effc1bd-bafe-4b0c-9492-89c2e180743a'.
+2026-10-28 20:29:43,499 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:29:43,605 INFO voice_control.control.executor: Executed 'next'
+2026-10-28 20:29:43,606 INFO voice_control.runtime: [TIMING] 'next' executed in 978 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:29:43,606 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:43,606 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:46,821 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 1fa14fdf-9e3a-4257-b1b6-4ac9317ff9fd)
+2026-10-28 20:29:46,939 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:46,939 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 1fa14fdf-9e3a-4257-b1b6-4ac9317ff9fd (latency: 33.43ms)
+2026-10-28 20:29:46,939 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:49,184 INFO voice_control.runtime: Heard 'previous' -> previous (confidence 1.00)
+2026-10-28 20:29:49,184 INFO voice_control.security.validator: Security validation passed for command 'previous' in session '1fa14fdf-9e3a-4257-b1b6-4ac9317ff9fd'.
+2026-10-28 20:29:52,287 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:29:52,404 WARNING voice_control.control.executor: Media action 'previous' reported failure
+2026-10-28 20:29:52,405 INFO voice_control.runtime: [TIMING] 'previous' failed in 3761 ms (end of speech -> action; target < 2000 ms)  <-- SLOWER THAN TARGET
+2026-10-28 20:29:52,405 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:52,405 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:53,354 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 3628bbe9-6d68-41d8-871b-fb9920c9978d)
+2026-10-28 20:29:53,468 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:29:53,469 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 3628bbe9-6d68-41d8-871b-fb9920c9978d (latency: 38.48ms)
+2026-10-28 20:29:53,469 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:29:57,411 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:29:57,411 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:29:57,411 ERROR voice_control.security.error_handler: [ERROR HANDLER] Handled ListeningWindowExpired: Command not finished inside the listening window
+2026-10-28 20:29:57,411 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:30:00,646 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 90094ea8-9886-4b2c-adfb-d390f6f2d8c0)
+2026-10-28 20:30:00,762 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:30:00,762 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 90094ea8-9886-4b2c-adfb-d390f6f2d8c0 (latency: 34.91ms)
+2026-10-28 20:30:00,762 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:30:03,461 INFO voice_control.runtime: Heard 'volume down' -> volume down (confidence 1.00)
+2026-10-28 20:30:03,462 INFO voice_control.security.validator: Security validation passed for command 'volume down' in session '90094ea8-9886-4b2c-adfb-d390f6f2d8c0'.
+2026-10-28 20:30:03,467 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:30:03,580 INFO voice_control.control.executor: Executed 'volume down'
+2026-10-28 20:30:03,580 INFO voice_control.runtime: [TIMING] 'volume down' executed in 664 ms (end of speech -> action; target < 1000 ms)
+2026-10-28 20:30:03,580 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:30:03,580 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:30:06,850 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: 06b3d215-cc53-4b1f-a961-99769ac730bd)
+2026-10-28 20:30:06,965 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:30:06,965 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: 06b3d215-cc53-4b1f-a961-99769ac730bd (latency: 30.48ms)
+2026-10-28 20:30:06,965 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:30:08,895 INFO voice_control.runtime: Heard 'play' -> play (confidence 1.00)
+2026-10-28 20:30:08,895 INFO voice_control.security.validator: Security validation passed for command 'play' in session '06b3d215-cc53-4b1f-a961-99769ac730bd'.
+2026-10-28 20:30:08,899 INFO voice_control.feedback.indicator: [FEEDBACK ✓] Command executed successfully.
+2026-10-28 20:30:09,012 INFO voice_control.control.executor: Executed 'play'
+2026-10-28 20:30:09,013 INFO voice_control.runtime: [TIMING] 'play' executed in 657 ms (end of speech -> action; target < 2000 ms)
+2026-10-28 20:30:09,013 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:30:09,013 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
+2026-10-28 20:30:12,921 INFO voice_control.feedback.indicator: [FEEDBACK] Wake word detected! System is now LISTENING (Token: e1b27d55-e8c5-400f-aabf-9b16b6395f6f)
+2026-10-28 20:30:13,032 INFO voice_control.runtime: [STATUS] LISTENING: say one command now (4 s).
+[STATUS] LISTENING: say one command now (4 s).
+2026-10-28 20:30:13,032 INFO voice_control.detector.wake_word: Wake word detected ('hey media', confidence=1.00). Active listening session: e1b27d55-e8c5-400f-aabf-9b16b6395f6f (latency: 21.72ms)
+2026-10-28 20:30:13,032 INFO voice_control.runtime: Wake word heard. Say a command within 4.0s.
+2026-10-28 20:30:14,771 INFO voice_control.runtime: Heard 'previous' -> previous (confidence 1.00)
+2026-10-28 20:30:14,771 INFO voice_control.security.validator: Security validation passed for command 'previous' in session 'e1b27d55-e8c5-400f-aabf-9b16b6395f6f'.
+2026-10-28 20:30:17,840 INFO voice_control.feedback.indicator: [FEEDBACK ✗] Command rejected or execution failed.
+2026-10-28 20:30:17,962 WARNING voice_control.control.executor: Media action 'previous' reported failure
+2026-10-28 20:30:17,962 INFO voice_control.runtime: [TIMING] 'previous' failed in 3718 ms (end of speech -> action; target < 2000 ms)  <-- SLOWER THAN TARGET
+2026-10-28 20:30:17,962 INFO voice_control.feedback.indicator: [FEEDBACK] System returned to IDLE (Awaiting wake word).
+2026-10-28 20:30:17,963 INFO voice_control.runtime: [STATUS] READY: say 'hey media' to give a command.
+[STATUS] READY: say 'hey media' to give a command.
