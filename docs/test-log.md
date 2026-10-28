@@ -32,7 +32,7 @@
 | US-13: Microphone error handling (Abhay) | Automated tests pass | `test_us13_mic_error_handling.py` passes (PR #34) |
 | US-16: Microphone privacy / mute (Abhay) | Verified | `test_us16_mute_and_timing.py` passes (23 tests); live mute/unmute check passed on 26 October (see Section 17.2) |
 | US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
-| US-15: Recover from recognition errors (Aaditya) | Automated tests pass; live check reported done (PR #41) | `test_us15_recovery.py` passes (18 tests); add Aaditya's live-check details when he sends them |
+| US-15: Recover from recognition errors (Aaditya) | Verified for observed live scenario | `test_us15_recovery.py`: 18 automated tests pass; live recognition-error handling and recovery without restart observed on 26 October. See Section 17.3 |
 | US-17 / SR-2: Local voice processing (Abhay) | Verified | Automated checks pass; live network check PASS (see Section 10 and [docs/evidence/us17-network-check.md](evidence/us17-network-check.md)) |
 | US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | AWAITING EVIDENCE | Waiting for Aaditya's formal results (50 utterances; 7 commands × 5). Preliminary figures are in sections 9 and 11 |
 | US-10 / NFR-3: Continuous availability (Aaditya) | PENDING — 2-hour run by Aaditya (US-10, approved change D-5); 15-minute preliminary run passed | See NFR-3 row above |
@@ -322,7 +322,7 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 | US-14 media error handling | Verified | None; retain the automated and live evidence |
 | US-20 duplicate execution | Verified | None; retain the automated and live evidence |
 | US-16 microphone mute | Verified | None; retain the live check (Section 17.2) |
-| US-15 recovery from recognition errors | Automated tests pass | Add Aaditya's live-check details when he sends them |
+| US-15 recovery from recognition errors | Verified for observed live scenario | Retain automated and live-check evidence; no repeat required for the observed scenario |
 | US-11 accuracy and response time | Awaiting Aaditya | Record formal results (50 utterances; 7 commands × 5) |
 | US-18 startup system check | Not started | Aaditya, due 28 October; record the result |
 | TC-09 / NFR-1 performance | Preliminary measurements available | Complete the planned performance test |
@@ -383,3 +383,24 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 **Limitation:** The log does not show whether speech was attempted during the muted period. Speech while muted is covered by the automated tests (`test_nothing_is_processed_while_muted`, `test_muting_cancels_an_open_listening_window`).
 
 **Status:** Verified.
+
+### 17.3 US-15 — Live Recovery from Recognition Error
+
+**Date:** 26 October 2026
+**Tester:** Aaditya
+
+**Method:** The application was started with the offline Vosk model and a YouTube video open. The tester checked normal command execution, recognition-error handling, and recovery without restarting the application.
+
+| Step | Action | Observed result | Status |
+|---|---|---|---|
+| 1 | Say "Hey Media, pause" | Pause command was recognized, validated, and executed successfully | PASS |
+| 2 | Say "Hey Media", followed by unclear speech | `UnrecognizedCommandError` was handled; rejection/error feedback was emitted, and the application returned to IDLE | PASS |
+| 3 | Immediately say "Hey Media, play" without restarting | Play command was recognized, validated, and executed successfully | PASS |
+
+**Result:** The observed live test demonstrates that the application handled a recognition error and accepted a subsequent valid command without restarting.
+
+**Evidence:** Aaditya's terminal screenshots showing the command logs and return to IDLE.
+
+**Limitation:** The screenshots do not establish whether the optional Wi-Fi-off test was performed. They also do not, by themselves, confirm the visible YouTube playback state for each action.
+
+**Status:** PASS for the observed recovery scenario.
