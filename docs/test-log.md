@@ -32,7 +32,7 @@
 | US-13: Microphone error handling (Abhay) | Automated tests pass | `test_us13_mic_error_handling.py` passes (PR #34) |
 | US-16: Microphone privacy / mute (Abhay) | Verified | `test_us16_mute_and_timing.py` passes (23 tests); live mute/unmute check passed on 26 October (see Section 17.2) |
 | US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
-| US-15: Recover from recognition errors (Aaditya) | Automated tests pass; live check reported done (PR #41) | `test_us15_recovery.py` passes (18 tests); add Aaditya's live-check details when he sends them |
+| US-15: Recover from recognition errors (Aaditya) | Verified for observed live scenario | `test_us15_recovery.py`: 18 automated tests pass; live recognition-error handling and recovery without restart observed on 26 October. See Section 17.3 |
 | US-17 / SR-2: Local voice processing (Abhay) | Verified | Automated checks pass; live network check PASS (see Section 10 and [docs/evidence/us17-network-check.md](evidence/us17-network-check.md)) |
 | US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | AWAITING EVIDENCE | Waiting for Aaditya's formal results (50 utterances; 7 commands × 5). Preliminary figures are in sections 9 and 11 |
 | US-10 / NFR-3: Continuous availability (Aaditya) | PENDING — 2-hour run by Aaditya (US-10, approved change D-5); 15-minute preliminary run passed | See NFR-3 row above |
@@ -336,7 +336,7 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 | US-14 media error handling | Verified | None; retain the automated and live evidence |
 | US-20 duplicate execution | Verified | None; retain the automated and live evidence |
 | US-16 microphone mute | Verified | None; retain the live check (Section 17.2) |
-| US-15 recovery from recognition errors | Automated tests pass | Add Aaditya's live-check details when he sends them |
+| US-15 recovery from recognition errors | Verified for observed live scenario | Retain automated and live-check evidence; no repeat required for the observed scenario |
 | US-11 accuracy and response time | Awaiting Aaditya | Record formal results (50 utterances; 7 commands × 5) |
 | US-18 startup system check | Not started | Aaditya, due 28 October; record the result |
 | TC-09 / NFR-1 performance | Preliminary measurements available | Complete the planned performance test |
@@ -397,3 +397,98 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 **Limitation:** The log does not show whether speech was attempted during the muted period. Speech while muted is covered by the automated tests (`test_nothing_is_processed_while_muted`, `test_muting_cancels_an_open_listening_window`).
 
 **Status:** Verified.
+
+### 17.3 US-15 — Live Recovery from Recognition Error
+
+**Date:** 26 October 2026
+**Tester:** Aaditya
+
+**Method:** The application was started with the offline Vosk model and a YouTube video open. The tester checked normal command execution, recognition-error handling, and recovery without restarting the application.
+
+| Step | Action | Observed result | Status |
+|---|---|---|---|
+| 1 | Say "Hey Media, pause" | Pause command was recognized, validated, and executed successfully | PASS |
+| 2 | Say "Hey Media", followed by unclear speech | `UnrecognizedCommandError` was handled; rejection/error feedback was emitted, and the application returned to IDLE | PASS |
+| 3 | Immediately say "Hey Media, play" without restarting | Play command was recognized, validated, and executed successfully | PASS |
+
+**Result:** The observed live test demonstrates that the application handled a recognition error and accepted a subsequent valid command without restarting.
+
+**Evidence:** Aaditya's terminal screenshots showing the command logs and return to IDLE.
+
+**Limitation:** The screenshots do not establish whether the optional Wi-Fi-off test was performed. They also do not, by themselves, confirm the visible YouTube playback state for each action.
+
+**Status:** PASS for the observed recovery scenario.
+
+### 17.4 US-11 — Live Accuracy and Response-Time Evaluation
+
+**Test date:** 28 October 2026
+
+**Reported test window:** 20:24–20:30 IST
+
+**Tester:** Aaditya Vashisht
+
+**Environment:** MacBook, quiet room, offline Vosk model `vosk-model-small-en-in-0.4`
+
+**Raw log:** `us11-run-v2.log`
+
+#### Objective
+
+Evaluate speech-command recognition and measure the time between the end of speech and the application's reported action.
+
+#### 1. Recognition and action results
+
+The submitted summary reports 45 correctly recognised utterances out of 50 (90%). However, the raw log contains 47 recognised command events and additional listening/error events. The exact 50-utterance denominator and classification need reconciliation before the 90% result is finalized.
+
+| Command | Events in raw log | Reported execution | Average recorded time |
+|---|---:|---|---:|
+| Play | 8 | 8 successful | 652.9 ms |
+| Pause | 7 | 7 successful | 663.3 ms |
+| Resume | 7 | 7 successful | 666.7 ms |
+| Next | 5 | 5 successful | 1,069.2 ms |
+| Previous | 7 | 7 failed | 3,729.4 ms |
+| Volume up | 6 | 6 successful | 665.0 ms |
+| Volume down | 7 | 7 successful | 661.6 ms |
+| **Total recognised commands** | **47** | **40 successful, 7 failed** | — |
+
+These counts are derived from the uploaded raw log. They should not be interpreted as the planned 5 trials per command because the observed counts differ from that plan.
+
+#### 2. Response-time findings
+
+- For the 40 actions reported as successful, the mean recorded response time was approximately **712.5 ms**.
+- The slowest successful action took **1,160 ms**.
+- All 40 successful actions were recorded below their configured response-time targets.
+- All seven `previous` actions failed after approximately 3.7 seconds and exceeded the 2-second target.
+- Therefore, the response-time target was **not met for every command type**.
+
+#### 3. Recognition and error handling
+
+The raw log records:
+- An `UnrecognizedCommandError` when speech was not understood.
+- Two listening windows that closed without a command.
+- A `ListeningWindowExpired` error when a command was not completed within the listening window.
+- The application returned to IDLE after the recorded errors.
+
+The final accuracy calculation must distinguish correctly recognised commands, incorrectly recognised commands, and attempts with no recognised command.
+
+#### 4. Previous-track investigation
+
+The raw log shows that `previous` was recognised and passed security validation on all seven attempts, but the media action was reported as failed each time. Each failure took approximately 3.7 seconds.
+
+The tester reports that plain Chrome testing indicated YouTube may restart the current video instead of navigating to the previous video, depending on playback position. This is the tester's observation and does not establish that every failure is exclusively caused by YouTube.
+
+**Result:** Recognition of `previous` was observed, but successful execution was not demonstrated in these seven attempts. The issue remains relevant to the overall command-action evaluation.
+
+#### 5. Evidence and limitations
+
+- Raw log: `us11-run-v2.log`
+- Start screenshot: shows the test environment and the beginning of the run.
+- End/failure screenshot: shows `previous` being recognised but reported as failed, with a response time exceeding the target.
+- Additional screenshots show successful commands and their recorded response times.
+
+The supplied evidence supports the command counts and timings above. It does not independently establish the claimed 45/50 accuracy result or the complete planned 5-trial distribution.
+
+#### 6. Final evaluation
+
+**Status: PARTIAL PASS — formal accuracy result pending reconciliation.**
+
+Successful commands were generally executed within their configured response-time targets. However, all seven observed `previous` actions failed and exceeded the target. Before closing US-11, reconcile the 50-utterance accuracy calculation, the planned trial distribution, and the `previous` failures against the raw log and supporting evidence.
