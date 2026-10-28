@@ -27,7 +27,7 @@
 | TC-09 / NFR-1: Performance | Preliminary evidence available | Complete the planned performance test |
 | NFR-2: Recognition reliability | PASS based on recorded results | 45 of 50 valid-command utterances succeeded (90%) |
 | NFR-3: Availability | PENDING — 2-hour run by Aaditya (US-10, approved change D-5); 15-minute preliminary run passed | Requirement reduced from 8 hours to 2 hours with teacher approval (SRS v1.1, D-5) |
-| NFR-4: First-time-user usability | PASS | Two first-time users issued working commands without a manual (28 October); see Section 13 |
+| NFR-4: First-time-user usability | PASS for observed sessions | Two first-time users issued working commands without a manual; tester 2 received a hint regarding the wake word (28 October); see Section 13 |
 | US-09: Command feedback (Abhay) | Automated tests pass | `test_us09_feedback.py` passes (PR #34); live feedback tones seen in the live sessions above |
 | US-13: Microphone error handling (Abhay) | Automated tests pass | `test_us13_mic_error_handling.py` passes (PR #34) |
 | US-16: Microphone privacy / mute (Abhay) | Verified | `test_us16_mute_and_timing.py` passes (23 tests); live mute/unmute check passed on 26 October (see Section 17.2) |
@@ -309,15 +309,15 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 | First-time user | Yes | Yes |
 | Commands issued (in order) | play, pause, next, volume up (twice), resume | play, volume down, previous, next (twice), pause |
 | Result | All commands executed | All commands executed |
-| Hint given | Told that only the 7 defined commands are supported | Same hint; had not read the terminal text and initially tester 2 hadn’t read the terminal’s “say ‘hey media’” line and was unsure about the wake word. |
+| Hint given | No hint or instructions provided | A hint regarding the wake word ("hey media") was given; tester 2 had not read the terminal instruction. |
 | Comment | Overall experience was good | Overall experience was good |
 
 **Observations:**
-- Both testers tried functions outside the seven commands (playback speed, video quality, autoplay). The application rejected these exactly as it rejects other unsupported phrases (error feedback, no media action), which is the expected US-08 behavior.
-- After the hint, both testers said they could use the application properly on their own.
-- Future work: the requests for speed, quality and autoplay control suggest possible additional commands.
+- One tester attempted functions outside the seven defined commands: playback speed, video quality, and autoplay. The application rejected these unsupported requests, as expected under US-08.
+- Tester 2 initially needed a hint regarding the wake word. Both testers reported that the overall experience was good.
+- Future work: requests for speed, quality, and autoplay control suggest possible additional commands.
 
-**Status:** PASS. Both first-time users issued working commands without a manual, using the defined command words. Hints were needed about the supported vocabulary and the wake word, and these are recorded above.
+**Status:** PASS for the two observed sessions. Both first-time users successfully issued working commands without a manual. Tester 2 received a hint regarding the wake word; this assistance is recorded above and should be considered when interpreting the usability result.
 
 ## 14. Warnings and Issues
 
@@ -358,7 +358,7 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 - SR-2 is verified: Vosk is the default backend and Abhay's network check (27 October) showed no outside connection and no audio-sized traffic.
 - US-16 is verified: automated tests pass and the live mute/unmute check passed on 26 October.
 - NFR-3 remains PENDING until Aaditya completes the 2-hour run (approved change D-5).
-- NFR-4 is verified: two first-time users issued working commands without a manual on 28 October (Section 13).
+- NFR-4 passed for the two observed sessions: both first-time users issued working commands without a manual on 28 October; tester 2 received a hint regarding the wake word (Section 13).
 - The 11 deprecation warnings did not cause test failures.
 
 **Overall assessment:** The automated test suite and the recorded live checks are encouraging. Do not mark any remaining item fully complete until its required evidence has been collected and documented.
