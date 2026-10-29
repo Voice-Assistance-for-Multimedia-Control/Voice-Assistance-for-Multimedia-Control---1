@@ -492,3 +492,109 @@ The supplied evidence supports the command counts and timings above. It does not
 **Status: PARTIAL PASS — formal accuracy result pending reconciliation.**
 
 Successful commands were generally executed within their configured response-time targets. However, all seven observed `previous` actions failed and exceeded the target. Before closing US-11, reconcile the 50-utterance accuracy calculation, the planned trial distribution, and the `previous` failures against the raw log and supporting evidence.
+
+### 17.5 US-10 — Continuous Availability (NFR-3, revised to 2 hours)
+
+**Test dates:** 28–29 October 2026
+**Tester:** Aaditya Vashisht
+**Tested commit:** `087f1db` (main after PR #52), run from a detached copy of the code so that concurrent US-18 edits could not affect the run
+**Environment:** MacBook (8 GB RAM), offline Vosk model `vosk-model-small-en-in-0.4`, YouTube mix (3 h 35 min) playing in the app-controlled Chrome window, `caffeinate` used to prevent sleep
+**Requirement:** NFR-3 as revised (SRS v1.1, README deviation D-5, instructor-approved): the system shall stay listening-ready for at least 2 continuous hours. Closure criteria: a command at the start, every 30 minutes and at the end, with start/end time and memory recorded.
+**Raw logs:** `us10-run.log`, `us10-mem.log`
+
+#### Objective
+Verify that the system stays listening-ready for at least 2 continuous hours without a restart, and that memory use and response time do not degrade.
+
+#### 1. Continuity
+- One process (PID 6077) was started at 23:29:37 on 28 October and was still running at 01:51:09 on 29 October (last memory-log line), which is 2 h 21 min after launch.
+- `AudioCaptureComponent started` appears once in the run log, so the process was never restarted.
+- The run log contains no `Traceback` or `ERROR` lines.
+- The first command check was at 23:44 and the last at 01:47, a span of 2 h 03 min. The checks were about 30 minutes apart (30, 31, 32 and 30 minutes).
+
+#### 2. Command checks
+| # | Time (IST) | Elapsed | Command | Confidence | Wake-word latency | Response time (target) | Result | Memory (Activity Monitor) |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 23:44 | 0:00 | pause | 0.91 | 45.37 ms | 682 ms (< 2000 ms) | PASS | 117.6 MB |
+| 2 | 00:14 | 0:30 | pause | 0.85 | 47.62 ms | 697 ms (< 2000 ms) | PASS | 123.6 MB |
+| 3 | 00:45 | 1:01 | resume | 1.00 | 44.75 ms | 677 ms (< 2000 ms) | PASS | 126.4 MB |
+| 4 | 01:17 | 1:33 | volume up | 1.00 | 39.81 ms | 667 ms (< 1000 ms) | PASS | 123.1 MB |
+| 5 | 01:47 | 2:03 | volume down | 1.00 | 52.43 ms | 674 ms (< 1000 ms) | PASS | 123.3 MB |
+
+- Each command followed the full pipeline in the log: wake word detected, command recognised, security validation passed, command executed, and the system returned to IDLE/READY.
+- Response times stayed between 667 and 697 ms. The first check took 682 ms and the last took 674 ms, so there was no slowdown.
+- Both volume commands were confirmed by ear: the sound got louder for "volume up" and quieter for "volume down".
+- Before check 3 the video was paused. After "resume" it was playing, and the pause button is visible in the check 3 screenshot.
+
+#### 3. Resource usage
+- **Activity Monitor (Python, PID 6077):** memory stayed between 115.1 MB and 126.4 MB for the whole run, with 8–10 threads. CPU was about 1% (1.0% at 23:44, 0.7% at 23:47, 0.9% at 23:50).
+- **System memory:** memory pressure was yellow at 23:44, before unneeded apps were closed, and green from 23:54 until the end. The Mac used between 6.5 and 6.95 GB of 8 GB, with 2.2–2.6 GB of swap.
+- **`ps` log (`us10-mem.log`):** 29 readings at 5-minute intervals plus a final reading (30 lines). After the first reading (20,208 kB, just after startup) the process's resident memory stayed between 12,352 kB and 18,576 kB. The final reading was 17,696 kB. CPU was 0.2–1.0% throughout. There was no sustained growth.
+- Activity Monitor and `ps` measure memory differently (Activity Monitor includes compressed memory), so the two sets of figures are reported separately and not compared with each other.
+
+#### 4. Observations
+- The YouTube page showed "Something went wrong" several times and was refreshed. This is a player-side issue. The voice system stayed in READY and its CPU and memory were unaffected.
+- The log shows exactly five wake-word detections, one for each check. Nothing was triggered by the video audio between checks.
+- The run was 2 hours instead of the original 8 hours, as approved by the instructor (SRS v1.1, D-5).
+
+#### 5. Evidence and limitations
+- Logs: `us10-run.log`, `us10-mem.log`
+- Screenshots: `us10-check1-start.png`, `us10-check1-start-cpu.png`, `us10-check2.png`, `us10-check3.png`, `us10-check4.png`, `us10-check5-end.png`, `us10-check5-end-cpu.png`
+
+![Check 1 (start)](evidence/us10-check1-start.png)
+![Check 5 (end)](evidence/us10-check5-end.png)
+
+**Limitations:** only five commands were issued in two hours, so this shows availability and stability, not behaviour under load. Volume changes were confirmed by ear, not measured, and the screenshots do not show the player's state for every command.
+
+**Status:** PASS for revised NFR-3 (2-hour criterion).
+
+### 17.6 US-18 — Startup System Check
+
+**Test date:** 29 October 2026
+**Tester:** Aaditya Vashisht
+**Tested on:** working tree of branch `feature/us10-test-us18-impl` (before the US-18 commit)
+**Environment:** MacBook Air (microphone: "MacBook Air Microphone"), offline Vosk model `vosk-model-small-en-in-0.4`
+**Code:** `src/voice_control/startup_check.py` (new), `main.py` (startup wiring), `tests/test_us18_startup_check.py` (20 new tests)
+
+#### Objective
+Verify that the assistant checks its required components at startup, indicates successful initialization, and reports an error if a required component fails.
+
+#### 1. Automated tests
+`python -m pytest -q`: **210 passed**, 149 warnings, 4.81 s. The warnings come from earlier tests (sounddevice/NumPy deprecation notices); none come from the new US-18 tests. The 20 new tests use fakes, so they need no microphone, model or Chrome. They cover:
+- all four components checked, and success reported
+- each component failing on its own: microphone, Vosk package, Vosk model folder, media functions, media_controls import, Selenium, unknown backend
+- several failures listed together
+- a check that crashes being reported as a failure
+- `main.py` stopping (exit code 2) before listening when a check fails
+- `main.py` reporting a recognizer or media player that fails to initialize
+- "ready" printed only after everything has initialized
+
+#### 2. Live checks
+| Check | Command | Observed result |
+|---|---|---|
+| A. Normal start | `python main.py --model models/vosk-model-small-en-in-0.4` | Four `[STARTUP] OK` lines (microphone "MacBook Air Microphone", Vosk with model, media controls, Selenium), then `Media player: Chrome window opened`, `All required components are ready.` and the READY status line. Ctrl-C stopped it cleanly. |
+| B. Missing recognizer model | `python main.py --model models/does-not-exist` | `[STARTUP] FAILED Speech recognizer: Vosk model not found at 'models/does-not-exist'...`, the other three OK, `NOT READY: Speech recognizer failed`, **exit code 2**. Chrome did not open and listening did not start. |
+| C. Microphone fault (simulated) | Same start, with the microphone check replaced by one that reports "no microphone" | `[STARTUP] FAILED Microphone: No microphone or audio input device detected on the system.`, the other three OK, `NOT READY: Microphone failed`, **exit code 2**. Chrome did not open and listening did not start. |
+
+In check A the four component checks completed within the same millisecond. About 3.5 s passed between the first check and the READY line, which includes loading the model and opening Chrome.
+
+#### 3. Acceptance criteria
+| Criterion | Evidence | Result |
+|---|---|---|
+| The system checks the availability of the microphone and required software components | Check A shows all four components checked; unit tests cover each one | PASS |
+| The system indicates successful initialization | Check A prints the OK lines and "All required components are ready." only after the recognizer and Chrome player have opened | PASS |
+| An error is reported if a required component fails to initialize | Checks B and C print `FAILED`, `NOT READY` and exit code 2; unit tests cover the other components | PASS |
+
+#### Limitations
+- The microphone fault in check C was simulated, because the built-in microphone cannot be removed. A real missing-microphone case is covered by the unit tests and by the existing US-13 detection code that the check reuses.
+- A recognizer that fails to initialize after its checks pass (for example a damaged model folder) and a Chrome window that fails to open are verified by unit tests with fakes, not live.
+- The startup check confirms that the Vosk model folder exists and that the packages are installed. Real loading of the model happens immediately afterwards, and a failure there is reported as `FAILED Speech recognizer`.
+- Behaviour change: if Chrome fails to open, startup now stops with an error. Before, it printed a warning and continued.
+
+#### Evidence
+`us18-check-a-normal-start.png`, `us18-check-b-missing-model.png`, `us18-check-c-simulated-mic.png`
+
+![Check A: normal start](evidence/us18-check-a-normal-start.png)
+![Check B: missing model](evidence/us18-check-b-missing-model.png)
+![Check C: simulated microphone fault](evidence/us18-check-c-simulated-mic.png)
+
+**Status:** PASS.

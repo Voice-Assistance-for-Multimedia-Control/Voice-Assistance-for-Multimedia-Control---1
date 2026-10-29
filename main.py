@@ -7,6 +7,9 @@ This is the ONLY entry point. Flow (Architecture 2.3):
     -> map_command -> SecurityValidator (shared session) -> media_controls
     -> FeedbackModule
 
+Startup (US-18): the required components are checked and the result is printed
+before the assistant starts listening.
+
 Usage:
     python main.py                          # local Vosk recognizer (SR-2)
     python main.py --model PATH             # custom Vosk model folder
@@ -25,15 +28,15 @@ if SRC.is_dir() and str(SRC) not in sys.path:
 
 from voice_control.config import VoiceControlConfig  # noqa: E402
 from voice_control.control.command_mapper import recognizer_phrases  # noqa: E402
-from voice_control.control.media_actions import (  # noqa: E402
-    bind_media_actions,
-    missing_functions,
-)
-from voice_control.recognition.transcriber import (  # noqa: E402
-    TranscriberUnavailableError,
-    create_transcriber,
-)
+from voice_control.control.media_actions import bind_media_actions  # noqa: E402
+from voice_control.recognition.transcriber import create_transcriber  # noqa: E402
 from voice_control.runtime import VoiceAssistant  # noqa: E402
+from voice_control.startup_check import (  # noqa: E402
+    MEDIA_PLAYER,
+    RECOGNIZER,
+    report_init_failure,
+    run_startup_checks,
+)
 
 
 def load_media_controls():
@@ -65,29 +68,32 @@ def main(argv=None) -> int:
     if args.model:
         config.vosk_model_path = args.model
 
-    try:
-        transcriber = create_transcriber(config, recognizer_phrases(config.wake_word))
-    except TranscriberUnavailableError as exc:
-        print(f"[ERROR] {exc}")
+    # US-18: check the required components before anything starts.
+    module, import_error = load_media_controls()
+    report = run_startup_checks(config, module, import_error)
+    report.show()
+    if not report.ok:
+        print(report.summary(), flush=True)
         return 2
 
-    module, import_error = load_media_controls()
-    if import_error:
-        print(f"[WARNING] {import_error}")
-    missing = missing_functions(module)
-    if missing:
-        print(f"[WARNING] Not available in media_controls yet: {', '.join(missing)}. "
-              "Those commands will be rejected with an error tone.")
+    try:
+        transcriber = create_transcriber(config, recognizer_phrases(config.wake_word))
+    except Exception as exc:  # Vosk missing, or a model folder that will not load
+        report_init_failure(RECOGNIZER, exc)
+        return 2
 
     # Open the shared media player now, so the first command does not have to.
     get_player = getattr(module, "get_player", None)
     if callable(get_player):
         try:
             get_player()
-            print("Media player opened. Start a YouTube video in that window, then speak.")
         except Exception as exc:
-            print(f"[WARNING] Could not open the media player yet: {exc}")
+            report_init_failure(MEDIA_PLAYER, exc)
+            return 2
+        print("[STARTUP] OK     Media player: Chrome window opened", flush=True)
+        print("Media player opened. Start a YouTube video in that window, then speak.")
 
+    print("[STARTUP] All required components are ready.", flush=True)
     assistant = VoiceAssistant(transcriber, bind_media_actions(module, import_error), config)
     return assistant.run()
 
