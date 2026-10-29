@@ -36,8 +36,8 @@ Sprint 1 total: 7 stories, 23 points.
 | **US-17 — Local Voice Processing** | Abhay S | 5 | Done (PR #44): offline Vosk; automated checks with network blocked; live network check passed 27 Oct ([evidence](docs/evidence/us17-network-check.md)) |
 | **US-19 — Listening Status Indicator** | Abhay S | 3 | Done (PR #44): READY / LISTENING / MUTED / MICROPHONE UNAVAILABLE status lines; unit tested |
 | **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | Done: 2-hour run passed with no restart or errors (NFR-3 revised from 8 h with instructor approval, see D-5); verified live (test log 17.5) |
-| **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | Done: accuracy and response-time measurements recorded (test log 17.4) |
-| **US-15 — Recover from Recognition Errors** | Aaditya Vashisht | 5 | Done (PR #41); unit tested; live check reported |
+| **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | Done: accuracy 46 of 51 attempts (90.2%, NFR-2); response time 712 ms average over 40 actions, slowest 1,160 ms (NFR-1); raw log in `docs/evidence/us11-run-v2.log` |
+| **US-15 — Recover from Recognition Errors** | Aaditya Vashisht | 5 | Done (PR #41); unit tested; verified live (test log, Section 17.3) |
 | **US-18 — Startup System Check** | Aaditya Vashisht | 3 | Done: checks microphone, speech recognizer, media controls and Selenium before listening; unit tested; verified live (test log 17.6) |
 | **US-08 — Reject Unsupported Commands** | Aarohi Jaiswal | 5 | Done; unit tested; verified live (two tests of 5 phrases each, see test log) |
 | **US-12 — Handle Unclear Voice Commands** | Aarohi Jaiswal | 3 | Done (PR #43): "Didn't catch that, please repeat"; unit tested; checked live |
@@ -121,7 +121,7 @@ The binding lives in `src/voice_control/control/media_actions.py`.
 
 ## Deviations from the Submitted Documents
 
-The SRS, Software Architecture & Design Specification (SAD) and Test Plan were followed, with the five deviations below. None changes the seven Sprint 1 commands or their acceptance criteria.
+The SRS, Software Architecture & Design Specification (SAD) and Test Plan were followed, with the six deviations below. None changes the seven Sprint 1 commands or their acceptance criteria.
 
 The revised SRS, [`1_Software_Requirements_Specification_v1.1.pdf`](1_Software_Requirements_Specification_v1.1.pdf) (editable: [`.docx`](1_Software_Requirements_Specification_v1.1.docx)), records D-1, D-2, D-3 and D-5 in the requirements themselves; the original version 1.0 is kept as [`1_Software_Requirements_Specification.pdf`](1_Software_Requirements_Specification.pdf) for comparison.
 
@@ -132,6 +132,7 @@ The revised SRS, [`1_Software_Requirements_Specification_v1.1.pdf`](1_Software_R
 | **D-3** | Speech processing with a library such as MediaPipe or SpeechRecognition (SRS 1.2), lightweight offline models preferred (SRS 2.4) | Vosk offline recognizer with a grammar limited to "hey media" and the seven commands; Google recognition only with `--backend google` | Keeps all audio on the device (SR-2) and gives a real confidence score for the security check | A ~36 MB model is downloaded once (see Setup). Google mode sends audio off-device and is not used for testing or the demo |
 | **D-4** | US-09 (command feedback) and US-13 (microphone error handling) planned for Sprint 2 | Delivered during Sprint 1 (PR #34) | Sprint 1's command flow depends on them: feedback after every command (FR-10) and an error tone for rejected commands (FR-9) | Sprint 2 has two fewer stories; no other Sprint 2 work was started during Sprint 1 |
 | **D-5** | Remains listening-ready for at least 8 continuous hours (SRS NFR-3, v1.0) | At least 2 continuous hours (SRS NFR-3, v1.1); tested with a 2-hour run (US-10) | Approved by the course instructor on 27 Oct 2026: a 1–2 hour run is acceptable | Shorter availability evidence; recorded as a revised requirement, not a pass against the original 8 hours |
+| **D-6** | The system shall return to the previous media item within 2 seconds of “Previous” (SRS FR-6) | “Previous” works when said within about 4 seconds of a video starting (for example right after “Next”). Later in a video, YouTube’s previous button restarts the current video instead, so the app reports the action as failed with the error tone | This is YouTube’s own player behaviour; the team chose not to work around it in this version | FR-6 is partly met. The failure is detected and reported honestly (US-14) instead of claiming success; US-11 recorded 7 of 7 failures when said mid-video |
 
 ---
 
@@ -169,13 +170,16 @@ The revised SRS, [`1_Software_Requirements_Specification_v1.1.pdf`](1_Software_R
 
 | Req / Test case | Implementation | Automated test | Status |
 |---|---|---|---|
-| FR-1 / TC-01 | `WakeWordDetector`, `TranscriptWakeWordEngine` | `test_tc01_wake_word.py` | Unit tested |
-| FR-2..FR-8 / TC-02..TC-08 | `map_command`, `CommandExecutor`, `media_controls` | `test_sprint1_integration.py`, `test_player_controls.py`, `test_media_controls.py` | Unit tested; laptop verification pending |
-| FR-9 | `map_command`, `ErrorHandler` | `test_sprint1_integration.py` | Unit tested |
-| FR-10 | `FeedbackModule` | `test_us09_feedback.py`, `test_sprint1_integration.py` | Unit tested |
-| NFR-1 / TC-09 | Whole pipeline | — | Needs hardware measurement |
-| SR-1 / TC-10 | `TranscriptWakeWordEngine`, `SecurityValidator` | `test_tc10_security_gating.py`, `test_sprint1_integration.py` | Unit tested |
-| SR-2 | `VoskTranscriber`, `AudioBuffer` | `test_audio_buffer.py`, `test_transcriber.py` | Unit tested; speech stays on the device (D-3) |
+| FR-1 / TC-01 | `WakeWordDetector`, `TranscriptWakeWordEngine` | `test_tc01_wake_word.py` | Unit tested; verified live |
+| FR-2..FR-8 / TC-02..TC-08 | `map_command`, `CommandExecutor`, `media_controls` | `test_sprint1_integration.py`, `test_player_controls.py`, `test_media_controls.py` | Unit tested; all seven verified live (test log, US-14); FR-6 limited, see D-6 |
+| FR-9 | `map_command`, `ErrorHandler` | `test_sprint1_integration.py` | Unit tested; verified live with 10 unsupported phrases (US-08) |
+| FR-10 | `FeedbackModule` | `test_us09_feedback.py`, `test_sprint1_integration.py` | Unit tested; seen in live runs |
+| NFR-1 / TC-09 | Whole pipeline | `test_us16_mute_and_timing.py` (timing log) | Verified live: 712 ms average, slowest 1,160 ms, volume at most 686 ms (US-11) |
+| NFR-2 | Vosk recognizer, command grammar | — | Verified live: 46 of 51 attempts correct, 90.2% (US-11) |
+| NFR-3 | Whole runtime | — | 2-hour run completed 28–29 Oct (US-10, D-5); evidence in review |
+| NFR-4 | Whole system | — | Verified live with 2 first-time users (test log, Section 13) |
+| SR-1 / TC-10 | `TranscriptWakeWordEngine`, `SecurityValidator` | `test_tc10_security_gating.py`, `test_sprint1_integration.py` | Unit tested; no false triggers during the 2-hour run (US-10, evidence in review) |
+| SR-2 | `VoskTranscriber`, `AudioBuffer` | `test_audio_buffer.py`, `test_transcriber.py`, `test_us19_status_and_us17_local.py` | Verified: network check, localhost only ([evidence](docs/evidence/us17-network-check.md)) |
 | US-13 | `AudioCaptureComponent` | `test_us13_mic_error_handling.py` | Unit tested |
 
 ---
