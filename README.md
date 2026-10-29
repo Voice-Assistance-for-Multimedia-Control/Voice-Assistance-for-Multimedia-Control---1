@@ -35,16 +35,16 @@ Sprint 1 total: 7 stories, 23 points.
 | **US-16 — Microphone Privacy Control** | Abhay S | 5 | Done (PR #42): type `m` + Enter to turn the microphone off/on; unit tested; verified live 26 Oct |
 | **US-17 — Local Voice Processing** | Abhay S | 5 | Done (PR #44): offline Vosk; automated checks with network blocked; live network check passed 27 Oct ([evidence](docs/evidence/us17-network-check.md)) |
 | **US-19 — Listening Status Indicator** | Abhay S | 3 | Done (PR #44): READY / LISTENING / MUTED / MICROPHONE UNAVAILABLE status lines; unit tested |
-| **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | In progress: 2-hour run (NFR-3 revised from 8 h with instructor approval, see D-5) |
-| **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | In progress: accuracy and response-time measurements (timing log ready: see Run) |
+| **US-10 — Continuous Availability** | Aaditya Vashisht | 5 | Done: 2-hour run passed with no restart or errors (NFR-3 revised from 8 h with instructor approval, see D-5); verified live (test log 17.5) |
+| **US-11 — Accurate Voice Recognition** | Aaditya Vashisht | 5 | Done: accuracy and response-time measurements recorded (test log 17.4) |
 | **US-15 — Recover from Recognition Errors** | Aaditya Vashisht | 5 | Done (PR #41); unit tested; live check reported |
-| **US-18 — Startup System Check** | Aaditya Vashisht | 3 | To do (due 28 Oct) |
+| **US-18 — Startup System Check** | Aaditya Vashisht | 3 | Done: checks microphone, speech recognizer, media controls and Selenium before listening; unit tested; verified live (test log 17.6) |
 | **US-08 — Reject Unsupported Commands** | Aarohi Jaiswal | 5 | Done; unit tested; verified live (two tests of 5 phrases each, see test log) |
 | **US-12 — Handle Unclear Voice Commands** | Aarohi Jaiswal | 3 | Done (PR #43): "Didn't catch that, please repeat"; unit tested; checked live |
 | **US-14 — Media Player Error Handling** | Aarohi Jaiswal | 3 | Done (PR #43): media actions confirm the result before reporting success; unit tested; verified live |
 | **US-20 — Prevent Duplicate Command Execution** | Aarohi Jaiswal | 5 | Done (PR #43); unit tested; checked live |
 
-Sprint 2 total: 13 stories, 53 points (Abhay 19, Aaditya 18, Aarohi 16). Done: 10 stories, 40 points. Remaining: US-10, US-11, US-18 (Aaditya, 13 points).
+Sprint 2 total: 13 stories, 53 points (Abhay 19, Aaditya 18, Aarohi 16). Done: 13 stories, 53 points. Remaining: none.
 
 Full test results: [`docs/test-log.md`](docs/test-log.md).
 
@@ -186,4 +186,4 @@ The revised SRS, [`1_Software_Requirements_Specification_v1.1.pdf`](1_Software_R
 python -m pytest tests/ -v
 ```
 
-190 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
+210 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).

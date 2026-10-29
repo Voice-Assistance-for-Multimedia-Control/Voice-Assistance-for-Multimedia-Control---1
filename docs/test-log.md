@@ -546,3 +546,55 @@ Verify that the system stays listening-ready for at least 2 continuous hours wit
 **Limitations:** only five commands were issued in two hours, so this shows availability and stability, not behaviour under load. Volume changes were confirmed by ear, not measured, and the screenshots do not show the player's state for every command.
 
 **Status:** PASS for revised NFR-3 (2-hour criterion).
+
+### 17.6 US-18 — Startup System Check
+
+**Test date:** 29 October 2026
+**Tester:** Aaditya Vashisht
+**Tested on:** working tree of branch `feature/us10-test-us18-impl` (before the US-18 commit)
+**Environment:** MacBook Air (microphone: "MacBook Air Microphone"), offline Vosk model `vosk-model-small-en-in-0.4`
+**Code:** `src/voice_control/startup_check.py` (new), `main.py` (startup wiring), `tests/test_us18_startup_check.py` (20 new tests)
+
+#### Objective
+Verify that the assistant checks its required components at startup, indicates successful initialization, and reports an error if a required component fails.
+
+#### 1. Automated tests
+`python -m pytest -q`: **210 passed**, 149 warnings, 4.81 s. The warnings come from earlier tests (sounddevice/NumPy deprecation notices); none come from the new US-18 tests. The 20 new tests use fakes, so they need no microphone, model or Chrome. They cover:
+- all four components checked, and success reported
+- each component failing on its own: microphone, Vosk package, Vosk model folder, media functions, media_controls import, Selenium, unknown backend
+- several failures listed together
+- a check that crashes being reported as a failure
+- `main.py` stopping (exit code 2) before listening when a check fails
+- `main.py` reporting a recognizer or media player that fails to initialize
+- "ready" printed only after everything has initialized
+
+#### 2. Live checks
+| Check | Command | Observed result |
+|---|---|---|
+| A. Normal start | `python main.py --model models/vosk-model-small-en-in-0.4` | Four `[STARTUP] OK` lines (microphone "MacBook Air Microphone", Vosk with model, media controls, Selenium), then `Media player: Chrome window opened`, `All required components are ready.` and the READY status line. Ctrl-C stopped it cleanly. |
+| B. Missing recognizer model | `python main.py --model models/does-not-exist` | `[STARTUP] FAILED Speech recognizer: Vosk model not found at 'models/does-not-exist'...`, the other three OK, `NOT READY: Speech recognizer failed`, **exit code 2**. Chrome did not open and listening did not start. |
+| C. Microphone fault (simulated) | Same start, with the microphone check replaced by one that reports "no microphone" | `[STARTUP] FAILED Microphone: No microphone or audio input device detected on the system.`, the other three OK, `NOT READY: Microphone failed`, **exit code 2**. Chrome did not open and listening did not start. |
+
+In check A the four component checks completed within the same millisecond. About 3.5 s passed between the first check and the READY line, which includes loading the model and opening Chrome.
+
+#### 3. Acceptance criteria
+| Criterion | Evidence | Result |
+|---|---|---|
+| The system checks the availability of the microphone and required software components | Check A shows all four components checked; unit tests cover each one | PASS |
+| The system indicates successful initialization | Check A prints the OK lines and "All required components are ready." only after the recognizer and Chrome player have opened | PASS |
+| An error is reported if a required component fails to initialize | Checks B and C print `FAILED`, `NOT READY` and exit code 2; unit tests cover the other components | PASS |
+
+#### Limitations
+- The microphone fault in check C was simulated, because the built-in microphone cannot be removed. A real missing-microphone case is covered by the unit tests and by the existing US-13 detection code that the check reuses.
+- A recognizer that fails to initialize after its checks pass (for example a damaged model folder) and a Chrome window that fails to open are verified by unit tests with fakes, not live.
+- The startup check confirms that the Vosk model folder exists and that the packages are installed. Real loading of the model happens immediately afterwards, and a failure there is reported as `FAILED Speech recognizer`.
+- Behaviour change: if Chrome fails to open, startup now stops with an error. Before, it printed a warning and continued.
+
+#### Evidence
+`us18-check-a-normal-start.png`, `us18-check-b-missing-model.png`, `us18-check-c-simulated-mic.png`
+
+![Check A: normal start](evidence/us18-check-a-normal-start.png)
+![Check B: missing model](evidence/us18-check-b-missing-model.png)
+![Check C: simulated microphone fault](evidence/us18-check-c-simulated-mic.png)
+
+**Status:** PASS.
