@@ -125,6 +125,8 @@ The SRS, Software Architecture & Design Specification (SAD) and Test Plan were f
 
 The revised SRS, [`1_Software_Requirements_Specification_v1.1.pdf`](1_Software_Requirements_Specification_v1.1.pdf) (editable: [`.docx`](1_Software_Requirements_Specification_v1.1.docx)), records D-1, D-2, D-3 and D-5 in the requirements themselves; the original version 1.0 is kept as [`1_Software_Requirements_Specification.pdf`](1_Software_Requirements_Specification.pdf) for comparison.
 
+The revised architecture document, [`3_Software_Architecture_Design_Specification_v1.1.pdf`](3_Software_Architecture_Design_Specification_v1.1.pdf) (editable: [`.docx`](3_Software_Architecture_Design_Specification_v1.1.docx)), describes the system as built and lists D-1 to D-6 in Section 4; version 1.0 is kept as [`architecture.miniproj.pdf`](architecture.miniproj.pdf).
+
 | ID | Submitted documents said | What we did instead | Why | Impact |
 |---|---|---|---|---|
 | **D-1** | Runs on embedded hardware, a Raspberry Pi / ESP32 board (SRS 1.1, 1.2; SAD 2.6), and is tested on that target hardware (Test Plan, Section 9 Test Environment) | Developed and tested on a laptop (macOS) with its built-in microphone | No Raspberry Pi or ESP32 was available to the team | No change in behaviour. The code is plain Python with no board-specific parts, so it can move to a Raspberry Pi unchanged (plus `sudo apt install libportaudio2` and Chromium). Response times (NFR-1, TC-09) are measured on the laptop, not the board |
@@ -176,11 +178,12 @@ The revised SRS, [`1_Software_Requirements_Specification_v1.1.pdf`](1_Software_R
 | FR-10 | `FeedbackModule` | `test_us09_feedback.py`, `test_sprint1_integration.py` | Unit tested; seen in live runs |
 | NFR-1 / TC-09 | Whole pipeline | `test_us16_mute_and_timing.py` (timing log) | Verified live: 712 ms average, slowest 1,160 ms, volume at most 686 ms (US-11) |
 | NFR-2 | Vosk recognizer, command grammar | — | Verified live: 46 of 51 attempts correct, 90.2% (US-11) |
-| NFR-3 | Whole runtime | — | 2-hour run completed 28–29 Oct (US-10, D-5); evidence in review |
+| NFR-3 | Whole runtime | — | Verified live: 2-hour run, 5 of 5 commands passed, no restart, memory flat (US-10, D-5; test log 17.5) |
 | NFR-4 | Whole system | — | Verified live with 2 first-time users (test log, Section 13) |
-| SR-1 / TC-10 | `TranscriptWakeWordEngine`, `SecurityValidator` | `test_tc10_security_gating.py`, `test_sprint1_integration.py` | Unit tested; no false triggers during the 2-hour run (US-10, evidence in review) |
+| SR-1 / TC-10 | `TranscriptWakeWordEngine`, `SecurityValidator` | `test_tc10_security_gating.py`, `test_sprint1_integration.py` | Unit tested; no false triggers during the 2-hour run (US-10, test log 17.5) |
 | SR-2 | `VoskTranscriber`, `AudioBuffer` | `test_audio_buffer.py`, `test_transcriber.py`, `test_us19_status_and_us17_local.py` | Verified: network check, localhost only ([evidence](docs/evidence/us17-network-check.md)) |
 | US-13 | `AudioCaptureComponent` | `test_us13_mic_error_handling.py` | Unit tested |
+| US-18 | `startup_check.py`, `main.py` | `test_us18_startup_check.py` | Unit tested; verified live: normal start, missing model, microphone fault (test log 17.6) |
 
 ---
 
