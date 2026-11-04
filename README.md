@@ -193,4 +193,15 @@ The revised architecture document, [`3_Software_Architecture_Design_Specificatio
 python -m pytest tests/ -v
 ```
 
-210 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-10).
+210 tests, run automatically by GitHub Actions on every push and pull request (`.github/workflows/tests.yml`, Python 3.9 and 3.12). They use synthetic audio and fake recognizers/players, so they verify the logic of the pipeline, not microphone accuracy or real playback; those are checked on the test laptop with the Test Plan (TC-01..TC-16).
+
+### Test reports (`docs/reports/`)
+
+| Report | Result |
+|---|---|
+| [Unit test report](docs/reports/unit-test-report.md) ([JUnit XML](docs/reports/unit-test-results.xml)) | 210 of 210 passed |
+| [System validation report](docs/reports/system-validation-report.md) | TC-01 to TC-16: 15 PASS, TC-06 PASS with limitation (D-6), 0 FAIL |
+| [Code coverage report](docs/reports/code-coverage-report.md) ([HTML](docs/reports/coverage-html/index.html), [XML](docs/reports/coverage.xml)) | 83.5% of statements |
+| [Branch coverage report](docs/reports/branch-coverage-report.md) | 70.6% of branches |
+
+Regenerate the automated reports with `python tools/generate_test_reports.py` (needs `pip install -e ".[dev]" selenium`). The CI run also prints line and branch coverage for every push.
