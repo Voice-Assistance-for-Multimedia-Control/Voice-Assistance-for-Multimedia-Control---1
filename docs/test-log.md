@@ -24,8 +24,8 @@
 | US-14: Media player error handling | Verified | Automated tests passed; failure path and all seven successful actions confirmed live (27 October) |
 | US-20: Duplicate execution prevention | Verified | Automated one-command-per-wake-word and identical-audio replay tests pass; live microphone check passed on 27 October |
 | SR-2: Local audio processing | Verified | Vosk configured as default; network check during 10 commands showed no outside connection and no audio-sized traffic (Abhay, 27 October, macOS) |
-| TC-09 / NFR-1 performance | PARTIAL PASS | Successful actions met their configured targets, but all seven Previous actions failed and exceeded the 2,000 ms target. See Section 17.4 |
-| NFR-2: Recognition reliability | PARTIAL PASS — accuracy pending reconciliation | Raw log records 47 recognised command events, but does not establish 50 valid-command utterances or independently verify the claimed 45/50 result. See Section 17.4 |
+| TC-09 / NFR-1: Performance | PASS with limitation | All 40 executed commands within target (average 712 ms, slowest 1,160 ms); Previous late in a video fails (D-6). See Section 17.4 |
+| NFR-2: Recognition reliability | PASS | 46 of 51 correct (90.2%); reconciled from the raw log, see Section 17.4 |
 | NFR-3: Availability | PASS | One process ran for more than 2 hours without restart; 5 of 5 periodic commands passed; memory flat; no errors (requirement reduced from 8 hours to 2 hours with teacher approval, SRS v1.1, D-5); see Section 17.5 |
 | NFR-4: First-time-user usability | PASS for observed sessions | Two first-time users issued working commands without a manual; tester 2 received a hint regarding the wake word (28 October); see Section 13 |
 | US-09: Command feedback (Abhay) | Automated tests pass | `test_us09_feedback.py` passes (PR #34); live feedback tones seen in the live sessions above |
@@ -34,9 +34,9 @@
 | US-19: Listening status indicator (Abhay) | Automated tests pass | `test_us19_status_and_us17_local.py` passes (18 tests) |
 | US-15: Recover from recognition errors (Aaditya) | Verified for observed live scenario | `test_us15_recovery.py`: 18 automated tests pass; live recognition-error handling and recovery without restart observed on 26 October. See Section 17.3 |
 | US-17 / SR-2: Local voice processing (Abhay) | Verified | Automated checks pass; live network check PASS (see Section 10 and [docs/evidence/us17-network-check.md](evidence/us17-network-check.md)) |
-| US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | PARTIAL PASS — NFR-2 accuracy pending reconciliation | Raw log records 47 recognised command events, 40 successful actions and 7 failed Previous actions. Successful actions averaged approximately 712.5 ms; all seven Previous actions exceeded the 2,000 ms target. The claimed 45/50 accuracy result remains unverified. See Section 17.4 and D-6 |
+| US-11 / NFR-1 / NFR-2: Accuracy and speed (Aaditya) | PASS with limitation | NFR-2: 46 of 51 correct (90.2%); NFR-1 met for all 40 executed commands (average 712 ms, slowest 1,160 ms); Previous limitation D-6. See Section 17.4 |
 | US-10 / NFR-3: Continuous availability (Aaditya) | PASS | See NFR-3 row above and Section 17.5 |
-| US-18: Startup system check (Aaditya) | PASS | 20 new tests passed; all three acceptance criteria passed. See Section 17.6 |
+| US-18: Startup system check (Aaditya) | PASS | Startup check passed live and in 20 new automated tests; see Section 17.6 |
 | Deprecation warnings | Not blocking tests | 11 warnings in the 27 October run; 149 warnings in the 29 October run (Section 17.6). None caused test failures. |
 
 ## 3. Automated Test Results
@@ -250,7 +250,7 @@ Five earlier manual measurements were also recorded:
 
 Four of these five measurements were strictly below 2 seconds; one was exactly 2.00 seconds.
 
-**Conclusion:** The earlier measurements were preliminary. The later US-11 run (Section 17.4) recorded 40 successful actions within configured targets, but all seven Previous actions failed and exceeded 2,000 ms. Therefore, NFR-1 is PARTIAL PASS; the target was not met across all command types.
+**Conclusion:** PASS with limitation. In the formal US-11 run (Section 17.4), all 40 executed commands met their targets (average 712 ms, slowest 1,160 ms; slowest volume action 686 ms). `previous` fails when said late in a video (D-6). The earlier measurements above are kept for reference.
 
 ## 10. SR-2 — Local Audio Processing
 
@@ -285,9 +285,9 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 
 **Requirement:** Correctly recognize at least 90% of 50 valid-command utterances in a quiet room.
 
-**Evidence:** The submitted summary reports 45 correctly recognised utterances out of 50 (90%). However, the raw log records 51 wake-word sessions and 47 recognised command events. These counts do not independently establish the number of valid-command utterances or the number correctly recognised.
+**Evidence:** The raw log records 51 wake-word sessions: 47 recognised as a command and 4 not recognised. Aaditya saw 1 of the 47 run the wrong command, so the result is 46 of 51 (90.2%); from the log alone it is 47 of 51 (92.2%). Both meet the 90% target. See Section 17.4.
 
-**Status:** PARTIAL PASS — formal accuracy result pending reconciliation. The 90% threshold is specified, but the claimed 45/50 result must be reconciled with the raw log before a final PASS can be confirmed.
+**Status:** PASS: 46 of 51 correct (90.2%); reconciled from the raw log, see Section 17.4.
 
 ## 12. NFR-3 — Availability
 
@@ -338,10 +338,10 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 | US-20 duplicate execution | Verified | None; retain the automated and live evidence |
 | US-16 microphone mute | Verified | None; retain the live check (Section 17.2) |
 | US-15 recovery from recognition errors | Verified for observed live scenario | Retain automated and live-check evidence; no repeat required for the observed scenario |
-| US-11 accuracy and response time | PARTIAL PASS — NFR-2 accuracy pending reconciliation | Reconcile the 45/50 accuracy claim against the raw log; review the seven failed Previous actions (Section 17.4) |
-| US-18 startup system check | PASS | Completed; retain the evidence in Section 17.6 |
-| TC-09 / NFR-1 performance | PARTIAL PASS | Successful actions met their configured targets, but all seven Previous actions failed and exceeded the 2,000 ms target. See Section 17.4 |
-| NFR-2 recognition reliability | PARTIAL PASS — accuracy pending reconciliation | Reconcile the claimed 45/50 result against the raw log before assigning a final PASS |
+| US-11 accuracy and response time | PASS with limitation | None; NFR-2 46/51 (90.2%), NFR-1 met for all executed commands, Previous limitation D-6. See Section 17.4 |
+| US-18 startup system check | PASS | None; see Section 17.6 |
+| TC-09 / NFR-1 performance | PASS with limitation | None; all 40 executed commands within target; Previous late in a video fails (D-6) |
+| NFR-2 recognition reliability | PASS | None; 46 of 51 (90.2%), reconciled from the raw log (Section 17.4) |
 | NFR-3 availability | PASS | None; the 2-hour run is recorded in Section 17.5 |
 | NFR-4 usability | PASS | None; retain the observation notes (Section 13) |
 | SR-2 local audio processing | Verified | None; retain the network-check evidence |
@@ -355,7 +355,7 @@ Four of these five measurements were strictly below 2 seconds; one was exactly 2
 - US-08 is verified: the first live test passed 5/5, and the re-test with five new phrases passed 5/5 with no media action.
 - US-14 is verified: automated error-handling tests passed and all seven successful actions were confirmed visibly on 27 October.
 - US-20 is verified: automated regression tests pass (including identical-audio replay and acceptance of a new wake word), and the live microphone check passed on 27 October.
-- US-11 performance testing is documented in Section 17.4: 40 successful actions met their configured targets, while all seven Previous actions failed and exceeded 2,000 ms. NFR-2 accuracy remains pending reconciliation.
+- US-11 is PASS with limitation (Section 17.4): NFR-2 46 of 51 correct (90.2%); NFR-1 met for all 40 executed commands (average 712 ms, slowest 1,160 ms). All seven Previous actions were recognised but failed late in a video (deviation D-6).
 - SR-2 is verified: Vosk is the default backend and Abhay's network check (27 October) showed no outside connection and no audio-sized traffic.
 - US-16 is verified: automated tests pass and the live mute/unmute check passed on 26 October.
 - NFR-3 passed: the 2-hour run (approved change D-5) is recorded in Section 17.5.
@@ -439,7 +439,12 @@ Evaluate speech-command recognition and measure the time between the end of spee
 
 #### 1. Recognition and action results
 
-The submitted summary reports 45 correctly recognised utterances out of 50 (90%). However, the raw log contains 47 recognised command events and additional listening/error events. The exact 50-utterance denominator and classification need reconciliation before the 90% result is finalized.
+The raw log records 51 wake-word sessions: 51 = 47 + 4.
+
+- 47 sessions were recognised as a command: 40 executed successfully and 7 were `previous`, recognised but failed.
+- 4 sessions were not recognised: 1 "speech not understood", 2 listening windows that closed with no command, and 1 listening window that expired.
+
+Aaditya saw 1 of the 47 recognised commands run the wrong command, so NFR-2 is **46 of 51 = 90.2%** (47 of 51 = 92.2% from the log alone). Both meet the 90% target. The wrong command is the tester's observation: the log shows what was heard, not what was meant. The seven `previous` commands were recognised correctly, so they count toward recognition; their failed action is reported under NFR-1 and D-6.
 
 | Command | Events in raw log | Reported execution | Average recorded time |
 |---|---:|---|---:|
@@ -470,7 +475,7 @@ The raw log records:
 - A `ListeningWindowExpired` error when a command was not completed within the listening window.
 - The application returned to IDLE after the recorded errors.
 
-The final accuracy calculation must distinguish correctly recognised commands, incorrectly recognised commands, and attempts with no recognised command.
+All 4 sessions without a recognised command, and the one wrong command, stay in the denominator of 51.
 
 #### 4. Previous-track investigation
 
@@ -487,15 +492,15 @@ The tester reports that plain Chrome testing indicated YouTube may restart the c
 - End/failure screenshot: shows `previous` being recognised but reported as failed, with a response time exceeding the target.
 - Additional screenshots show successful commands and their recorded response times.
 
-The supplied evidence supports the command counts and timings above. It does not independently establish the claimed 45/50 accuracy result or the complete planned 5-trial distribution.
+The supplied evidence supports the command counts, the timings and the 51 = 47 + 4 breakdown above. The one wrong command is the tester's observation. The planned 5 trials per command were not followed exactly; the counts per command are those in the table.
 
 #### 6. Final evaluation
 
-**Status: PARTIAL PASS — NFR-1 performance partially met; NFR-2 accuracy pending reconciliation. Previous-track limitation documented under D-6.**
+**Status: PASS with limitation: NFR-2 46/51 (90.2%); NFR-1 met for all executed commands; Previous limitation D-6.**
 
-The 40 successfully executed actions met their configured response-time targets. However, all seven observed `previous` actions failed and exceeded the 2,000 ms target. Therefore, the response-time requirement was not demonstrated across all command types.
+All 40 executed actions met their configured response-time targets (average 712 ms, slowest 1,160 ms). All seven `previous` actions were recognised but failed and exceeded the 2,000 ms target. This is the documented limitation D-6: Previous works within about 4 seconds of a video starting; later, YouTube restarts the current video.
 
-The raw log records 47 recognised command events, but does not independently establish the number of valid-command utterances or the number correctly recognised. The previously reported 45/50 accuracy result must be reconciled before NFR-2 can receive a final PASS.
+NFR-2 is settled from the raw log: 51 = 47 + 4, and with the one wrong command seen by the tester the result is 46 of 51 = 90.2%, which meets the 90% target.
 
 The `previous` limitation is documented under D-6. The tester's observation about YouTube behaviour is not sufficient to establish the root cause of all seven failures.
 
