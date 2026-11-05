@@ -176,7 +176,7 @@ The revised architecture document, [`3_Software_Architecture_Design_Specificatio
 | FR-2..FR-8 / TC-02..TC-08 | `map_command`, `CommandExecutor`, `media_controls` | `test_sprint1_integration.py`, `test_player_controls.py`, `test_media_controls.py` | Unit tested; all seven verified live (test log, US-14); FR-6 limited, see D-6 |
 | FR-9 | `map_command`, `ErrorHandler` | `test_sprint1_integration.py` | Unit tested; verified live with 10 unsupported phrases (US-08) |
 | FR-10 | `FeedbackModule` | `test_us09_feedback.py`, `test_sprint1_integration.py` | Unit tested; seen in live runs |
-| NFR-1 / TC-09 | Whole pipeline | `test_us16_mute_and_timing.py` (timing log) | Verified live: 712 ms average, slowest 1,160 ms, volume at most 686 ms (US-11) |
+| NFR-1 / TC-09 | Whole pipeline | `test_us16_mute_and_timing.py` (timing log) | Verified live, with limitation: all 40 executed commands within target, 712 ms average, slowest 1,160 ms, volume at most 686 ms; Previous late in a video fails (D-6) (US-11) |
 | NFR-2 | Vosk recognizer, command grammar | — | Verified live: 46 of 51 attempts correct, 90.2% (US-11) |
 | NFR-3 | Whole runtime | — | Verified live: 2-hour run, 5 of 5 commands passed, no restart, memory flat (US-10, D-5; test log 17.5) |
 | NFR-4 | Whole system | — | Verified live with 2 first-time users (test log, Section 13) |
@@ -200,7 +200,7 @@ python -m pytest tests/ -v
 | Report | Result |
 |---|---|
 | [Unit test report](docs/reports/unit-test-report.md) ([JUnit XML](docs/reports/unit-test-results.xml)) | 210 of 210 passed |
-| [System validation report](docs/reports/system-validation-report.md) | TC-01 to TC-16: 15 PASS, TC-06 PASS with limitation (D-6), 0 FAIL |
+| [System validation report](docs/reports/system-validation-report.md) | TC-01 to TC-16: 14 PASS, 2 PASS with limitation (TC-06 Previous, TC-09 response time; D-6), 0 FAIL |
 | [Code coverage report](docs/reports/code-coverage-report.md) ([HTML](docs/reports/coverage-html/index.html), [XML](docs/reports/coverage.xml)) | 83.5% of statements |
 | [Branch coverage report](docs/reports/branch-coverage-report.md) | 70.6% of branches |
 
