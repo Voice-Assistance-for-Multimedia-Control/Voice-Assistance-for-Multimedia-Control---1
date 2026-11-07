@@ -13,6 +13,8 @@ Statuses describe what is verified, not just what is merged. "Unit tested" means
 
 **Sprint 1 demo video:** [`sprint_1_demo.mp4`](sprint_1_demo.mp4) (about 1 minute, YouTube playlist controlled by voice on the test laptop).
 
+**Sprint 2 demo video:** [`sprint_2_demo.mp4`](sprint_2_demo.mp4) (1 minute 37 seconds: start-up checks, all seven commands with response times, unclear speech, microphone mute and status lines, timing summary).
+
 ### Sprint 1 (Core Multimedia Control Pipeline)
 | User Story | Assignee | Story Points | Status |
 |---|---|:---:|---|
